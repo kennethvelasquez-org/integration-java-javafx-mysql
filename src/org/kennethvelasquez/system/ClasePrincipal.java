@@ -4,14 +4,20 @@
  */
 package org.kennethvelasquez.system;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
 /**
  *
  * @author STEPHRYS
  */
-public class ClasePrincipal {
+public class ClasePrincipal extends Application {
 
     public static void main(String[] args) {
-        
+        launch(args);
     }
     
+    @Override
+    public void start(Stage stageRoot){
+        
+    }
 }
