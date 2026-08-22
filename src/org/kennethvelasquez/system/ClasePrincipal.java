@@ -6,6 +6,8 @@ package org.kennethvelasquez.system;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.kennethvelasquez.system.utils.SceneManager;
+import org.kennethvelasquez.system.utils.ViewFactory;
 /**
  *
  * @author STEPHRYS
@@ -18,6 +20,8 @@ public class ClasePrincipal extends Application {
     
     @Override
     public void start(Stage stageRoot){
-        
+        SceneManager.getInstanceSceneManager().setStagePrincipal(stageRoot);
+        ViewFactory viewFacto = new ViewFactory();
+        viewFacto.loginView();
     }
 }
