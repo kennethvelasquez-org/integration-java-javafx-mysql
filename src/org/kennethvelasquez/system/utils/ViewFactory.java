@@ -43,7 +43,7 @@ public class ViewFactory {
         try {
             switch (nameScene) {
                 case "login"-> scene = loadFileFXML("LoginView.fxml", 350, 425);
-                case "register"-> scene = loadFileFXML("RegisterView.fxml",450,500);
+                case "register"-> scene = loadFileFXML("RegisterView.fxml",635,580);
                 default-> scene = loadFileFXML("NotFoundView.fxml", 350, 350);
             }
             SceneManager.getInstanceSceneManager().changeScene(scene);
@@ -63,6 +63,7 @@ public class ViewFactory {
     }
     
     public void registerView(){
+        loadScene("register");
     }
     
 }

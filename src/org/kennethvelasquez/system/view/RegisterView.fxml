@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="635.0" spacing="10.0" styleClass="register-view" stylesheets="@../resources/styles/RegisterStyles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kennethvelasquez.system.controller.RegisterController">
+   <children>
+      <HBox fx:id="hbImgRegister" maxHeight="150.0" maxWidth="150.0" prefHeight="150.0" prefWidth="150.0" styleClass="img-register" VBox.vgrow="NEVER">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="img-register">
+               <image>
+                  <Image url="@../resources/images/register.jpg" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <VBox prefHeight="320.0" prefWidth="440.0" styleClass="container-form">
+         <children>
+            <GridPane prefHeight="306.0" prefWidth="440.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="288.0" minWidth="10.0" prefWidth="246.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="339.0" minWidth="10.0" prefWidth="339.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Ingrese sus nombres" />
+                  <Label text="Ingrese sus apellidos" GridPane.rowIndex="1" />
+                  <Label text="Ingrese su usuario" GridPane.rowIndex="2" />
+                  <Label text="Ingrese su correo" GridPane.rowIndex="3" />
+                  <Label text="Ingrese su contraseña" GridPane.rowIndex="4" />
+                  <Label text="Confirme su contraseña" GridPane.rowIndex="5" />
+                  <TextField GridPane.columnIndex="1" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
+               </children>
+            </GridPane>
+            <HBox fx:id="hboxOptionsSecurity" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="25.0" styleClass="options-security">
+               <children>
+                  <Label text="Elija seguridad de contraseña" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0" spacing="150.0" styleClass="container-buttons">
+         <children>
+            <Button id="btn-cancel" mnemonicParsing="false" onMouseClicked="#onCancelRegister" text="CANCELAR" />
+            <Button id="btn-create-user" mnemonicParsing="false" text="REGISTRARSE" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+</VBox>
