@@ -28,7 +28,13 @@ public class SceneManager {
             stagePrincipal.sizeToScene();
             stagePrincipal.show();
         } catch (NullPointerException objectNull) {
-            //Alert 
+            AlertInformation alertInfo = new AlertInformation();
+            System.out.println("Error Change Scene");
+            objectNull.printStackTrace();
+            alertInfo.viewAlert("ERRO CAMBIO DE ESCENA", 
+                    "ERROR AL REALIZAR EL CAMBIO DE ESCENAR EN EL ESCENARIO", 
+                    "ERRO AL CAMBIAR ESCENA "+objectNull.getMessage(),
+                    "ERR");
         }
     }
 
