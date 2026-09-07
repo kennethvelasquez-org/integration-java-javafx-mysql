@@ -10,6 +10,7 @@ import java.net.URL;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import org.kennethvelasquez.system.ClasePrincipal;
+import javafx.fxml.JavaFXBuilderFactory;
 
 /**
  *
@@ -28,6 +29,8 @@ public class ViewFactory {
             FXMLLoader loaderFXML = new FXMLLoader();
             //Lector de ruta del FXML
             URL pathFile = ClasePrincipal.class.getResource(pathFileFXML);
+            loaderFXML.setLocation(pathFile);
+            loaderFXML.setBuilderFactory(new JavaFXBuilderFactory());
             
             return new Scene(loaderFXML.load(), width,height);
         } catch (IOException ioException) {
@@ -39,7 +42,7 @@ public class ViewFactory {
         Scene scene;
         try {
             switch (nameScene) {
-                case "login"-> scene = loadFileFXML("LoginView.fxml", 350, 500);
+                case "login"-> scene = loadFileFXML("LoginView.fxml", 350, 425);
                     
                 default-> scene = loadFileFXML("NotFoundView.fxml", 350, 350);
             }
@@ -50,7 +53,7 @@ public class ViewFactory {
     }
     
     public void loginView(){
-        
+        loadScene("login");
     }
     
 }
