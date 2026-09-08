@@ -50,6 +50,7 @@ public class ViewFactory {
                     scene = loadFileFXML("RegisterView.fxml",635,580);
                     SceneManager.getInstanceSceneManager().getStagePrincipal().setTitle("CREAR CUENTA");
                 }
+
                 default-> scene = loadFileFXML("NotFoundView.fxml", 350, 350);
             }
             SceneManager.getInstanceSceneManager().changeScene(scene);
@@ -57,6 +58,7 @@ public class ViewFactory {
             AlertInformation alertInfo = new AlertInformation("ERROR CAMBIO DE VENTANA",
                     "Error al cambiar Ventana",
                     "Se genero un error al cambiar de ventana "+nullPointer.getMessage(), 
+
                     "ERR");
             System.out.println("Error Load Scene");
             nullPointer.printStackTrace();

@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -16,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import org.kennethvelasquez.system.utils.AlertInformation;
 import org.kennethvelasquez.system.utils.Validations;
+
 import org.kennethvelasquez.system.utils.ViewFactory;
 
 /**
@@ -25,6 +27,7 @@ import org.kennethvelasquez.system.utils.ViewFactory;
 public class RegisterController implements Initializable{
     @FXML
     private HBox hboxOptionsSecurity;
+
     @FXML private TextField txtName;
     @FXML private TextField txtLastName;
     @FXML private TextField txtUser;
@@ -37,8 +40,10 @@ public class RegisterController implements Initializable{
     private RadioButton rbMD5;
     private RadioButton rbBCrypt;
     private ViewFactory viewFacto = new ViewFactory();
+
     private Validations validate = new Validations();
     private AlertInformation alertInfo = new AlertInformation();
+
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -47,6 +52,7 @@ public class RegisterController implements Initializable{
         rbNoSecure = new RadioButton("Sin seguridad");
         rbMD5 = new RadioButton("MD5");
         rbBCrypt = new RadioButton("BCrypt");
+
         buildEvents();
         tgOptionsSecurity.getToggles().addAll(rbNoSecure,rbMD5, rbBCrypt);
         hboxOptionsSecurity.getChildren().addAll(rbNoSecure, rbMD5, rbBCrypt);
@@ -142,5 +148,6 @@ public class RegisterController implements Initializable{
         }
         
     }
+
     
 }
