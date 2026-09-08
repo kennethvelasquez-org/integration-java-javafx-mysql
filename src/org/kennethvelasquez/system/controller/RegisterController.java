@@ -105,7 +105,8 @@ public class RegisterController implements Initializable{
         }
         
         String msg = "";
-
+        //El uso de !validate es lo equivalente logicamente a → !true lo mismo a =false 
+        //si es !false es true, por ende cuando hay error es !false = true 
         if (!validate.isValidLengthText(name, 70)) {
             msg = "El campo Nombre no puede exceder los 70 caracteres.";
         }

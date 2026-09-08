@@ -56,7 +56,7 @@ public class ViewFactory {
         } catch (NullPointerException nullPointer) {
             AlertInformation alertInfo = new AlertInformation("ERROR CAMBIO DE VENTANA",
                     "Error al cambiar Ventana",
-                    "Se genero un erro al cambiar de ventana "+nullPointer.getMessage(), 
+                    "Se genero un error al cambiar de ventana "+nullPointer.getMessage(), 
                     "ERR");
             System.out.println("Error Load Scene");
             nullPointer.printStackTrace();
