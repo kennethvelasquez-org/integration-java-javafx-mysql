@@ -10,10 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.shape.Rectangle;
 import org.kennethvelasquez.system.utils.ViewFactory;
 
 /**
@@ -46,5 +44,7 @@ public class RegisterController implements Initializable{
     private void onCancelRegister(MouseEvent event){
         viewFacto.loginView();
     }
+    
+    
     
 }
