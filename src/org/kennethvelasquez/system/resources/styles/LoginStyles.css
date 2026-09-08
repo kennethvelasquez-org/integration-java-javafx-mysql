@@ -57,7 +57,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 }
 
 #btn-login:hover{
-    -fx-effect:dropshadow(gaussian,#04b9e785,30,0.3,0,0);
+    -fx-effect:dropshadow(gaussian,#04b9e785,23,0.3,0,0);
 }
 
 #btn-login:pressed{

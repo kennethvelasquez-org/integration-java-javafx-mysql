@@ -16,6 +16,7 @@ create Table User(
     user varchar(70) not null check(length(user)<=70) unique,
     password varchar(70) not null check(length(password)<=70), # Es de 70 porque el hash de bcrypt es de 60 caracteres, y le puse 10 mas por si acaso
     id_rol int,
+    type_encrypt int not null,
     constraint fk_user_rol
         foreign key (id_rol) references Rol(id_rol)
         on delete set null on update set null,
@@ -58,13 +59,14 @@ Delimiter $$
             in email_p varchar(70),
             in user_p varchar(70),
             in password_p varchar(70),
-            in id_rol_p int
+            in id_rol_p int,
+            in type_encrypt_p auto_increment
         )
     begin
-        insert into User(name, last_name, email, user, password, id_rol, id_user) 
+        insert into User(name, last_name, email, user, password, id_rol, id_user,type_encrypt) 
             values(name_p, last_name_p, email_p, user_p,
                 password_p,
-                id_rol_p, uuid());
+                id_rol_p, uuid(),type_encrypt_p);
     end$$
 Delimiter ;
 
@@ -75,13 +77,14 @@ Delimiter $$
             in email_p varchar(70),
             in user_p varchar(70),
             in password_p varchar(70),
-            in id_rol_p int
+            in id_rol_p int,
+            in type_encrypt_p int
         )
     begin
-        insert into User(name, last_name, email, user, password, id_rol, id_user) 
+        insert into User(name, last_name, email, user, password, id_rol, id_user, type_encrypt) 
             values(name_p, last_name_p, email_p, user_p,
                 md5(password_p), # Este es el hash de la contraseña con md5
-                id_rol_p, uuid());
+                id_rol_p, uuid(),type_encrypt_p);
     end$$
 Delimiter ;
 
@@ -98,13 +101,14 @@ Delimiter $$
             in email_p varchar(70),
             in user_p varchar(70),
             in password_hash varchar(70), # Este es el hash de la contraseña con bcrypt
-            in id_rol_p int
+            in id_rol_p int,
+            in type_encrypt_p int
         )
     begin
-        insert into User(name, last_name, email, user, password, id_rol, id_user) 
+        insert into User(name, last_name, email, user, password, id_rol, id_user, type_encrypt) 
             values(name_p, last_name_p, email_p, user_p,
                 password_hash, # Aqui se recibe el hash de bcrypt ya hecho en java, y se guarda tal cual en la base de datos
-                id_rol_p, uuid());
+                id_rol_p, uuid(),type_encrypt_p);
     end$$
 Delimiter ;
 
@@ -119,7 +123,8 @@ Delimiter $$
                email as Correo,
                user as Usuario,
                password as Clave,
-               id_rol as Rol
+               id_rol as Rol,
+               type_encrypt as Encript
             from User 
                 where email = data_user or user = data_user;
     end$$

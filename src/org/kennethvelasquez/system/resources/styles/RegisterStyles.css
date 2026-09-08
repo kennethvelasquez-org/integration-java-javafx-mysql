@@ -1,0 +1,87 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 7/09/2026, 03:34:44
+    Author     : STEPHRYS
+*/
+
+.register-view{
+    -fx-background-color: #131b5c;
+}
+
+.register-view .img-register{
+    -fx-background-radius:17px;
+    -fx-border-radius:17px;
+    -fx-border-width:5px;
+    -fx-border-color:#fff;
+}
+
+.container-form{
+    
+}
+
+.container-form Label{
+    -fx-font-size:17px;
+    -fx-text-fill:white;
+}
+
+.container-form TextField,
+.container-form PasswordField{
+    -fx-border-color:#00a7e4;
+    -fx-border-radius:5px;
+    -fx-background-radius:6px;
+    -fx-border-width:3px;
+    -fx-background-color:#fff;
+    -fx-font-size:15px;
+    -fx-padding:3px;
+}
+
+.options-security{
+    
+}
+
+.options-security RadioButton{
+    -fx-font-size: 17px;
+    -fx-text-fill:#fff;
+}
+
+.form-register{
+    
+}
+
+.container-buttons Button{
+    -fx-pref-width: 155px;
+    -fx-font-size:18px;
+    -fx-font-weight:700;
+    -fx-background-radius:5px;
+    -fx-border-radius:5px;
+    -fx-focus-color:transparent;
+    -fx-faint-focus-color:transparent;
+    -fx-text-fill:#fff;
+}
+
+#btn-cancel{
+    -fx-background-color:#9a0033;
+}
+#btn-create-user{
+    -fx-background-color:#009999;
+}
+#btn-cancel:hover,
+#btn-create-user:hover{
+    -fx-cursor:HAND;
+}
+#btn-cancel:hover{
+    -fx-effect:dropshadow(gaussian,#f70b6275,18,0.3,0,0);
+}
+#btn-create-user:hover{
+    -fx-effect:dropshadow(gaussian,#04ecff85,13,0.3,0,0);
+}
+
+#btn-cancel:pressed,
+#btn-create-user:pressed{
+    -fx-scale-y:1.2;
+    -fx-scale-x:1.2;
+    -fx-cursor:CLOSED-HAND;
+}

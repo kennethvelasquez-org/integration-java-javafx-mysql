@@ -42,18 +42,36 @@ public class ViewFactory {
         Scene scene;
         try {
             switch (nameScene) {
-                case "login"-> scene = loadFileFXML("LoginView.fxml", 350, 425);
-                    
+                case "login"-> {
+                    scene = loadFileFXML("LoginView.fxml", 350, 425);
+                    SceneManager.getInstanceSceneManager().getStagePrincipal().setTitle("INICIO DE SESIÓN");
+                }
+                case "register"-> {
+                    scene = loadFileFXML("RegisterView.fxml",635,580);
+                    SceneManager.getInstanceSceneManager().getStagePrincipal().setTitle("CREAR CUENTA");
+                }
+
                 default-> scene = loadFileFXML("NotFoundView.fxml", 350, 350);
             }
             SceneManager.getInstanceSceneManager().changeScene(scene);
         } catch (NullPointerException nullPointer) {
-            //Alert
+            AlertInformation alertInfo = new AlertInformation("ERROR CAMBIO DE VENTANA",
+                    "Error al cambiar Ventana",
+                    "Se genero un error al cambiar de ventana "+nullPointer.getMessage(), 
+
+                    "ERR");
+            System.out.println("Error Load Scene");
+            nullPointer.printStackTrace();
+            alertInfo.viewAlert();
         }
     }
     
     public void loginView(){
         loadScene("login");
+    }
+    
+    public void registerView(){
+        loadScene("register");
     }
     
 }
