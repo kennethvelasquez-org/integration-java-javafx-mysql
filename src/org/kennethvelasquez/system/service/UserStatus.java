@@ -8,6 +8,10 @@ package org.kennethvelasquez.system.service;
  *
  * @author STEPHRYS
  */
-public class UserStatus {
-    
+public enum UserStatus {
+    USER_CREATED,
+    INCORRECT_ENCRYPT_TYPE,
+    ERROR_USER_SEARCH,
+    ERROR_USER_CREATE,
+    USER_EXISTS
 }

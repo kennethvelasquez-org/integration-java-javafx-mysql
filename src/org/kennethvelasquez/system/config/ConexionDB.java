@@ -26,6 +26,15 @@ public class ConexionDB{
             System.out.println("Error Constructor ConexionDB");
             classNotFound.printStackTrace();
             alertInfo.viewAlert();
+        } catch (NullPointerException objetctNull) {
+            AlertInformation alertInfo = new AlertInformation("ERROR OBJETO NULL",
+                    "El objeto de conexion es nulo",
+                    "Se genero un error al crear el objeto para conexion jdbc "
+                            +objetctNull.getMessage(), 
+                    "ERR");
+            System.out.println("Error Null ConexionDB");
+            objetctNull.printStackTrace();
+            alertInfo.viewAlert();
         } catch (SQLException errorSQL) {
             AlertInformation alertInfo = new AlertInformation("ERROR CONEXION DATABASE",
                     "Error al conectar a la base de datos",
@@ -38,4 +47,14 @@ public class ConexionDB{
         }
     }
     
+    
+    public static ConexionDB getInstanceConexionDB(){
+        if( instanceConexionDB == null )
+            instanceConexionDB = new ConexionDB();
+        return instanceConexionDB;
+    }
+    
+    public Connection getConnection(){
+        return instanceConnection;
+    }
 }

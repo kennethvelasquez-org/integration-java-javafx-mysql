@@ -20,6 +20,12 @@ public class User {
     public User() {
     }
 
+    public User(String name, String lastName, Integer rol) {
+        this.name = name;
+        this.lastName = lastName;
+        this.rol = rol;
+    }
+
     public User(String name, String lastName, String email, String user, String password, Integer rol, Integer typeEncrypt) {
         this.name = name;
         this.lastName = lastName;
