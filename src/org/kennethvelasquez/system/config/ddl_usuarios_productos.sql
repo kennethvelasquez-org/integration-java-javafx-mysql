@@ -19,20 +19,33 @@ create Table User(
     type_encrypt int not null,
     constraint fk_user_rol
         foreign key (id_rol) references Rol(id_rol)
-        on delete set null on update set null,
+        on delete set null 
+        on update set null,
     id_user varchar(36) not null,
     constraint pk_user primary key (id_user)
 );
 
+create table Category (
+    name_category varchar(100) not null check(length(name_category)<= 100),
+    description varchar(200) not null check(length(description)<=200),
+    id_category int not null auto_increment,
+    constraint pk_category primary key (id_category)
+);
 
 create table Product(
     name varchar(70) not null check(length(name)<=70),
     description varchar(100) not null check(length(description)<=100),
     price decimal(10,2) not null default 0.00,
     id_user varchar(36),
+    id_category int,
+    constraint fk_product_category 
+        foreign key(id_category) references Category(id_category)
+        on delete set null
+        on update cascade,
     constraint fk_product_user
         foreign key (id_user) references User(id_user)
-        on delete set null on update cascade,
+        on delete set null 
+        on update cascade,
     id_product varchar(36) not null,
     constraint pk_product primary key (id_product)
 );
@@ -56,11 +69,11 @@ Delimiter $$
     create procedure sp_create_user_unprotected(
             in name_p varchar(70),
             in last_name_p varchar(70),
-            in email_p varchar(70),
             in user_p varchar(70),
+            in email_p varchar(70),
             in password_p varchar(70),
             in id_rol_p int,
-            in type_encrypt_p auto_increment
+            in type_encrypt_p int
         )
     begin
         insert into User(name, last_name, email, user, password, id_rol, id_user,type_encrypt) 
@@ -74,8 +87,8 @@ Delimiter $$
     create procedure sp_create_user_hashed(
             in name_p varchar(70),
             in last_name_p varchar(70),
-            in email_p varchar(70),
             in user_p varchar(70),
+            in email_p varchar(70),
             in password_p varchar(70),
             in id_rol_p int,
             in type_encrypt_p int
@@ -98,8 +111,8 @@ Delimiter $$
     create procedure sp_create_user_bcrypt(
             in name_p varchar(70),
             in last_name_p varchar(70),
-            in email_p varchar(70),
             in user_p varchar(70),
+            in email_p varchar(70),
             in password_hash varchar(70), # Este es el hash de la contraseña con bcrypt
             in id_rol_p int,
             in type_encrypt_p int
@@ -115,7 +128,8 @@ Delimiter ;
 
 Delimiter $$
     create procedure sp_read_user_by_email_or_user(
-            in data_user varchar(70)
+            in user_p varchar(70),
+            in email_p varchar(70)
         )
     begin
         select name as Nombres,
@@ -126,7 +140,7 @@ Delimiter $$
                id_rol as Rol,
                type_encrypt as Encript
             from User 
-                where email = data_user or user = data_user;
+                where email = email_p or user = user_p;
     end$$
 Delimiter ;
 
@@ -137,8 +151,8 @@ Delimiter $$
         )
     begin
         
-        select name as Nombres,
-               last_name as Apellidos,
+        select id_user as ID,
+			   name as Nombres,
                email as Correo,
                user as Usuario,
                password as Clave,
@@ -155,7 +169,8 @@ Delimiter $$
         )
     begin
         
-        select name as Nombres,
+        select id_user as ID,
+			   name as Nombres,
                last_name as Apellidos,
                email as Correo,
                user as Usuario,

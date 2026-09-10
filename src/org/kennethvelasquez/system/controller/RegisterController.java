@@ -15,6 +15,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import org.kennethvelasquez.system.service.UserService;
+import org.kennethvelasquez.system.service.UserStatus;
 import org.kennethvelasquez.system.utils.AlertInformation;
 import org.kennethvelasquez.system.utils.Validations;
 
@@ -43,7 +45,7 @@ public class RegisterController implements Initializable{
 
     private Validations validate = new Validations();
     private AlertInformation alertInfo = new AlertInformation();
-
+    private UserService userService = new UserService();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -145,6 +147,34 @@ public class RegisterController implements Initializable{
                     "Las contraseñas ingresadas no coinciden.",
                     "ERR");
             return ;
+        }
+        
+        UserStatus statusRegister;
+        statusRegister = userService.createUser(name, lastName, email, user, password, optionSecurity);
+        
+        switch (statusRegister) {
+            case USER_CREATED->{
+                alertInfo.viewAlert("CREACION DE CUENTA", "¡¡USUARIO CREADO EXITOSAMENTE!!", 
+                    "Su usuario se ha creado.",
+                    "INFORMATION");
+                viewFacto.loginView();
+            }
+            case INCORRECT_ENCRYPT_TYPE->
+                alertInfo.viewAlert("ERROR DE ENCRIPTACIÓN", "Encriptación Incorrecta", 
+                    "Ha elegido una opción de encriptado inválido.",
+                    "ERR");
+            case ERROR_USER_SEARCH->
+                alertInfo.viewAlert("ERROR BUSQUEDA DE USUARIO", "Error al comprobar usuario", 
+                    "Ocurrió un error al momento de validar existencia de usuario.\n"+userService.getMessageError(),
+                    "ERR");
+            case ERROR_USER_CREATE->
+                alertInfo.viewAlert("CREACION DE CUENTA", "Error al crear cuenta", 
+                    "Ocurrió un error inesperado al crear tu cuenta.\n"+userService.getMessageError(),
+                    "ERR");
+            case USER_EXISTS-> 
+                alertInfo.viewAlert("ERROR DE CUENTA", "LA CUENTA YA EXISTE!!", 
+                    "El usuario o correo ya se encuentran registrados\nINGRESE UN NOMBRE DE USUARIO O CORREO DIFERENTE",
+                    "ERR");
         }
         
     }

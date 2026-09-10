@@ -13,7 +13,8 @@ call sp_create_user_unprotected(
 	'admin@example.com',
 	'admin',
 	'admin123',
-	100
+	100,
+    1
 );
 
 # Usuario con contraseña almacenada usando MD5 dentro del procedimiento.
@@ -23,8 +24,14 @@ call sp_create_user_hashed(
 	'user@example.com',
 	'user',
 	'user123',
-	101
+	101,
+    2
 );
+
+#----------------SIMULACIONES DE BUSQUEDA DE USUARIO--------------------------
+call sp_read_user_by_email_or_user("admin@example.com",null);
+call sp_read_user_by_email_or_user(null, null);
+select * from user;
 
 #----------------SIMULACIONES DE LOGIN--------------------------
 # Login sin hash: se envia la contraseña plana y se compara directamente.
