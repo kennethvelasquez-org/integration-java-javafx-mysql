@@ -18,6 +18,7 @@ import javafx.scene.layout.HBox;
 import org.kennethvelasquez.system.service.UserService;
 import org.kennethvelasquez.system.service.UserStatus;
 import org.kennethvelasquez.system.utils.AlertInformation;
+import org.kennethvelasquez.system.utils.ToolBCrypt;
 import org.kennethvelasquez.system.utils.Validations;
 
 import org.kennethvelasquez.system.utils.ViewFactory;
@@ -149,6 +150,9 @@ public class RegisterController implements Initializable{
             return ;
         }
         
+        ToolBCrypt bcrypt = new ToolBCrypt();
+        
+        /*
         UserStatus statusRegister;
         statusRegister = userService.createUser(name, lastName, email, user, password, optionSecurity);
         
@@ -175,7 +179,7 @@ public class RegisterController implements Initializable{
                 alertInfo.viewAlert("ERROR DE CUENTA", "LA CUENTA YA EXISTE!!", 
                     "El usuario o correo ya se encuentran registrados\nINGRESE UN NOMBRE DE USUARIO O CORREO DIFERENTE",
                     "ERR");
-        }
+        }*/
         
     }
 
