@@ -150,9 +150,6 @@ public class RegisterController implements Initializable{
             return ;
         }
         
-        ToolBCrypt bcrypt = new ToolBCrypt();
-        
-        /*
         UserStatus statusRegister;
         statusRegister = userService.createUser(name, lastName, email, user, password, optionSecurity);
         
@@ -179,7 +176,7 @@ public class RegisterController implements Initializable{
                 alertInfo.viewAlert("ERROR DE CUENTA", "LA CUENTA YA EXISTE!!", 
                     "El usuario o correo ya se encuentran registrados\nINGRESE UN NOMBRE DE USUARIO O CORREO DIFERENTE",
                     "ERR");
-        }*/
+        }
         
     }
 

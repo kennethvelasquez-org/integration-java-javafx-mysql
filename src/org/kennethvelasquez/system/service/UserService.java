@@ -7,6 +7,7 @@ package org.kennethvelasquez.system.service;
 import java.sql.SQLException;
 import org.kennethvelasquez.system.model.User;
 import org.kennethvelasquez.system.repository.UserRepository;
+import org.kennethvelasquez.system.utils.ToolBCrypt;
 
 /**
  * Servicio encargado de gestionar la lógica de negocio relacionada con los usuarios.
@@ -101,7 +102,8 @@ public class UserService {
                 case 1 -> userRepo.createUnprotected(newUser);
                 case 2 -> userRepo.createMD5(newUser);
                 case 3 -> {
-                    newUser.setPassword(password);
+                    ToolBCrypt encrypt = new ToolBCrypt();
+                    newUser.setPassword(encrypt.encryptToString(password));
                     userRepo.createBCrypt(newUser);
                 }
                 default -> {
