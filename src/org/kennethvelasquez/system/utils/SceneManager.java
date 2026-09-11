@@ -26,6 +26,7 @@ public class SceneManager {
         try {
             stagePrincipal.setScene(scene);
             stagePrincipal.sizeToScene();
+            stagePrincipal.centerOnScreen();
             stagePrincipal.show();
         } catch (NullPointerException objectNull) {
             AlertInformation alertInfo = new AlertInformation();
