@@ -138,7 +138,8 @@ Delimiter $$
                user as Usuario,
                password as Clave,
                id_rol as Rol,
-               type_encrypt as Encript
+               type_encrypt as Encript,
+               id_user as ID
             from User 
                 where email = email_p or user = user_p;
     end$$

@@ -26,9 +26,9 @@
             <VBox alignment="CENTER_LEFT" prefHeight="120.0" prefWidth="330.0" spacing="5.0" styleClass="form">
                <children>
                   <Label text="INGRESE CORREO O USUARIO" />
-                  <TextField />
+                  <TextField fx:id="txtDataUser" />
                   <Label text="INGRESE SU CONTRASEÑA" />
-                  <PasswordField />
+                  <PasswordField fx:id="pwdPassword" />
                </children>
             </VBox>
             <HBox alignment="CENTER" prefHeight="35.0" prefWidth="200.0">
@@ -36,7 +36,7 @@
                   <Hyperlink onMouseClicked="#onRegisterUser" styleClass="link" text="¿No tienes cuenta? Regístrate" />
                </children>
             </HBox>
-            <Button id="btn-login" mnemonicParsing="false" text="INICIAR SESIÓN" />
+            <Button id="btn-login" mnemonicParsing="false" onAction="#onLogin" text="INICIAR SESIÓN" />
          </children>
       </VBox>
    </children>
