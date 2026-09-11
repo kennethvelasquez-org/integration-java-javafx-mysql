@@ -10,8 +10,8 @@ call sp_create_rol('employee', 'Vendedor de productos');
 call sp_create_user_unprotected(
 	'Admin',
 	'Principal',
-	'admin@example.com',
 	'admin',
+	'admin@example.com',
 	'admin123',
 	100,
     1
@@ -21,17 +21,17 @@ call sp_create_user_unprotected(
 call sp_create_user_hashed(
 	'User',
 	'Standard',
-	'user@example.com',
 	'user',
+	'user@example.com',
 	'user123',
 	101,
     2
 );
 
 #----------------SIMULACIONES DE BUSQUEDA DE USUARIO--------------------------
-call sp_read_user_by_email_or_user("admin@example.com",null);
-call sp_read_user_by_email_or_user(null, null);
-select * from user;
+call sp_read_user_by_email_or_user(null,"admin@example.com");
+call sp_read_user_by_email_or_user("user",null);
+
 
 #----------------SIMULACIONES DE LOGIN--------------------------
 # Login sin hash: se envia la contraseña plana y se compara directamente.
@@ -41,3 +41,4 @@ call sp_login_user_unprotected('admin', 'admin123');
 call sp_login_user_hashed('user@example.com', 'user123');
 
 # El login con BCrypt se omite: la verificación debe hacerse en Java con BCrypt.
+@

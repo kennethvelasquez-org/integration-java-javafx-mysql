@@ -153,4 +153,72 @@ public class UserRepository implements UserInterface{
         return false;
     }
     
+    @Override
+    public User searchByEmailOrUser(String dataUser) throws SQLException, SQLIntegrityConstraintViolationException {
+        String storedProcedure="{call sp_read_user_by_email_or_user(?,?)}";
+
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, dataUser);
+            callSP.setString(2, dataUser);
+            ResultSet result = callSP.executeQuery();
+            if (result.next()) {
+                User findUser = new User();
+                findUser.setName(result.getString(1));
+                findUser.setLastName(result.getString(2));
+                findUser.setUser(result.getString(3));
+                findUser.setEmail(result.getString(4));
+                findUser.setPassword(result.getString(5));
+                findUser.setRol(result.getInt(6));
+                findUser.setTypeEncrypt(result.getInt(7));
+                findUser.setIdUser(result.getString(8));
+                return findUser;
+            }
+        }
+        return null;
+    }
+    
+    
+    @Override
+    public User loginUnprotected(String dataUser, String password) throws SQLException, SQLIntegrityConstraintViolationException {
+        String storedProcedure="{call sp_login_user_unprotected(?,?)}";
+
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, dataUser);
+            callSP.setString(2, password);
+            ResultSet result = callSP.executeQuery();
+            if (result.next()) {
+                User findUser = new User();
+                findUser.setIdUser(result.getString(1));
+                findUser.setName(result.getString(2));
+                findUser.setLastName(result.getString(3));
+                findUser.setEmail(result.getString(4));
+                findUser.setUser(result.getString(5));
+                findUser.setRol(result.getInt(6));
+                return findUser;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public User loginMD5(String dataUser, String password) throws SQLException, SQLIntegrityConstraintViolationException {
+        String storedProcedure="{call sp_login_user_hashed(?,?)}";
+
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, dataUser);
+            callSP.setString(2, password);
+            ResultSet result = callSP.executeQuery();
+            if (result.next()) {
+                User findUser = new User();
+                findUser.setIdUser(result.getString(1));
+                findUser.setName(result.getString(2));
+                findUser.setLastName(result.getString(3));
+                findUser.setEmail(result.getString(4));
+                findUser.setUser(result.getString(5));
+                findUser.setRol(result.getInt(6));
+                return findUser;
+            }
+        }
+        return null;
+    }
 }

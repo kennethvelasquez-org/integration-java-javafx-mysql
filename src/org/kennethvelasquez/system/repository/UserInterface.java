@@ -60,4 +60,17 @@ public interface UserInterface {
      * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de integridad.
      */
     Boolean existsByEmailOrUser(String user,String email) throws SQLException, SQLIntegrityConstraintViolationException;
+    
+    /**
+     * Devuelve un objeto modelo User cuando existe en la base de datos.
+     *
+     * @param dataUser Correo o usuario a verificar.
+     * @return Si existe, retorna un objeto Usuario, de lo contrario NULL
+     * @throws SQLException Si ocurre un error de base de datos.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de integridad.
+     */
+    User searchByEmailOrUser(String dataUser) throws SQLException, SQLIntegrityConstraintViolationException;
+    
+    User loginUnprotected(String dataUser, String password)throws SQLException, SQLIntegrityConstraintViolationException;
+    User loginMD5(String dataUser, String password)throws SQLException, SQLIntegrityConstraintViolationException;
 }
