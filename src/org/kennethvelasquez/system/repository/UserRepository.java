@@ -153,6 +153,18 @@ public class UserRepository implements UserInterface{
         return false;
     }
     
+    /**
+     * Busca y obtiene la información completa de un usuario por su correo electrónico o nombre de usuario.
+     * <p>
+     * Invoca el procedimiento almacenado {@code sp_read_user_by_email_or_user}. Mapea todas las columnas
+     * de la consulta hacia una nueva instancia de {@link User}, incluyendo su ID generado y el tipo de encriptación.
+     * </p>
+     *
+     * @param dataUser Correo electrónico o nombre de usuario a consultar.
+     * @return Instancia de {@link User} con todos los atributos poblados si fue encontrado; {@code null} si no existe.
+     * @throws SQLException Si ocurre un error de comunicación o ejecución SQL.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de integridad.
+     */
     @Override
     public User searchByEmailOrUser(String dataUser) throws SQLException, SQLIntegrityConstraintViolationException {
         String storedProcedure="{call sp_read_user_by_email_or_user(?,?)}";
@@ -177,7 +189,19 @@ public class UserRepository implements UserInterface{
         return null;
     }
     
-    
+    /**
+     * Valida las credenciales de inicio de sesión para cuentas sin protección criptográfica.
+     * <p>
+     * Invoca el procedimiento almacenado {@code sp_login_user_unprotected}, el cual verifica en la base de datos
+     * la coincidencia exacta de la contraseña en texto plano con el correo o usuario indicado.
+     * </p>
+     *
+     * @param dataUser Correo electrónico o nombre de usuario provisto.
+     * @param password Contraseña en texto plano a verificar.
+     * @return Entidad {@link User} con los datos de sesión si la autenticación es correcta; {@code null} si es inválida.
+     * @throws SQLException Si ocurre un error de ejecución en la base de datos.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de integridad.
+     */
     @Override
     public User loginUnprotected(String dataUser, String password) throws SQLException, SQLIntegrityConstraintViolationException {
         String storedProcedure="{call sp_login_user_unprotected(?,?)}";
@@ -200,6 +224,19 @@ public class UserRepository implements UserInterface{
         return null;
     }
 
+    /**
+     * Valida las credenciales de inicio de sesión para cuentas con contraseña hasheada con MD5.
+     * <p>
+     * Invoca el procedimiento almacenado {@code sp_login_user_hashed}, delegando a MySQL la aplicación
+     * de la función {@code md5()} sobre la contraseña recibida antes de compararla con la base de datos.
+     * </p>
+     *
+     * @param dataUser Correo electrónico o nombre de usuario provisto.
+     * @param password Contraseña en texto plano para cotejar con el hash MD5.
+     * @return Entidad {@link User} con los datos de sesión si la autenticación es correcta; {@code null} si es inválida.
+     * @throws SQLException Si ocurre un error de ejecución en la base de datos.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de integridad.
+     */
     @Override
     public User loginMD5(String dataUser, String password) throws SQLException, SQLIntegrityConstraintViolationException {
         String storedProcedure="{call sp_login_user_hashed(?,?)}";
