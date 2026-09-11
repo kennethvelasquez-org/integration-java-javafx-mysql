@@ -1,0 +1,73 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 31/08/2026, 03:23:54
+    Author     : STEPHRYS
+*/
+.login-view{
+    -fx-background-color: linear-gradient(to left, #131B5B, #131BB6);
+}
+
+.form{
+    
+}
+
+.form *{
+    -fx-focus-color:transparent;
+    -fx-faint-focus-color:transparent;
+}
+
+.form Label{
+    -fx-text-fill:#fff;
+    -fx-font-size:17px;
+}
+.form TextField,
+.form PasswordField{
+    -fx-border-color:#00a7e4;
+    -fx-border-radius:5px;
+    -fx-background-radius:6px;
+    -fx-border-width:3px;
+    -fx-background-color:#fff;
+    -fx-font-size:15px;
+    -fx-padding:3px;
+}
+
+.link{
+    -fx-border-color:transparent;
+    -fx-text-fill:#2fe06e;
+    -fx-font-size:17px;
+    -fx-font-weight:500;
+}
+
+.link:pressed{
+    -fx-font-weight:700;
+}
+
+#btn-login{
+    -fx-focus-color:transparent;
+    -fx-faint-focus-color:transparent;
+    -fx-font-size:18px;
+    -fx-padding:4px 15px;
+    -fx-font-weight:700;
+    -fx-text-fill:#fff;
+    -fx-background-radius:6px;
+    -fx-background-color:#00a7e4;
+}
+
+#btn-login:hover{
+    -fx-effect:dropshadow(gaussian,#04b9e785,23,0.3,0,0);
+}
+
+#btn-login:pressed{
+    -fx-padding:4px 15px;
+    -fx-font-weight:700;
+    -fx-border-color:#fff;
+    -fx-border-width:2px;
+    -fx-border-radius:5px;
+    -fx-padding:2px 15px;
+    -fx-background-color:#045ee7;
+    -fx-cursor:CLOSED-HAND;
+    -fx-effect:dropshadow(gaussian,#5073e785,30,0.3,0,0);
+}
