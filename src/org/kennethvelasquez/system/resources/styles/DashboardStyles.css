@@ -1,0 +1,63 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 10/09/2026, 20:00:13
+    Author     : STEPHRYS
+*/
+.dashboard-view{
+    -fx-background-image: url("../images/bg-dashboard.jpg");
+    -fx-background-position:center;
+}
+
+.container-options{
+    -fx-spacing:20px;
+}
+
+.container-options Button{
+    -fx-pref-width:140px;
+    -fx-padding: 2px 4px;
+    -fx-font-size:19px;
+    -fx-background-color:transparent;
+    -fx-background-radius:5px;
+    -fx-border-color:#ccc;
+    -fx-border-radius: 5px;
+    -fx-font-family: "Cascadia";
+    -fx-text-fill:#fff;
+    -fx-font-weight:500;
+    -fx-focus-color:transparent;
+    -fx-faint-focus-color:transparent;
+}
+
+
+.container-options Button:hover{
+    -fx-font-weight:800;
+    -fx-background-radius:7px;
+    -fx-background-color:#176ba585;
+}
+
+.container-options Button:pressed{
+    -fx-font-weight:800;
+    -fx-background-color:#176ba585;
+    -fx-background-radius:7px;
+    -fx-border-width:2px;
+}
+.container-options Button.active{
+    -fx-font-weight:800;
+    -fx-background-color:#057ba995;
+    -fx-background-radius:7px;
+    -fx-scale-y:1.08;
+    -fx-scale-x:1.08;
+    -fx-border-color:#47feec;
+    -fx-border-width:1px;
+}
+
+.lbl-welcome,
+.lbl-full-name{
+    -fx-font-family:"Georgia";
+    -fx-padding: 3px;
+    -fx-font-size:26px;
+    -fx-pref-height:30px;
+    -fx-text-fill:#fff;
+}
