@@ -85,7 +85,7 @@ public class LoginController implements Initializable{
             case LOGIN_SUCCESS -> {
                 alertInfo.viewAlert("BIENVENIDO", "Inicio de sesión correcto", 
                 "Hola, " + AuthenticationController.getUserLogued().getUser(), "INFO");
-                
+                viewFacto.dashboardView();
             }
             case ERROR_CREDENTIALS->
                 alertInfo.viewAlert("DATOS INCORRECTOS", "Error de Credenciales",
