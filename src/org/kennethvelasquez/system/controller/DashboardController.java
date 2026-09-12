@@ -70,6 +70,11 @@ public class DashboardController implements Initializable {
     @FXML private Button btnMyPerfil;
 
     /**
+     * Botón de navegación superior que permite abrir la vista del editor HTML ("HTML").
+     */
+    @FXML private Button btnHtml;
+
+    /**
      * Botón de navegación superior para acceder al módulo de gestión del catálogo de productos.
      */
     @FXML private Button btnProducts;
@@ -222,20 +227,32 @@ public class DashboardController implements Initializable {
     @FXML
     private void onMyProfile(MouseEvent event) {
         Parent profileComponent = viewFacto.loadComponent("my-profile");
-        insertContentAnchorPante(profileComponent);
-        
+        if (profileComponent != null) {
+            insertContentAnchorPante(profileComponent);
+        }
     }
 
     /**
-     * Método de compatibilidad hacia atrás para invocaciones desde FXML que apunten a {@code onMyPerfil}.
+     * Manejador del evento de clic para la opción "HTML" ({@link #btnHtml}).
      * <p>
-     * Redirige el flujo directamente hacia {@link #onMyProfile(MouseEvent)}.
+     * Solicita a la factoría {@link ViewFactory#loadComponent(String)} la carga del componente
+     * correspondiente a la clave {@code "html-view"} (vista {@code HTMLView.fxml}) y la incrusta
+     * en el panel principal llamando a {@link #insertContentAnchorPante(Parent)}.
      * </p>
      *
-     * @param event Evento del ratón capturado.
+     * @param event Evento del ratón disparado al hacer clic sobre el botón "HTML".
      */
     @FXML
-    private void onMyPerfil(MouseEvent event) {
-        onMyProfile(event);
+    private void onHtml(MouseEvent event) {
+        Parent htmlComponent = viewFacto.loadComponent("html-view");
+        if (htmlComponent != null) {
+            insertContentAnchorPante(htmlComponent);
+        }
+    }
+    
+    @FXML 
+    private void onLogout(MouseEvent event){
+        AuthenticationController.setUserLogued(null);
+        viewFacto.loginView();
     }
 }

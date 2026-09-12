@@ -92,6 +92,9 @@ public class ViewFactory {
                 case "my-profile"-> {
                    yield loadFileFXMLParent("MyProfileView.fxml", 1280, 650);
                 }
+                case "html-view"-> {
+                   yield loadFileFXMLParent("HTMLView.fxml", 1280, 650);
+                }
                 default-> loadFileFXMLParent("NotFoundView.fxml", 350, 350);
             };
         } catch (NullPointerException nullPointer) {
