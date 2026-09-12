@@ -17,6 +17,7 @@ create Table User(
     password varchar(70) not null check(length(password)<=70), # Es de 70 porque el hash de bcrypt es de 60 caracteres, y le puse 10 mas por si acaso
     id_rol int,
     type_encrypt int not null,
+    user_status boolean default true,
     constraint fk_user_rol
         foreign key (id_rol) references Rol(id_rol)
         on delete set null 
@@ -62,9 +63,46 @@ Delimiter $$
     end$$
 Delimiter ;
 
+Delimiter //
+	create procedure sp_read_rol()
+    begin
+		select id_rol as ID,
+			name as Nombre,
+            description as "Descripción"
+            from rol;
+    end//
+Delimiter ;
+
+Delimiter //
+	create procedure sp_search_rol(in id_rol_p int)
+    begin
+		select id_rol as ID,
+			name as Nombre,
+            description as "Descripción"
+			from Rol
+				where id_rol = id_rol_p;
+    end//
+Delimiter ;
+
+Delimiter //
+	create procedure sp_update_rol(in id_rol_p int, in name_p varchar(70),in description_p varchar(100))
+    begin
+		update Rol set
+			name = name_p,
+            description = description_p
+		where id_rol = id_rol_p;
+    end//
+Delimiter ;
+
+Delimiter //
+	create procedure sp_delete_rol(in id_rol_p int)
+    begin
+		delete from Rol 
+			where id_rol = id_rol_p;
+    end//
+Delimiter ;
 
 #----------------STORED PROCEDURES DE USUARIOS----------------------
-
 Delimiter $$
     create procedure sp_create_user_unprotected(
             in name_p varchar(70),
@@ -139,7 +177,8 @@ Delimiter $$
                password as Clave,
                id_rol as Rol,
                type_encrypt as Encript,
-               id_user as ID
+               id_user as ID,
+               user_status as Estado
             from User 
                 where email = email_p or user = user_p;
     end$$
@@ -157,7 +196,8 @@ Delimiter $$
                email as Correo,
                user as Usuario,
                password as Clave,
-               id_rol as Rol
+               id_rol as Rol,
+               user_status as Estado
             from User 
                 where (email = data_user or user = data_user) and password = password_p;
     end$$
@@ -176,7 +216,8 @@ Delimiter $$
                email as Correo,
                user as Usuario,
                password as Clave,
-               id_rol as Rol
+               id_rol as Rol,
+               user_status as Estado
             from User 
                 /* Hacemos hash directamente en la consulta, para que el usuario no tenga que enviar el hash, sino que envie la contraseña en texto plano, y el SP haga el hash y compare con el hash guardado en la base de datos */
                 where (email = data_user or user = data_user) and password = md5(password_hash);
@@ -186,3 +227,30 @@ Delimiter ;
 /* EL SP DE LOGIN CON BCRYPT SE OMITE PORQUE NO SE PUEDE HACER HASH CON BCRYPT EN MYSQL.
     Asi ya en java se hace el hash con bcrypt, y se envia al SP para que lo compare con el hash guardado en la base de datos de algun usuario que se busque con el sp_read_user_by_email_or_user.
  */
+ 
+#------------------------------ READ USUARIOS -----------
+create view view_read_users as
+	select u.id_user as "ID Usuario",
+		   u.name as Nombres,
+		   u.last_name as Apellidos,
+		   u.email as Correo,
+		   r.id_rol as "ID Rol",
+		   r.name as Rol,
+		   u.user_status as Estado
+		from User u
+			inner join Rol r
+				on r.id_rol = u.id_rol;
+delimiter $$
+	create procedure sp_read_users()
+		begin
+			select * from view_read_users;
+        end$$
+delimiter ;
+
+#------------------------------ UPDATE USUARIOS -----------
+delimiter $$
+	create procedure sp_update_user()
+		begin
+			select * from view_read_users;
+        end$$
+delimiter ;

@@ -4,6 +4,12 @@ use db_usuarios_productos;
 call sp_create_rol('admin', 'Administrador del sistema');
 call sp_create_rol('user', 'Usuario estandar del sistema');
 call sp_create_rol('employee', 'Vendedor de productos');
+call sp_create_rol('test delete', 'Prueba de rol a eliminar');
+call sp_read_rol();
+call sp_search_rol(101);
+call sp_update_rol(102, "Manager","Es una persona que restringe acceso");
+call sp_delete_rol(103);
+
 
 #----------------USUARIOS DE PRUEBA-----------------------------
 # Usuario con contraseña almacenada sin hash.
@@ -41,4 +47,9 @@ call sp_login_user_unprotected('admin', 'admin123');
 call sp_login_user_hashed('user@example.com', 'user123');
 
 # El login con BCrypt se omite: la verificación debe hacerse en Java con BCrypt.
-@
+
+#----------------CRUD DE USUARIOS--------------------------
+call sp_read_users();
+
+
+

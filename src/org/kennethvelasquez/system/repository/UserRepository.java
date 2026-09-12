@@ -252,7 +252,7 @@ public class UserRepository implements UserInterface{
                 findUser.setLastName(result.getString(3));
                 findUser.setEmail(result.getString(4));
                 findUser.setUser(result.getString(5));
-                findUser.setRol(result.getInt(6));
+                findUser.setRol(result.getInt(7));
                 return findUser;
             }
         }
