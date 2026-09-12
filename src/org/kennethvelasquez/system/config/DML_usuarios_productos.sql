@@ -12,6 +12,17 @@ call sp_delete_rol(103);
 
 
 #----------------USUARIOS DE PRUEBA-----------------------------
+call sp_create_user(
+    'Kenneth',
+    'Velasquez',
+    'kvelasquez@example.com',
+    'kvelasquez',
+    'password123',
+    100,
+    1,
+    true
+);
+
 # Usuario con contraseña almacenada sin hash.
 call sp_create_user_unprotected(
 	'Admin',

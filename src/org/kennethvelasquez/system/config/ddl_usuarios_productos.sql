@@ -104,6 +104,28 @@ Delimiter ;
 
 #----------------STORED PROCEDURES DE USUARIOS----------------------
 Delimiter $$
+    create procedure sp_create_user(
+            in name_p varchar(70),
+            in last_name_p varchar(70),
+            in email_p varchar(70),
+            in user_p varchar(70),
+            in password_p varchar(70),
+            in id_rol_p int,
+            in type_encrypt_p int,
+            in user_status_p boolean
+        )
+    begin
+        insert into User( name, last_name, email, user, password, 
+					id_rol, type_encrypt, user_status, id_user
+				)	 
+        values( name_p, last_name_p, email_p, user_p, password_p,
+            id_rol_p, type_encrypt_p, user_status_p, 
+            uuid()
+        );
+    end$$
+Delimiter ;
+
+Delimiter $$
     create procedure sp_create_user_unprotected(
             in name_p varchar(70),
             in last_name_p varchar(70),
@@ -234,6 +256,7 @@ create view view_read_users as
 		   u.name as Nombres,
 		   u.last_name as Apellidos,
 		   u.email as Correo,
+           u.user as Usuario,
 		   r.id_rol as "ID Rol",
 		   r.name as Rol,
 		   u.user_status as Estado
