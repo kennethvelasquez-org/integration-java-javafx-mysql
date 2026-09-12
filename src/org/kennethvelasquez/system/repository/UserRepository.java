@@ -11,6 +11,9 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
+import org.kennethvelasquez.system.model.dto.UserDTO;
 /**
  * Repositorio encargado de la persistencia y acceso a datos de los usuarios.
  * <p>
@@ -257,5 +260,42 @@ public class UserRepository implements UserInterface{
             }
         }
         return null;
+    }
+
+        /**
+     * Obtiene la lista completa de usuarios registrados en el sistema consultando la vista {@code view_read_users}.
+     * <p>
+     * Invoca el procedimiento almacenado {@code sp_read_users}, el cual realiza un {@code INNER JOIN}
+     * entre las tablas {@code User} y {@code Rol} para obtener la información detallada de cada usuario.
+     * </p>
+     *
+     * @return Lista de tipo {@link List}&lt;{@link User}&gt; con todos los registros encontrados (o lista vacía si no hay registros).
+     * @throws SQLException Si ocurre un error durante la consulta en la base de datos.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de restricciones de integridad.
+     */
+    @Override
+    public List read() throws SQLException, SQLIntegrityConstraintViolationException {
+        List<UserDTO> listUsers = new ArrayList<UserDTO>();
+        String storedProcedure = "{call sp_read_users()}";
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            ResultSet result = callSP.executeQuery();
+            
+            // Usamos while en lugar de if porque esperamos múltiples registros
+            while (result.next()) {
+                UserDTO user = new UserDTO();
+                user.setIdUser(result.getString(1));       // Columna 1: u.id_user ("ID Usuario")
+                user.setName(result.getString(2));         // Columna 2: u.name (Nombres)
+                user.setLastName(result.getString(3));     // Columna 3: u.last_name (Apellidos)
+                user.setEmail(result.getString(4));        // Columna 4: u.email (Correo)
+                user.setUser(result.getString(5));         // Columna 5: u.user (Usuario)
+                user.setTypeEncrypt(result.getInt(6));     // Columna 6: u.type_encrypt (Cifrado)
+                
+                user.setRolName(result.getString(7));      // Columna 7: r.name (Rol en texto)
+                user.setStatus(result.getBoolean(8));   // Columna 8: u.user_status (Estado booleano)
+                
+                listUsers.add(user);
+            }
+        }
+        return listUsers;
     }
 }

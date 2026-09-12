@@ -257,7 +257,7 @@ create view view_read_users as
 		   u.last_name as Apellidos,
 		   u.email as Correo,
            u.user as Usuario,
-		   r.id_rol as "ID Rol",
+           u.type_encrypt as Cifrado,
 		   r.name as Rol,
 		   u.user_status as Estado
 		from User u

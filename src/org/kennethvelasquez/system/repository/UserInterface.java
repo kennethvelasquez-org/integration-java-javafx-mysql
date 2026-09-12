@@ -8,6 +8,7 @@ import org.kennethvelasquez.system.model.User;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 /**
  * Contrato de operaciones para la persistencia y acceso a datos de usuarios.
  * <p>
@@ -92,4 +93,13 @@ public interface UserInterface {
      * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de integridad.
      */
     User loginMD5(String dataUser, String password) throws SQLException, SQLIntegrityConstraintViolationException;
+    
+     /**
+     * Consulta y retorna el catálogo completo de usuarios registrados junto con su rol.
+     *
+     * @return Lista de entidades {@link User} encontradas en la base de datos.
+     * @throws SQLException Si ocurre un error en la base de datos.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de integridad.
+     */
+    List<User> read() throws SQLException, SQLIntegrityConstraintViolationException;
 }
