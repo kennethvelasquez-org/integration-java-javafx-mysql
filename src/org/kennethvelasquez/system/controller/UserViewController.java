@@ -6,7 +6,10 @@ package org.kennethvelasquez.system.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.input.MouseEvent;
+import org.kennethvelasquez.system.utils.ViewFactory;
 
 /**
  * FXML Controller class
@@ -16,6 +19,11 @@ import javafx.fxml.Initializable;
 public class UserViewController implements Initializable {
 
     /**
+     * Instancia de la factoría de vistas ({@link ViewFactory}) para instanciar escenas y componentes FXML.
+     */
+    private ViewFactory viewFacto = new ViewFactory();
+    
+    /**
      * Initializes the controller class.
      */
     @Override
@@ -23,4 +31,8 @@ public class UserViewController implements Initializable {
         
     }    
     
+    @FXML
+    private void onDashboard(MouseEvent event){
+        viewFacto.dashboardView();
+    }
 }

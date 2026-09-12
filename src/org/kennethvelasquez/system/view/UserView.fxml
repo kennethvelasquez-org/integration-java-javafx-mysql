@@ -1,15 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="org.kennethvelasquez.system.controller.UserViewController">
-    <stylesheets>
-        <URL value="@UserViewStyles.css"/>
-    </stylesheets>
-</AnchorPane>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1366.0" styleClass="user-view" stylesheets="@../resources/styles/UserViewStyles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kennethvelasquez.system.controller.UserViewController">
+   <children>
+      <BorderPane maxHeight="85.0" prefHeight="85.0" prefWidth="1366.0">
+         <left>
+            <ImageView fitHeight="85.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../resources/images/users-flaticon.com.png" />
+               </image>
+               <effect>
+                  <BoxBlur />
+               </effect>
+            </ImageView>
+         </left>
+         <center>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="container-options" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" styleClass="option" text="AGREGAR">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" styleClass="image-option">
+                           <image>
+                              <Image url="@../resources/images/add-flaticon.com.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button mnemonicParsing="false" styleClass="option" text="EDITAR">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" styleClass="image-option">
+                           <image>
+                              <Image url="@../resources/images/edit-flaticon.com.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button mnemonicParsing="false" styleClass="option" text="BUSCAR">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" styleClass="image-option">
+                           <image>
+                              <Image url="@../resources/images/search-flaticon.com.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button mnemonicParsing="false" styleClass="option" text="LISTAR">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" styleClass="image-option">
+                           <image>
+                              <Image url="@../resources/images/list-flaticon.com.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button mnemonicParsing="false" styleClass="option" text="ELIMINAR">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/images/delete-flaticon.com.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button mnemonicParsing="false" styleClass="cancel" text="CANCELAR" />
+               </children>
+            </HBox>
+         </center>
+         <right>
+            <Button mnemonicParsing="false" onMouseClicked="#onDashboard" styleClass="btn-home" BorderPane.alignment="CENTER">
+               <graphic>
+                  <ImageView fitHeight="55.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/images/home-flaticon.com.png" />
+                     </image></ImageView>
+               </graphic>
+            </Button>
+         </right>
+      </BorderPane>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+</VBox>

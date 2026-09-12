@@ -2,6 +2,91 @@
  * Empty Stylesheet file.
  */
 
-.mainFxmlClass {
+.user-view {
+    -fx-background-image: url("../images/bg-dashboard.jpg");
+    -fx-background-position:center;
+}
 
+.container-options{
+    -fx-spacing:15px;
+}
+
+.container-options Button{
+    -fx-padding: 5px 5px;
+    -fx-spacing:15px;
+    -fx-font-family: "Cascadia";
+    -fx-font-weight:500;
+    -fx-focus-color:transparent;
+    -fx-faint-focus-color:transparent;
+    -fx-pref-width:150px;
+    -fx-font-size:19px;
+    -fx-background-radius:5px;
+    -fx-background-insets: 1;
+}
+Button:hover{
+    -fx-cursor:hand;
+}
+Button:pressed{
+    -fx-cursor:CLOSED_HAND;
+}
+
+.container-options .option{
+    -fx-background-color:transparent;
+    -fx-border-color:#ccc;
+    -fx-border-radius: 5px;
+    -fx-text-fill:#fff;
+}
+
+.container-options Button:hover{
+    -fx-font-weight:800;
+    -fx-background-radius:7px;
+}
+
+.container-options .option:hover{
+    -fx-background-color:#176ba585;
+}
+
+.container-options .option:pressed{
+    -fx-background-color:#176ba585;
+    -fx-border-width:2px;
+}
+
+.container-options .image-option{
+    -fx-pref-width: 45px;
+    -fx-pref-height: 45px;
+}
+
+.container-options .cancel{
+    -fx-background-color: transparent;
+    -fx-border-color: #521c32;
+    -fx-pref-height: 50px;
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+    -fx-text-fill: #f6738e;
+    -fx-font-weight:600;
+}
+
+.container-options .cancel:hover{
+    -fx-background-color: #90141b;
+    -fx-text-fill:#fff;
+    -fx-font-weight:600;
+    -fx-border-color: #521c32;
+    -fx-effect: dropshadow(gaussian, rgba(163, 25, 69, 0.4), 12, 0.2, 0, 0);
+}
+
+.container-options .cancel:pressed{
+    -fx-background-color: #971032;
+    -fx-text-fill:#fff;
+    -fx-font-weight:800;
+    -fx-effect: dropshadow(gaussian, rgba(163, 25, 69, 0.4), 12, 0.2, 0, 0);
+}
+
+.btn-home{
+    -fx-focus-color:transparent;
+    -fx-background-color:white;
+    -fx-background-radius: 25%;
+}
+
+.btn-home:hover{
+    -fx-background-color:linear-gradient(to right,#07a6dd70,#1afce4);
 }
