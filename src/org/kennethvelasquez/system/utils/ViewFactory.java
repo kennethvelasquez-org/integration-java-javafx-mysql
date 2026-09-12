@@ -35,7 +35,8 @@ public class ViewFactory {
             
             return loaderFXML.load();
         } catch (IOException ioException) {
-            throw new UncheckedIOException("Error al cargar/leer el archivo FXML", ioException);
+            throw new UncheckedIOException("Error al cargar/leer el archivo FXML: Load FXML Parent",
+                    ioException);
         }
     }
     
@@ -83,9 +84,30 @@ public class ViewFactory {
             nullPointer.printStackTrace();
             alertInfo.viewAlert();
         }
-    }
+    }    
     
-    
+    public Parent loadComponent(String nameScene){
+        try {
+            return switch (nameScene) {
+                case "my-profile"-> {
+                   yield loadFileFXMLParent("MyProfileView.fxml", 1280, 650);
+                }
+                case "html-view"-> {
+                   yield loadFileFXMLParent("HTMLView.fxml", 1280, 650);
+                }
+                default-> loadFileFXMLParent("NotFoundView.fxml", 350, 350);
+            };
+        } catch (NullPointerException nullPointer) {
+            AlertInformation alertInfo = new AlertInformation("ERROR CAMBIO DE VENTANA",
+                    "Error al cambiar Ventana",
+                    "Se genero un error al cambiar de ventana "+nullPointer.getMessage(), 
+                    "ERR");
+            System.out.println("Error Load Scene");
+            nullPointer.printStackTrace();
+            alertInfo.viewAlert();
+            return null;
+        }
+    }    
     
     public void loginView(){
         loadScene("login");

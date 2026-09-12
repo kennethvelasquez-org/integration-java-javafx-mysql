@@ -1,16 +1,22 @@
 # Proyecto integrador de JAVA - JAVAFX - MYSQL
 
-## Configuración JavaFX en Netbeans
+## Configuración JavaFX en NetBeans
 La documentación oficial la puedes encontrar en [JavaFX](https://openjfx.io/openjfx-docs/).
 
-Hacer clic derecho sobre el proyecto y luego clic en **"properties"**.
+Hacer clic derecho sobre el proyecto y luego clic en **"Properties"**.
 
-1. Ir a Librares > pestaña Classpath > símbolo **+** y agregar la librería de javafx.
-2. Ir a Build > Compiling > Opción **Compile on sabe** y desmarcar.
-3. Ir a Run > VM Options > pegar lo siguiente y reemplazar **RUTA_DIRECTA** por la ubicación exacta del SDK de JavaFX en la dirección javafx-sdk/lib:
+1. Ir a **Libraries** > pestaña **Classpath** > presionar **Add Library...** (o símbolo **+**) y agregar la librería de JavaFX.
+2. Ir a **Build** > **Compiling** > desmarcar la opción **Compile on Save**.
+3. Ir a **Run** > **VM Options** > pegar lo siguiente y reemplazar **RUTA_DIRECTA** por la ubicación exacta del SDK de JavaFX en la dirección `javafx-sdk/lib` (por ejemplo: `C:\libreries\javafx-sdk-21\lib`):
+    ```bash
+    --module-path "RUTA_DIRECTA" --add-modules javafx.controls,javafx.fxml,javafx.web
     ```
-    --module-path "RUTA_DIRECTA" --add-modules javafx.controls,javafx.fxml
-    ```
+
+> **Importante sobre `javafx.web` y el `HTMLEditor`:**  
+> Por defecto, la documentación básica de JavaFX únicamente sugiere registrar `--add-modules javafx.controls,javafx.fxml`. Sin embargo, en este proyecto se utiliza el componente de texto enriquecido **`HTMLEditor`**, el cual pertenece al módulo **`javafx.web`**.  
+> Si se omite `javafx.web`, Java intentará cargar el editor en el módulo sin nombre (*unnamed module*) provocando la siguiente excepción al abrir la vista:  
+> `java.lang.IllegalAccessError: class javafx.scene.web.HTMLEditor (in unnamed module) cannot access class com.sun.javafx.scene.control.ControlHelper (in module javafx.controls)`  
+> Por ello, es **estrictamente indispensable** agregar `javafx.web` en la directiva `--add-modules`.
 
 ## Dependencias y Librerías Requeridas
 

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<Pane id="paneMyProfile" fx:id="paneMyProfile" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: #ffffff80; -fx-background-radius: 15px;" styleClass="profile-view" stylesheets="@../resources/styles/MyProfileStyles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kennethvelasquez.system.controller.MyProfileController">
+   <children>
+      <VBox layoutX="15.0" layoutY="15.0" maxHeight="620.0" prefHeight="620.0" prefWidth="1250.0" styleClass="profile-card">
+         <children>
+            <HBox prefHeight="520.0" prefWidth="1188.0">
+               <children>
+                  <BorderPane prefHeight="525.0" prefWidth="1250.0">
+                     <left>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="225.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <ImageView fitHeight="200.0" fitWidth="225.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/images/profile.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                     </left>
+                     <center>
+                        <HBox fx:id="hboxInfo" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <!-- 1. GRIDPANE: MODO SOLO LECTURA -->
+                              <GridPane id="grid-my-info" fx:id="gridMyInfo" hgap="10.0" maxWidth="1.7976931348623157E308" prefHeight="525.0" vgap="12.0" HBox.hgrow="ALWAYS">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="221.0" minWidth="120.0" prefWidth="190.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="150.0" prefWidth="250.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="78.0" minHeight="25.0" prefHeight="77.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="78.0" minHeight="25.0" prefHeight="78.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Label styleClass="lblDescript" text="ID de Usuario:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                    <Label fx:id="lblInfoIdUser" styleClass="lblInfo" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                    <Label styleClass="lblDescript" text="Nombres:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                    <Label fx:id="lblInfoName" styleClass="lblInfo" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label styleClass="lblDescript" text="Apellidos:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                    <Label fx:id="lblInfoLastName" styleClass="lblInfo" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Label styleClass="lblDescript" text="Usuario:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                    <Label fx:id="lblInfoUser" styleClass="lblInfo" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <Label styleClass="lblDescript" text="Correo Electrónico:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                                    <Label fx:id="lblInfoEmail" styleClass="lblInfo" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <Label styleClass="lblDescript" text="Rol:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                                    <Label fx:id="lblInfoRol" styleClass="lblInfo" text="-" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                 </children>
+                              </GridPane>
+                              <!-- 2. GRIDPANE: MODO EDICIÓN CON TEXTFIELDS BALANCEADOS -->
+                              <GridPane id="grid-edit-my-info" fx:id="gridEditMyInfo" hgap="10.0" maxWidth="1.7976931348623157E308" vgap="12.0" HBox.hgrow="ALWAYS">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="190.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="150.0" prefWidth="250.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <!-- ID del Usuario (Restringido) -->
+                                    <Label styleClass="lblDescript" text="ID de Usuario:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                    <TextField fx:id="txtEditIdUser" editable="false" focusTraversable="false" promptText="ID generado" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                    <!-- Nombres (Habilitado para edición) -->
+                                    <Label styleClass="lblDescript" text="Nombres:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                    <TextField fx:id="txtEditName" promptText="Ingrese sus nombres" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <!-- Apellidos (Habilitado para edición) -->
+                                    <Label styleClass="lblDescript" text="Apellidos:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                    <TextField fx:id="txtEditLastName" promptText="Ingrese sus apellidos" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <!-- Usuario (Restringido) -->
+                                    <Label styleClass="lblDescript" text="Usuario:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                    <TextField fx:id="txtEditUser" editable="false" focusTraversable="false" promptText="Nombre de usuario" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <!-- Correo Electrónico (Restringido) -->
+                                    <Label styleClass="lblDescript" text="Correo Electrónico:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                                    <TextField fx:id="txtEditEmail" editable="false" focusTraversable="false" promptText="Correo registrado" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <!-- Rol (Restringido) -->
+                                    <Label styleClass="lblDescript" text="Rol:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                                    <TextField fx:id="txtEditRol" editable="false" focusTraversable="false" promptText="Rol asignado" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                 </children>
+                              </GridPane>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                     </center>
+                  </BorderPane>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="70.0" prefWidth="1188.0" styleClass="container-buttons">
+               <children>
+                  <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#onCancel" styleClass="btn-cancel" text="Cancelar" />
+                  <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#onActionEdit" styleClass="btn-primary" text="Editar" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+</Pane>
