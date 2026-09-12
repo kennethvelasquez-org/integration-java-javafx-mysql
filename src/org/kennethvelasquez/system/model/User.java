@@ -38,6 +38,24 @@ public class User {
         this.rol = rol;
         this.typeEncrypt = typeEncrypt;
     }
+    public User(String name, String lastName, String email, String user, Integer rol) {
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.user = user;
+        this.rol = rol;
+    }
+    public User(String name, String lastName, String email, String user, 
+            String password, Integer rol, Integer typeEncrypt,String idUser) {
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.user = user;
+        this.password = password;
+        this.rol = rol;
+        this.typeEncrypt = typeEncrypt;
+        this.idUser = idUser;
+    }
 
     public User(String name, String lastName, String email, String user, String password,
             Integer rol, String idUser, Boolean status) {
