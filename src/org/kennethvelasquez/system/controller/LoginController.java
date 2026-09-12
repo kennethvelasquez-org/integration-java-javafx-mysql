@@ -83,8 +83,6 @@ public class LoginController implements Initializable{
         AuthenticationStatus loginStatus = authService.userLogin(dataUser, password);
         switch (loginStatus) {
             case LOGIN_SUCCESS -> {
-                alertInfo.viewAlert("BIENVENIDO", "Inicio de sesión correcto", 
-                "Hola, " + AuthenticationController.getUserLogued().getUser(), "INFO");
                 viewFacto.dashboardView();
             }
             case ERROR_CREDENTIALS->

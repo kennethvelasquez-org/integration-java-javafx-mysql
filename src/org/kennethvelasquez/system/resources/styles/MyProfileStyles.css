@@ -1,0 +1,200 @@
+/* ==========================================================================
+   ESTILOS DE PERFIL - TEMA MINIMALISTA DARK-BLUE
+   Archivo: MyProfileStyles.css
+   Compatible con JavaFX 17+ / 21+
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. CONTENEDOR PRINCIPAL DE LA VISTA
+   -------------------------------------------------------------------------- */
+.profile-view {
+    -fx-background-color: #0b112c;
+    -fx-font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* --------------------------------------------------------------------------
+   2. TARJETA / PANEL ELEVADO (CARD CONTAINER)
+   -------------------------------------------------------------------------- */
+.profile-card {
+    -fx-background-color: #131b43;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: #1f2c68;
+    -fx-border-width: 1px;
+    -fx-padding: 30px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.55), 25, 0.2, 0, 8);
+}
+
+/* --------------------------------------------------------------------------
+   3. ENCABEZADOS Y TÍTULOS
+   -------------------------------------------------------------------------- */
+.profile-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+}
+
+.profile-subtitle {
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-text-fill: #00a7e4;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* --------------------------------------------------------------------------
+   4. GRIDPANE EN MODO SOLO LECTURA (#grid-my-info)
+   -------------------------------------------------------------------------- */
+#grid-my-info {
+    -fx-padding: 10px 0;
+}
+
+/* Etiquetas de la Columna 0 (Descriptores / Títulos de campo) */
+#grid-my-info > Label.lblDescript,
+#grid-edit-my-info > Label.lblDescript {
+    -fx-text-fill: #8d9fc6;
+    -fx-font-size: 20px;
+    -fx-font-weight: 600;
+}
+
+/* Etiquetas de la Columna 1 (Valores actuales mostrados como cajas limpias) */
+#grid-my-info > Label.lblInfo {
+    -fx-background-color: #192354;
+    -fx-background-radius: 6px;
+    -fx-border-color: #233273;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-padding: 6px 12px;
+    -fx-text-fill: #f1f5f9;
+    -fx-font-size: 18px;
+    -fx-font-weight: 500;
+    -fx-pref-width:1000px;
+}
+
+/* --------------------------------------------------------------------------
+   5. GRIDPANE EN MODO EDICIÓN (#grid-edit-my-info)
+   -------------------------------------------------------------------------- */
+#grid-edit-my-info {
+    -fx-padding: 10px 0;
+}
+
+/* Campos de texto generales en modo edición */
+#grid-edit-my-info TextField {
+    -fx-background-color: #0e163b;
+    -fx-background-radius: 6px;
+    -fx-border-color: #243574;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 3px 5px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 19px;
+    -fx-prompt-text-fill: #556895;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Estado al posicionar el ratón (Hover) en campos editables */
+#grid-edit-my-info TextField:hover {
+    -fx-border-color: #384f9e;
+}
+
+/* Estado de enfoque activo (Focus) al escribir */
+#grid-edit-my-info TextField:focused {
+    -fx-background-color: #121b47;
+    -fx-border-color: #00a7e4;
+    -fx-effect: dropshadow(gaussian, rgba(0, 167, 228, 0.4), 10, 0.3, 0, 0);
+}
+
+/* --------------------------------------------------------------------------
+   6. CAMPOS RESTRINGIDOS / SOLO LECTURA (:read-only)
+   (idUser, user, email, rol en el formulario de edición)
+   -------------------------------------------------------------------------- */
+#grid-edit-my-info TextField:read-only {
+    -fx-background-color: #090e26;
+    -fx-border-color: #172149;
+    -fx-border-width: 1px;
+    -fx-text-fill: #687a9e;
+    -fx-opacity: 0.85;
+    -fx-cursor: default;
+}
+
+#grid-edit-my-info TextField:read-only:focused {
+    -fx-border-color: #172149;
+    -fx-effect: null;
+}
+
+/* --------------------------------------------------------------------------
+   7. BOTONES DE ACCIÓN (GUARDAR, EDITAR, CANCELAR)
+   -------------------------------------------------------------------------- */
+.container-buttons {
+    -fx-spacing: 15px;
+}
+
+.container-buttons Button{
+    -fx-font-size:18px;
+    -fx-padding: 8px 20px;
+    -fx-font-weight: 700;
+    -fx-border-width:3px;
+    -fx-pref-width:160px;
+}
+
+/* Botón Primario (Guardar / Aplicar cambios) */
+.btn-primary, #btn-save {
+    -fx-background-color: #00a7e4;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.btn-primary:hover, #btn-save:hover {
+    -fx-background-color: #05b8f8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 167, 228, 0.55), 14, 0.3, 0, 0);
+}
+
+.btn-primary:pressed, #btn-save:pressed {
+    -fx-background-color: #028ec3;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Botón Secundario / Alternar a Edición */
+.btn-secondary, #btn-edit {
+    -fx-background-color: #1d2757;
+    -fx-background-radius: 6px;
+    -fx-border-color: #2b3b7e;
+    -fx-border-radius: 6px;
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.btn-secondary:hover{
+    -fx-background-color: #24316c;
+    -fx-border-color: #00a7e4;
+    -fx-text-fill: #00a7e4;
+}
+
+.btn-secondary:pressed{
+    -fx-background-color: #182046;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Botón de Cancelación */
+.btn-cancel, #btn-cancel-edit {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-border-color: #521c32;
+    -fx-border-radius: 6px;
+    -fx-text-fill: #d3738e;
+    -fx-cursor: hand;
+}
+
+.btn-cancel:hover, #btn-cancel-edit:hover {
+    -fx-background-color: #7a1032;
+    -fx-border-color: #a31945;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(163, 25, 69, 0.4), 12, 0.2, 0, 0);
+}

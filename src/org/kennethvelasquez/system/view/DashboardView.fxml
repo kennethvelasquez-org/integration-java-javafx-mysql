@@ -2,23 +2,28 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="bpDashboardView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" styleClass="dashboard-view" stylesheets="@../resources/styles/DashboardStyles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kennethvelasquez.system.controller.DashboardController">
+<BorderPane fx:id="bpDashboardView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" styleClass="dashboard-view" stylesheets="@../resources/styles/DashboardStyles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kennethvelasquez.system.controller.DashboardController">
    <top>
       <HBox fx:id="hboxOption" alignment="CENTER" maxHeight="45.0" prefHeight="100.0" prefWidth="200.0" styleClass="container-options" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnMyPerfil" mnemonicParsing="false" onAction="#onSelectOption" onMouseClicked="#onMyPerfil" text="Mi Perfil" />
+            <Button fx:id="btnMyPerfil" mnemonicParsing="false" onAction="#onSelectOption" onMouseClicked="#onMyProfile" text="Mi Perfil" />
+            <Button fx:id="btnHtml" mnemonicParsing="false" onAction="#onSelectOption" onMouseClicked="#onHtml" text="HTML" />
             <Button fx:id="btnUsers" mnemonicParsing="false" onAction="#onSelectOption" text="Usuarios" />
             <Button fx:id="btnProducts" mnemonicParsing="false" onAction="#onSelectOption" text="Productos" />
-            <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#onSelectOption" text="Cerrar Sesión" />
+            <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#onSelectOption" onMouseClicked="#onLogout" text="Cerrar Sesión" />
          </children>
       </HBox>
    </top>
    <bottom>
-      <HBox alignment="CENTER" maxHeight="45.0" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" maxHeight="40.0" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <Label styleClass="lbl-welcome" text="¡Bienvenido!,">
                <font>
@@ -33,4 +38,16 @@
          </children>
       </HBox>
    </bottom>
+   <center>
+      <StackPane maxWidth="1320.0" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pane maxHeight="650.0" maxWidth="1280.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #00D7D245;">
+               <effect>
+                  <GaussianBlur radius="15.0" />
+               </effect>
+            </Pane>
+            <AnchorPane fx:id="apContentMain" maxHeight="660.0" maxWidth="1290.0" prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </StackPane>
+   </center>
 </BorderPane>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.HTMLEditor?>
+
+<Pane id="paneHtmlView" fx:id="paneHtmlView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: #ffffff80; -fx-background-radius: 15px;" styleClass="html-view" stylesheets="@../resources/styles/HTMLViewStyles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kennethvelasquez.system.controller.HTMLController">
+   <children>
+      <VBox layoutX="15.0" layoutY="15.0" maxHeight="620.0" prefHeight="620.0" prefWidth="1250.0" styleClass="html-card">
+         <children>
+            <!-- Cabecera de la subvista -->
+            <VBox prefHeight="65.0" prefWidth="1200.0">
+               <children>
+                  <Label styleClass="html-title" text="Editor de Contenido Enriquecido (HTMLEditor)" />
+                  <Label styleClass="html-subtitle" text="Demostración de navegación interna y carga modular de subvistas mediante ViewFactory.loadComponent()" />
+               </children>
+            </VBox>
+
+            <!-- Control HTMLEditor integrado -->
+            <HTMLEditor fx:id="htmlEditor" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body contenteditable=&quot;true&quot;&gt;&lt;/body&gt;&lt;/html&gt;" prefHeight="445.0" prefWidth="1200.0" styleClass="html-editor-container" VBox.vgrow="ALWAYS" />
+
+            <!-- Barra inferior de acciones -->
+            <HBox alignment="CENTER_RIGHT" prefHeight="60.0" prefWidth="1200.0" styleClass="container-buttons">
+               <children>
+                  <Button fx:id="btnReset" mnemonicParsing="false" onAction="#onReset" styleClass="btn-cancel" text="Restablecer" />
+                  <Button fx:id="btnGetHtml" mnemonicParsing="false" onAction="#onGetHtml" styleClass="btn-secondary" text="Ver Código HTML" />
+                  <Button fx:id="btnSave" mnemonicParsing="false" onAction="#onSave" styleClass="btn-primary" text="Guardar" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+</Pane>
