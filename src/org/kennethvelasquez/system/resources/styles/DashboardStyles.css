@@ -56,8 +56,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 .lbl-welcome,
 .lbl-full-name{
     -fx-font-family:"Georgia";
-    -fx-padding: 3px;
+    -fx-padding: 2px 3px;
     -fx-font-size:26px;
     -fx-pref-height:30px;
     -fx-text-fill:#fff;
+}
+
+.lbl-full-name{
+    -fx-font-weight: 800;
 }
