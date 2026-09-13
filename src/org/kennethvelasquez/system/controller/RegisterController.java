@@ -18,7 +18,6 @@ import javafx.scene.layout.HBox;
 import org.kennethvelasquez.system.service.UserService;
 import org.kennethvelasquez.system.service.UserStatus;
 import org.kennethvelasquez.system.utils.AlertInformation;
-import org.kennethvelasquez.system.utils.ToolBCrypt;
 import org.kennethvelasquez.system.utils.Validations;
 
 import org.kennethvelasquez.system.utils.ViewFactory;

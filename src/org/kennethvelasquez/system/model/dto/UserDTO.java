@@ -50,9 +50,9 @@ public class UserDTO extends User {
         }
         
         return switch (this.getTypeEncrypt()) {
-            case 1 -> "Desprotegido";
+            case 1 -> "DESPROTEGIDO";
             case 2 -> "MD5";
-            case 3 -> "BCrypt";
+            case 3 -> "BCRYPT";
             default -> "Desconocido";
         };
     }

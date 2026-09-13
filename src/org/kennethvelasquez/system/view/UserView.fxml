@@ -97,7 +97,7 @@
       </BorderPane>
       <BorderPane prefHeight="665.0" prefWidth="1336.0" styleClass="card-pane">
          <center>
-            <TableView fx:id="tblUsers" prefHeight="200.0" prefWidth="200.0" styleClass="table-view-nebula" BorderPane.alignment="CENTER">
+            <TableView fx:id="tblUsers" onMouseClicked="#onSelectUser" prefHeight="200.0" prefWidth="200.0" styleClass="table-view-nebula" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="colIdUser" prefWidth="89.0" text="ID" />
                 <TableColumn fx:id="colName" prefWidth="149.0" text="Nombres" />
@@ -124,43 +124,43 @@
                         <VBox>
                            <children>
                               <Label text="ID del Usuario" />
-                              <TextField fx:id="txtIdUser" disable="true" promptText="123-abc-a1b2c3" styleClass="text-field-nebula" />
+                              <TextField fx:id="txtIdUser" disable="true" editable="false" promptText="123-abc-a1b2c3" styleClass="text-field-nebula" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label text="Nombres" />
-                              <TextField fx:id="txtName" disable="true" promptText="Ingrese sus nombres" styleClass="text-field-nebula" />
+                              <TextField fx:id="txtName" disable="true" editable="false" promptText="Ingrese sus nombres" styleClass="text-field-nebula" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label text="Apellidos" />
-                              <TextField fx:id="txtLastName" disable="true" promptText="Ingrese sus apellidos" styleClass="text-field-nebula" />
+                              <TextField fx:id="txtLastName" disable="true" editable="false" promptText="Ingrese sus apellidos" styleClass="text-field-nebula" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label text="Usuario" />
-                              <TextField fx:id="txtUser" disable="true" promptText="Ingrese un nombre de usuario ejemplo: pepito123" styleClass="text-field-nebula" />
+                              <TextField fx:id="txtUser" disable="true" editable="false" promptText="Ingrese un nombre de usuario ejemplo: pepito123" styleClass="text-field-nebula" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label text="Correo" />
-                              <TextField fx:id="txtEmail" disable="true" promptText="Ingrese un correo ejemplo: pepito123@gmail.com" styleClass="text-field-nebula" />
+                              <TextField fx:id="txtEmail" disable="true" editable="false" promptText="Ingrese un correo ejemplo: pepito123@gmail.com" styleClass="text-field-nebula" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label text="Contraseña" />
-                              <PasswordField fx:id="txtPassword" disable="true" promptText="Ingrese contraseña segura" />
+                              <PasswordField fx:id="pwdPassword" disable="true" editable="false" promptText="Ingrese contraseña segura" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label text="Confirmar Contraseña" />
-                              <PasswordField fx:id="txtConfirmPassword" disable="true" promptText="Ingrese nuevamente la contraseña segura" />
+                              <PasswordField fx:id="pwdConfirmPassword" disable="true" editable="false" promptText="Ingrese nuevamente la contraseña segura" />
                            </children>
                         </VBox>
                         <VBox>
@@ -170,17 +170,17 @@
                                  <children>
                                     <VBox alignment="CENTER" prefHeight="60.0" prefWidth="150.0">
                                        <children>
-                                          <CheckBox fx:id="cbUnprotected" disable="true" mnemonicParsing="false" text="Sin proteger" />
+                                          <CheckBox fx:id="cbUnprotected" disable="true" mnemonicParsing="false" onAction="#onSelectSecurity" text="Sin proteger" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER" prefHeight="60.0" prefWidth="150.0">
                                        <children>
-                                          <CheckBox fx:id="cbMD5" disable="true" mnemonicParsing="false" text="MD5" />
+                                          <CheckBox fx:id="cbMD5" disable="true" mnemonicParsing="false" onAction="#onSelectSecurity" text="MD5" />
                                        </children>
                                     </VBox>
                                     <VBox alignment="CENTER" prefHeight="60.0" prefWidth="150.0">
                                        <children>
-                                          <CheckBox fx:id="cbBCrypt" disable="true" mnemonicParsing="false" text="BCrypt" />
+                                          <CheckBox fx:id="cbBCrypt" disable="true" mnemonicParsing="false" onAction="#onSelectSecurity" text="BCrypt" />
                                        </children>
                                     </VBox>
                                  </children>
