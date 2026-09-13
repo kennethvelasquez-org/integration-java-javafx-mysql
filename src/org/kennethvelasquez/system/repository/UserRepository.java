@@ -297,4 +297,61 @@ public class UserRepository implements UserInterface{
         }
         return listUsers;
     }
+
+    /**
+    * {@inheritDoc}
+    * <p>
+    * Invoca el procedimiento almacenado {@code sp_soft_delete_user} para
+    * modificar el atributo {@code user_status = false} del usuario en MySQL.
+    * </p>
+    */
+    @Override
+    public void delete(String idUser) throws SQLException, SQLIntegrityConstraintViolationException {
+        String storedProcedure = "{call sp_delete_user(?)}";
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, idUser);
+            callSP.execute();
+        }
+    }
+    
+    /**
+     * Actualiza la información de un usuario existente en la base de datos.
+     * <p>
+     * Invoca el procedimiento almacenado {@code sp_update_user} enviando como parámetros
+     * los atributos de la entidad {@link User}. El procedimiento almacenado se encarga de
+     * localizar el registro por su {@code id_user} y actualizar sus nombres, apellidos,
+     * correo, nombre de usuario, contraseña (si fue provista), rol, tipo de encriptación y estado.
+     * </p>
+     *
+     * <p>
+     * <b>Manejo de recursos:</b><br>
+     * Utiliza la sentencia {@code try-with-resources} sobre {@link CallableStatement},
+     * garantizando la liberación automática de los cursores y recursos de memoria en el
+     * controlador JDBC al concluir la ejecución de la consulta.
+     * </p>
+     *
+     * @param user Entidad {@link User} que encapsula los datos modificados que serán persistidos.
+     * @throws SQLException Si ocurre un error de comunicación o fallo en la ejecución del procedimiento almacenado en MySQL.
+     * @throws SQLIntegrityConstraintViolationException Si se produce una colisión por valor duplicado en columnas únicas 
+     *                                                  ({@code email} o {@code user}) o una violación de llave foránea en {@code id_rol}.
+     */
+    @Override
+    public void update(User user) throws SQLException, SQLIntegrityConstraintViolationException {
+        String storedProcedure = "{call sp_update_user(?,?,?,?,?,?,?,?,?)}";
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, user.getIdUser());
+            callSP.setString(2, user.getName());
+            callSP.setString(3, user.getLastName());
+            callSP.setString(4, user.getEmail());
+            callSP.setString(5, user.getUser());
+            callSP.setString(6, user.getPassword());
+            callSP.setInt(7, user.getRol());
+            callSP.setInt(8, user.getTypeEncrypt());
+            callSP.setBoolean(9, user.getStatus());
+
+            callSP.execute();
+        }
+    }
+    
+    
 }

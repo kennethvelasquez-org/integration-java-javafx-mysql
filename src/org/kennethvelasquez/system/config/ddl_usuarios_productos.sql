@@ -270,10 +270,101 @@ delimiter $$
         end$$
 delimiter ;
 
+/* 
+Procedimiento de Búsqueda Global y Parcial (sp_search_user_by_data)
+Permite buscar usuarios ingresando cualquier fragmento de texto (incompleto o completo).
+ Evalúa coincidencias en Nombres, Apellidos, Nombre Completo, Usuario, Correo y UUID.
+*/
+
+create or replace view view_users_details as
+	select 
+		u.id_user as ID,
+		u.name as Nombres,
+		u.last_name as Apellidos,
+		u.user as Usuario,
+		u.email as Correo,
+		r.name as Rol,
+		u.id_rol as IdRol,
+		u.type_encrypt as Encriptado,
+		u.user_status as Estado
+		from User u
+			left join Rol r on u.id_rol = r.id_rol;
+
+Delimiter $$
+    create procedure sp_search_user_by_data(
+        in data_p varchar(100)
+    )
+    begin
+        -- Limpiar espacios y asegurar que si viene nulo se convierta en ''
+        set data_p = ifnull(trim(data_p), '');
+        -- Consultar directamente sobre la vista
+        select ID, Nombres, Apellidos,
+            Usuario, Correo, Rol,
+            IdRol, Encriptado,
+            Estado
+			from view_users_details
+				where ID like concat('%', data_p, '%')
+				   or Nombres like concat('%', data_p, '%')
+				   or Apellidos like concat('%', data_p, '%')
+				   or Usuario like concat('%', data_p, '%')
+				   or Correo like concat('%', data_p, '%')
+				   or Rol like concat('%', data_p, '%')
+				order by Nombres asc;
+    end$$
+Delimiter ;
+
 #------------------------------ UPDATE USUARIOS -----------
-delimiter $$
-	create procedure sp_update_user()
-		begin
-			select * from view_read_users;
-        end$$
-delimiter ;
+Delimiter $$
+    create procedure sp_update_user(
+        in id_user_p varchar(36),
+        in name_p varchar(70),
+        in last_name_p varchar(70),
+        in email_p varchar(70),
+        in user_p varchar(70),
+        in password_p varchar(70),
+        in id_rol_p int,
+        in type_encrypt_p int,
+        in user_status_p boolean
+    )
+    begin
+        update User
+            set name = name_p,
+                last_name = last_name_p,
+                email = email_p,
+                user = user_p,
+                id_rol = id_rol_p,
+                /*La siguiente seccion es para los administradores con el uso de una validacion mas avanzada usando 
+                sentencias de control switch en SQL
+					-- Si password_p viene nulo o vacío, conserva la que ya tenía ('password').
+					-- Si viene texto nuevo y type_encrypt es 2, le aplica MD5.
+					-- En cualquier otro caso nuevo, guarda el nuevo password_p.
+                */
+                password = case 
+								when password_p is null or trim(password_p) = '' then password 
+								when type_encrypt_p = 2 then md5(password_p)
+								else password_p
+						   end,
+                type_encrypt = case 
+								when type_encrypt is null or trim(type_encrypt) = '' then type_encrypt 
+								else type_encrypt_p
+						   end,
+                user_status = user_status_p
+            where id_user = id_user_p;
+    end$$
+Delimiter ;
+
+#------------------------------ DELETE USUARIOS -----------
+/*
+	 Procedimiento de Eliminación Lógica / Soft Delete (sp_soft_delete_user)
+	No destruye el registro de la base de datos (evita problemas de integridad referencial con compras, logs o auditoría), únicamente pasa user_status a false (0):
+*/
+Delimiter $$
+    create procedure sp_delete_user(
+        in id_user_p varchar(36)
+    )
+    begin
+        update User
+            set user_status = false
+            where id_user = id_user_p;
+    end$$
+Delimiter ;
