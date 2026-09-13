@@ -129,4 +129,20 @@ public interface UserInterface {
      *                                                  o de clave foránea (identificador de rol no válido).
      */
     void update(User user) throws SQLException, SQLIntegrityConstraintViolationException;
+    
+    /**
+     * Registra y persiste un nuevo usuario en la base de datos.
+     * <p>
+     * Delega la persistencia al procedimiento almacenado correspondiente, el cual
+     * genera el identificador único (UUID), evalúa el algoritmo de encriptación
+     * y almacena los datos personales, rol y estado inicial de la cuenta.
+     * </p>
+     *
+     * @param user Entidad {@link User} con la información del nuevo usuario a registrar.
+     * @throws SQLException Si ocurre un error de comunicación, sintaxis o fallo en el motor de base de datos.
+     * @throws SQLIntegrityConstraintViolationException Si se violan restricciones de unicidad 
+     *                                                  (correo electrónico o nombre de usuario duplicado) 
+     *                                                  o restricciones de clave foránea en el rol.
+     */
+    void create(User user) throws SQLException, SQLIntegrityConstraintViolationException;
 }

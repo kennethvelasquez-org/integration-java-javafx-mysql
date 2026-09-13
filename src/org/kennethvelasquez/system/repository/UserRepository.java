@@ -353,5 +353,32 @@ public class UserRepository implements UserInterface{
         }
     }
     
-    
+      /**
+     * {@inheritDoc}
+     * <p>
+     * Invoca el procedimiento almacenado unificado {@code sp_create_user}. 
+     * Si {@code type_encrypt = 2}, MySQL aplica la función nativa {@code md5()} sobre la contraseña;
+     * si {@code type_encrypt = 3} (BCrypt), la contraseña debe haber sido encriptada previamente en Java.
+     * El identificador {@code id_user} es autogenerado en la base de datos mediante {@code uuid()}.
+     * </p>
+     *
+     * @param user Entidad {@link User} que contiene los datos del usuario a persistir.
+     * @throws SQLException Si ocurre un error durante la ejecución de la sentencia en MySQL.
+     * @throws SQLIntegrityConstraintViolationException Si el correo o nombre de usuario ya existen en la base de datos.
+     */
+    @Override
+    public void create(User user) throws SQLException, SQLIntegrityConstraintViolationException {
+        String storedProcedure = "{call sp_create_user(?,?,?,?,?,?,?,?)}";
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, user.getName());
+            callSP.setString(2, user.getLastName());
+            callSP.setString(3, user.getEmail());
+            callSP.setString(4, user.getUser());
+            callSP.setString(5, user.getPassword());
+            callSP.setInt(6, user.getRol());
+            callSP.setInt(7, user.getTypeEncrypt());
+            callSP.setBoolean(8, user.getStatus());
+            callSP.execute();
+        }
+    }
 }

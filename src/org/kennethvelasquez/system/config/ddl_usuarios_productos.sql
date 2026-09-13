@@ -105,23 +105,25 @@ Delimiter ;
 #----------------STORED PROCEDURES DE USUARIOS----------------------
 Delimiter $$
     create procedure sp_create_user(
-            in name_p varchar(70),
-            in last_name_p varchar(70),
-            in email_p varchar(70),
-            in user_p varchar(70),
-            in password_p varchar(70),
-            in id_rol_p int,
-            in type_encrypt_p int,
-            in user_status_p boolean
-        )
+        in name_p varchar(70),
+        in last_name_p varchar(70),
+        in email_p varchar(70),
+        in user_p varchar(70),
+        in password_p varchar(70),
+        in id_rol_p int,
+        in type_encrypt_p int,
+        in user_status_p boolean
+    )
     begin
-        insert into User( name, last_name, email, user, password, 
-					id_rol, type_encrypt, user_status, id_user
-				)	 
-        values( name_p, last_name_p, email_p, user_p, password_p,
-            id_rol_p, type_encrypt_p, user_status_p, 
-            uuid()
-        );
+		insert into user(name, last_name, email, user, password, id_rol, type_encrypt,user_status, id_user)
+			values(name_p,last_name_p,email_p,user_p,
+					#validacion de type_encript = md5
+					case 
+						when type_encrypt_p = 2 then md5(password_p)
+						else password_p
+					end, 
+                    id_rol_p,
+                    type_encrypt_p, user_status_p,uuid());
     end$$
 Delimiter ;
 
