@@ -38,5 +38,33 @@ public enum UserStatus {
     /**
      * El correo electrónico o nombre de usuario ingresado ya se encuentra registrado por otra cuenta.
      */
-    USER_EXISTS
+    USER_EXISTS,
+    
+    // ESTADOS DE LECTURA Y CONSULTA
+    /**
+     * La consulta se ejecutó exitosamente y se recuperó la lista de usuarios.
+     */
+    READ_SUCCESS,
+    /**
+     * No existe el usuario que se estaba buscando en la base de datos.
+     */
+    USER_NOT_FOUND,
+    /**
+     * Ocurrió un fallo técnico o error de SQL al intentar consultar la lista de usuarios.
+     */
+    ERROR_READ_USERS,
+    /**
+     * La consulta se ejecutó con éxito pero no existen registros en la base de datos.
+     */
+    EMPTY_LIST,
+    
+    // ESTADOS DE ACTUALIZACIÓN / ELIMINACIÓN
+    /** La información del usuario fue actualizada con éxito. */
+    USER_UPDATED,
+    /** Ocurrió un error al intentar actualizar el usuario. */
+    ERROR_USER_UPDATE,
+    /** El usuario fue desactivado o eliminado exitosamente. */
+    USER_DELETED,
+    /** Ocurrió un error al intentar eliminar o desactivar al usuario. */
+    ERROR_USER_DELETE
 }

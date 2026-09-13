@@ -8,6 +8,8 @@ import org.kennethvelasquez.system.model.User;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
+import org.kennethvelasquez.system.model.dto.UserDTO;
 /**
  * Contrato de operaciones para la persistencia y acceso a datos de usuarios.
  * <p>
@@ -92,4 +94,71 @@ public interface UserInterface {
      * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de integridad.
      */
     User loginMD5(String dataUser, String password) throws SQLException, SQLIntegrityConstraintViolationException;
+    
+     /**
+     * Consulta y retorna el catálogo completo de usuarios registrados junto con su rol.
+     *
+     * @return Lista de entidades {@link User} encontradas en la base de datos.
+     * @throws SQLException Si ocurre un error en la base de datos.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de integridad.
+     */
+    List<User> read() throws SQLException, SQLIntegrityConstraintViolationException;
+    
+    /**
+     * Realiza la eliminación lógica (Soft Delete) de un usuario en el sistema,
+     * desactivando su estado en la base de datos sin borrar el registro físico.
+     *
+     * @param idUser Identificador único (UUID) del usuario a desactivar.
+     * @throws SQLException Si ocurre un error durante la ejecución en MySQL.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de restricciones de integridad.
+     */
+    void delete(String idUser) throws SQLException, SQLIntegrityConstraintViolationException;
+    
+      /**
+     * Actualiza la información general, rol, estado y/o credenciales de un usuario existente en la base de datos.
+     * <p>
+     * Modifica los datos del registro en la base de datos cuyo identificador coincida con {@code user.getIdUser()}.
+     * La entidad provista debe contener los valores actualizados para nombres, apellidos, correo, nombre de usuario,
+     * rol y estado. Si la propiedad de contraseña es nula o vacía, la implementación deberá preservar la clave actual
+     * sin alterarla.
+     * </p>
+     *
+     * @param user Entidad {@link User} con la información modificada que será persistida en el sistema.
+     * @throws SQLException Si ocurre un error de comunicación, fallo de sintaxis o problema en el motor de base de datos.
+     * @throws SQLIntegrityConstraintViolationException Si los nuevos datos violan restricciones de unicidad 
+     *                                                  (correo o nombre de usuario ya registrado por otra cuenta)
+     *                                                  o de clave foránea (identificador de rol no válido).
+     */
+    void update(User user) throws SQLException, SQLIntegrityConstraintViolationException;
+    
+    /**
+     * Registra y persiste un nuevo usuario en la base de datos.
+     * <p>
+     * Delega la persistencia al procedimiento almacenado correspondiente, el cual
+     * genera el identificador único (UUID), evalúa el algoritmo de encriptación
+     * y almacena los datos personales, rol y estado inicial de la cuenta.
+     * </p>
+     *
+     * @param user Entidad {@link User} con la información del nuevo usuario a registrar.
+     * @throws SQLException Si ocurre un error de comunicación, sintaxis o fallo en el motor de base de datos.
+     * @throws SQLIntegrityConstraintViolationException Si se violan restricciones de unicidad 
+     *                                                  (correo electrónico o nombre de usuario duplicado) 
+     *                                                  o restricciones de clave foránea en el rol.
+     */
+    void create(User user) throws SQLException, SQLIntegrityConstraintViolationException;
+    
+    /**
+     * Busca y lista usuarios de forma global y parcial a partir de cualquier dato ingresado en el objeto User.
+     * <p>
+     * Consume el procedimiento almacenado {@code sp_search_user_by_data}, el cual evalúa
+     * coincidencias parciales sobre ID, nombres, apellidos, usuario, correo y rol.
+     * Si el objeto recibido es nulo o sus atributos de búsqueda están vacíos, se retornan todos los usuarios.
+     * </p>
+     *
+     * @param userDto Entidad {@link UserDTO} que contiene el criterio o fragmento de texto a buscar.
+     * @return Lista de objetos {@link UserDTO} que coinciden con el criterio de búsqueda.
+     * @throws SQLException Si ocurre un error durante la ejecución de la consulta en MySQL.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre un error de integridad referencial.
+     */
+    List<UserDTO> find(UserDTO userDto) throws SQLException, SQLIntegrityConstraintViolationException;
 }

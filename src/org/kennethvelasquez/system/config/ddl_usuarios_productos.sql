@@ -17,6 +17,7 @@ create Table User(
     password varchar(70) not null check(length(password)<=70), # Es de 70 porque el hash de bcrypt es de 60 caracteres, y le puse 10 mas por si acaso
     id_rol int,
     type_encrypt int not null,
+    user_status boolean default true,
     constraint fk_user_rol
         foreign key (id_rol) references Rol(id_rol)
         on delete set null 
@@ -62,8 +63,69 @@ Delimiter $$
     end$$
 Delimiter ;
 
+Delimiter //
+	create procedure sp_read_rol()
+    begin
+		select id_rol as ID,
+			name as Nombre,
+            description as "Descripción"
+            from rol;
+    end//
+Delimiter ;
+
+Delimiter //
+	create procedure sp_search_rol(in id_rol_p int)
+    begin
+		select id_rol as ID,
+			name as Nombre,
+            description as "Descripción"
+			from Rol
+				where id_rol = id_rol_p;
+    end//
+Delimiter ;
+
+Delimiter //
+	create procedure sp_update_rol(in id_rol_p int, in name_p varchar(70),in description_p varchar(100))
+    begin
+		update Rol set
+			name = name_p,
+            description = description_p
+		where id_rol = id_rol_p;
+    end//
+Delimiter ;
+
+Delimiter //
+	create procedure sp_delete_rol(in id_rol_p int)
+    begin
+		delete from Rol 
+			where id_rol = id_rol_p;
+    end//
+Delimiter ;
 
 #----------------STORED PROCEDURES DE USUARIOS----------------------
+Delimiter $$
+    create procedure sp_create_user(
+        in name_p varchar(70),
+        in last_name_p varchar(70),
+        in email_p varchar(70),
+        in user_p varchar(70),
+        in password_p varchar(70),
+        in id_rol_p int,
+        in type_encrypt_p int,
+        in user_status_p boolean
+    )
+    begin
+		insert into user(name, last_name, email, user, password, id_rol, type_encrypt,user_status, id_user)
+			values(name_p,last_name_p,email_p,user_p,
+					#validacion de type_encript = md5
+					case 
+						when type_encrypt_p = 2 then md5(password_p)
+						else password_p
+					end, 
+                    id_rol_p,
+                    type_encrypt_p, user_status_p,uuid());
+    end$$
+Delimiter ;
 
 Delimiter $$
     create procedure sp_create_user_unprotected(
@@ -139,7 +201,8 @@ Delimiter $$
                password as Clave,
                id_rol as Rol,
                type_encrypt as Encript,
-               id_user as ID
+               id_user as ID,
+               user_status as Estado
             from User 
                 where email = email_p or user = user_p;
     end$$
@@ -157,7 +220,8 @@ Delimiter $$
                email as Correo,
                user as Usuario,
                password as Clave,
-               id_rol as Rol
+               id_rol as Rol,
+               user_status as Estado
             from User 
                 where (email = data_user or user = data_user) and password = password_p;
     end$$
@@ -176,7 +240,8 @@ Delimiter $$
                email as Correo,
                user as Usuario,
                password as Clave,
-               id_rol as Rol
+               id_rol as Rol,
+               user_status as Estado
             from User 
                 /* Hacemos hash directamente en la consulta, para que el usuario no tenga que enviar el hash, sino que envie la contraseña en texto plano, y el SP haga el hash y compare con el hash guardado en la base de datos */
                 where (email = data_user or user = data_user) and password = md5(password_hash);
@@ -186,3 +251,132 @@ Delimiter ;
 /* EL SP DE LOGIN CON BCRYPT SE OMITE PORQUE NO SE PUEDE HACER HASH CON BCRYPT EN MYSQL.
     Asi ya en java se hace el hash con bcrypt, y se envia al SP para que lo compare con el hash guardado en la base de datos de algun usuario que se busque con el sp_read_user_by_email_or_user.
  */
+ 
+#------------------------------ READ USUARIOS -----------
+create view view_read_users as
+	select u.id_user as "ID Usuario",
+		   u.name as Nombres,
+		   u.last_name as Apellidos,
+		   u.email as Correo,
+           u.user as Usuario,
+           u.type_encrypt as Cifrado,
+		   r.name as Rol,
+		   u.user_status as Estado
+		from User u
+			inner join Rol r
+				on r.id_rol = u.id_rol;
+delimiter $$
+	create procedure sp_read_users()
+		begin
+			select * from view_read_users;
+        end$$
+delimiter ;
+
+/* 
+Procedimiento de Búsqueda Global y Parcial (sp_search_user_by_data)
+Permite buscar usuarios ingresando cualquier fragmento de texto (incompleto o completo).
+ Evalúa coincidencias en Nombres, Apellidos, Nombre Completo, Usuario, Correo y UUID.
+*/
+
+create or replace view view_users_details as
+	select 
+		u.id_user as ID,
+		u.name as Nombres,
+		u.last_name as Apellidos,
+		u.user as Usuario,
+		u.email as Correo,
+		r.name as Rol,
+		u.id_rol as IdRol,
+		u.type_encrypt as Encriptado,
+		u.user_status as Estado
+		from User u
+			left join Rol r on u.id_rol = r.id_rol;
+
+Delimiter $$
+    create procedure sp_search_user_by_data(
+        in id_user_p varchar(36),
+        in name_p varchar(70),
+        in last_name_p varchar(70),
+        in email_p varchar(70),
+        in user_p varchar(70),
+        in id_rol_p varchar(70),
+        in name_rol varchar(70),
+        in type_encrypt_p varchar(70),
+        in user_status_p varchar(70)
+    )
+    begin
+        select 
+            ID, Nombres, Apellidos,
+            Usuario, Correo, Rol,
+            IdRol, Encriptado, Estado
+			from view_users_details
+				where (id_user_p != '' and ID like concat('%', id_user_p, '%'))
+				   or (name_p != '' and Nombres like concat('%', name_p, '%'))
+				   or (last_name_p != '' and Apellidos like concat('%', last_name_p, '%'))
+				   or (user_p != '' and Usuario like concat('%', user_p, '%'))
+				   or (email_p != '' and Correo like concat('%', email_p, '%'))
+				   or (id_rol_p != '' and IdRol like concat('%', id_rol_p, '%'))
+				   or (name_rol != '' and Rol like concat('%', name_rol, '%'))
+				   or (type_encrypt_p != '' and Encriptado like concat('%', type_encrypt_p, '%'))
+				   or (user_status_p != '' and Estado like concat('%', user_status_p, '%'))
+				order by Nombres asc;
+    end$$
+Delimiter ;
+
+drop procedure sp_search_user_by_data;
+
+#------------------------------ UPDATE USUARIOS -----------
+Delimiter $$
+    create procedure sp_update_user(
+        in id_user_p varchar(36),
+        in name_p varchar(70),
+        in last_name_p varchar(70),
+        in email_p varchar(70),
+        in user_p varchar(70),
+        in password_p varchar(70),
+        in id_rol_p int,
+        in type_encrypt_p int,
+        in user_status_p boolean
+    )
+    begin
+        update User
+            set name = name_p,
+                last_name = last_name_p,
+                email = email_p,
+                user = user_p,
+                id_rol = id_rol_p,
+                /*La siguiente seccion es para los administradores con el uso de una validacion mas avanzada usando 
+                sentencias de control switch en SQL
+					-- Si password_p viene nulo o vacío, conserva la que ya tenía ('password').
+					-- Si viene texto nuevo y type_encrypt es 2, le aplica MD5.
+					-- En cualquier otro caso nuevo, guarda el nuevo password_p.
+                */
+                password = case 
+								when password_p is null or trim(password_p) = '' then password 
+								when type_encrypt_p = 2 then md5(password_p)
+								else password_p
+						   end,
+                type_encrypt = case 
+								when type_encrypt is null or trim(type_encrypt) = '' then type_encrypt 
+								else type_encrypt_p
+						   end,
+                user_status = user_status_p
+            where id_user = id_user_p;
+    end$$
+Delimiter ;
+
+#------------------------------ DELETE USUARIOS -----------
+/*
+	 Procedimiento de Eliminación Lógica / Soft Delete (sp_soft_delete_user)
+	No destruye el registro de la base de datos (evita problemas de integridad referencial con compras, logs o auditoría), únicamente pasa user_status a false (0):
+*/
+Delimiter $$
+    create procedure sp_delete_user(
+        in id_user_p varchar(36)
+    )
+    begin
+        update User
+            set user_status = false
+            where id_user = id_user_p;
+    end$$
+Delimiter ;

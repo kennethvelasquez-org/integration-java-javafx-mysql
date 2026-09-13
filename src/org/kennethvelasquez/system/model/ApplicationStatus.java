@@ -10,9 +10,8 @@ package org.kennethvelasquez.system.model;
  */
 public enum ApplicationStatus {
     NONE,
+    CREATE,
     SAVE,
-    UPDATE,
     DELETE,
-    CANCEL,
-    CONFIRM
+    SEARCH
 }
