@@ -9,6 +9,7 @@ import org.kennethvelasquez.system.model.User;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import org.kennethvelasquez.system.model.dto.UserDTO;
 /**
  * Contrato de operaciones para la persistencia y acceso a datos de usuarios.
  * <p>
@@ -145,4 +146,19 @@ public interface UserInterface {
      *                                                  o restricciones de clave foránea en el rol.
      */
     void create(User user) throws SQLException, SQLIntegrityConstraintViolationException;
+    
+    /**
+     * Busca y lista usuarios de forma global y parcial a partir de cualquier dato ingresado en el objeto User.
+     * <p>
+     * Consume el procedimiento almacenado {@code sp_search_user_by_data}, el cual evalúa
+     * coincidencias parciales sobre ID, nombres, apellidos, usuario, correo y rol.
+     * Si el objeto recibido es nulo o sus atributos de búsqueda están vacíos, se retornan todos los usuarios.
+     * </p>
+     *
+     * @param userDto Entidad {@link UserDTO} que contiene el criterio o fragmento de texto a buscar.
+     * @return Lista de objetos {@link UserDTO} que coinciden con el criterio de búsqueda.
+     * @throws SQLException Si ocurre un error durante la ejecución de la consulta en MySQL.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre un error de integridad referencial.
+     */
+    List<UserDTO> find(UserDTO userDto) throws SQLException, SQLIntegrityConstraintViolationException;
 }

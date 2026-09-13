@@ -381,4 +381,49 @@ public class UserRepository implements UserInterface{
             callSP.execute();
         }
     }
+    
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Invoca {@code sp_search_user_by_data} enviando el texto de búsqueda.
+     * Mapea cada fila del {@link ResultSet} hacia una instancia de {@link UserDTO},
+     * asignando tanto los atributos heredados de {@link User} como los campos propios del DTO.
+     * </p>
+     */
+    @Override
+    public List<UserDTO> find(UserDTO userDTOFind) throws SQLException, SQLIntegrityConstraintViolationException {
+        List<UserDTO> usersFound = new ArrayList<>();
+        String storedProcedure = "{call sp_search_user_by_data(?,?,?,?,?,?,?,?,?)}";
+        
+        //2. Ejecutar la llamada con try-with-resources
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, userDTOFind.getIdUser());
+            callSP.setString(2, userDTOFind.getName());
+            callSP.setString(3, userDTOFind.getLastName());
+            callSP.setString(4, userDTOFind.getEmail());
+            callSP.setString(5, userDTOFind.getUser());
+            callSP.setString(6, userDTOFind.getIdRolStr());
+            callSP.setString(7, userDTOFind.getRolName());
+            callSP.setString(8, userDTOFind.getTypeEncryptStr());
+            callSP.setString(9, userDTOFind.getStatusStr());
+            try (ResultSet result = callSP.executeQuery()) {
+                while (result.next()) {
+                    UserDTO user = new UserDTO();
+                    
+                    // Atributos heredados de User:
+                    user.setIdUser(result.getString(1));       // Columna 1: u.id_user ("ID Usuario")
+                    user.setName(result.getString(2));         // Columna 2: u.name (Nombres)
+                    user.setLastName(result.getString(3));     // Columna 3: u.last_name (Apellidos)
+                    user.setUser(result.getString(4));         // Columna 4: u.user (Usuario)
+                    user.setEmail(result.getString(5));        // Columna 5: u.email (Correo)
+                    user.setRol(result.getInt(7));      // Columna 7: r.name (Rol en texto)
+                    user.setTypeEncrypt(result.getInt(8));     // Columna 8: u.type_encrypt (Cifrado)
+                    user.setStatus(result.getBoolean(9));   // Columna 9: u.user_status (Estado booleano)
+                    
+                    usersFound.add(user);
+                }
+            }
+        }
+        return usersFound;
+    }
 }

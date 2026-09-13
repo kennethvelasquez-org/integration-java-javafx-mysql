@@ -72,8 +72,8 @@ call sp_login_user_hashed('ffff', "Otro");
 #----------------CRUD DE USUARIOS--------------------------
 call sp_read_users();
 select * from user;
--- 1. Prueba de búsqueda parcial (trae a todos los que tengan 'ad' en nombre, user o correo)
-call sp_search_user_by_data('ad');
+-- 1. Prueba de búsqueda (trae a todos los que tengan 'ad' en= user )
+call sp_search_user_by_data(null,null,null,null,null,null,null,null,null);
 -- 2. Prueba de búsqueda vacía (trae todos los usuarios)
 call sp_search_user_by_data('');
 -- 3. Prueba de eliminación lógica (desactivar usuario por su UUID)
