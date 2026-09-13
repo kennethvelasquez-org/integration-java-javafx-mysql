@@ -190,13 +190,13 @@
                         <VBox>
                            <children>
                               <Label text="Rol" />
-                              <ComboBox fx:id="cmbRol" disable="true" prefHeight="25.0" prefWidth="430.0" promptText="Seleccione el rol del usuario" visibleRowCount="5" />
+                              <ComboBox fx:id="cmbRol" disable="true" prefHeight="25.0" prefWidth="430.0" visibleRowCount="5" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label text="Estado" />
-                              <ComboBox fx:id="cmbStatus" disable="true" prefHeight="25.0" prefWidth="430.0" promptText="Seleccione el estado" visibleRowCount="3" />
+                              <ComboBox fx:id="cmbStatus" disable="true" prefHeight="25.0" prefWidth="430.0" visibleRowCount="3" />
                            </children>
                         </VBox>
                      </children>

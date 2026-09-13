@@ -7,7 +7,9 @@ package org.kennethvelasquez.system.service;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import org.kennethvelasquez.system.model.Rol;
 import org.kennethvelasquez.system.model.User;
+import org.kennethvelasquez.system.model.UserAccountStatus;
 import org.kennethvelasquez.system.model.dto.UserDTO;
 import org.kennethvelasquez.system.repository.UserRepository;
 import org.kennethvelasquez.system.utils.ToolBCrypt;
@@ -280,6 +282,53 @@ public class UserService {
         } catch (Exception e){
             messageError = e.getMessage();
             return UserStatus.ERROR_USER_UPDATE;
+        }
+    }
+    
+    /**
+     * Busca y filtra usuarios de forma global utilizando un objeto User como filtro.
+     *
+     * @param userFilter Entidad {@link UserDTO} con el valor de búsqueda (o {@code null} para listar todos).
+     * @return {@link UserStatus#READ_SUCCESS} si se encontraron registros;
+     *         {@link UserStatus#EMPTY_LIST} si no hubo coincidencias;
+     *         {@link UserStatus#ERROR_READ_USERS} si ocurrió un error en la base de datos.
+     */
+    public UserStatus findUsers(String idUser, String name, String lastName,
+            String email, String user, Rol rol, Integer typeEncrypt, 
+            UserAccountStatus userStatus) {
+        
+        String idRol= rol==null?"":String.valueOf(rol.getIdRol());
+        String rolName= rol==null?"":String.valueOf(rol.getName());
+        String encrypt= typeEncrypt==null || typeEncrypt==0?"":String.valueOf(typeEncrypt);
+        String status = userStatus==null ?"": String.valueOf(
+            userStatus.isActive()?"1":"0"
+        );
+        
+        UserDTO userFilter = new UserDTO(
+                idUser,
+                name,
+                lastName,
+                email,
+                user,
+                idRol,
+                rolName,
+                encrypt,
+                status
+        );
+        
+        try {
+            this.usersList = userRepo.find(userFilter);
+            
+            if (this.usersList == null || this.usersList.isEmpty()) {
+                return UserStatus.EMPTY_LIST;
+            }
+            return UserStatus.READ_SUCCESS;
+        } catch (SQLException e) {
+            this.messageError = e.getMessage();
+            return UserStatus.ERROR_READ_USERS;
+        } catch (Exception e) {
+            this.messageError = e.getMessage();
+            return UserStatus.ERROR_READ_USERS;
         }
     }
     

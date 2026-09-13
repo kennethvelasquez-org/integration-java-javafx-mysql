@@ -17,9 +17,35 @@ public class UserDTO extends User {
     private String rolName;     // Se llama rolName para NO chocar con Integer rol de User
     private String userStatus; // Nuevo campo que no estaba en el User original
     private String typeEncryptName;
+    private String idRolStr;
+    private String typeEncryptStr;
+    private String statusStr;
+    
     public UserDTO() {
         super();
     }
+
+    public UserDTO(String idUser, String name, String lastName, String email, String user,
+            Integer rol, String rolName,  Integer typeEncrypt, Boolean status) {
+        super(idUser, name, lastName, email, user, rol, typeEncrypt, status);
+        this.rolName = rolName;
+    }
+    
+    public UserDTO(String idUser, String name, String lastName, String email, String user,
+            String idRolStr, String rolName,  String typeEncryptStr, String statusStr) {
+        super();
+        // Uso el setter heredado del padre (User)
+        setIdUser(idUser);
+        setName(name);
+        setLastName(lastName);
+        setEmail(email);
+        setUser(user);
+        this.idRolStr = idRolStr;
+        this.typeEncryptStr = typeEncryptStr;
+        this.statusStr = statusStr;
+        this.rolName = rolName;
+    }
+    
     public String getRolName() {
         return rolName;
     }
@@ -59,6 +85,30 @@ public class UserDTO extends User {
 
     public void setTypeEncryptName(String typeEncryptName) {
         this.typeEncryptName = typeEncryptName;
+    }
+
+    public String getIdRolStr() {
+        return idRolStr;
+    }
+
+    public void setIdRolStr(String idRolStr) {
+        this.idRolStr = idRolStr;
+    }
+
+    public String getTypeEncryptStr() {
+        return typeEncryptStr;
+    }
+
+    public void setTypeEncryptStr(String typeEncryptStr) {
+        this.typeEncryptStr = typeEncryptStr;
+    }
+
+    public String getStatusStr() {
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
     }
     
 }

@@ -294,26 +294,36 @@ create or replace view view_users_details as
 
 Delimiter $$
     create procedure sp_search_user_by_data(
-        in data_p varchar(100)
+        in id_user_p varchar(36),
+        in name_p varchar(70),
+        in last_name_p varchar(70),
+        in email_p varchar(70),
+        in user_p varchar(70),
+        in id_rol_p varchar(70),
+        in name_rol varchar(70),
+        in type_encrypt_p varchar(70),
+        in user_status_p varchar(70)
     )
     begin
-        -- Limpiar espacios y asegurar que si viene nulo se convierta en ''
-        set data_p = ifnull(trim(data_p), '');
-        -- Consultar directamente sobre la vista
-        select ID, Nombres, Apellidos,
+        select 
+            ID, Nombres, Apellidos,
             Usuario, Correo, Rol,
-            IdRol, Encriptado,
-            Estado
+            IdRol, Encriptado, Estado
 			from view_users_details
-				where ID like concat('%', data_p, '%')
-				   or Nombres like concat('%', data_p, '%')
-				   or Apellidos like concat('%', data_p, '%')
-				   or Usuario like concat('%', data_p, '%')
-				   or Correo like concat('%', data_p, '%')
-				   or Rol like concat('%', data_p, '%')
+				where (id_user_p != '' and ID like concat('%', id_user_p, '%'))
+				   or (name_p != '' and Nombres like concat('%', name_p, '%'))
+				   or (last_name_p != '' and Apellidos like concat('%', last_name_p, '%'))
+				   or (user_p != '' and Usuario like concat('%', user_p, '%'))
+				   or (email_p != '' and Correo like concat('%', email_p, '%'))
+				   or (id_rol_p != '' and IdRol like concat('%', id_rol_p, '%'))
+				   or (name_rol != '' and Rol like concat('%', name_rol, '%'))
+				   or (type_encrypt_p != '' and Encriptado like concat('%', type_encrypt_p, '%'))
+				   or (user_status_p != '' and Estado like concat('%', user_status_p, '%'))
 				order by Nombres asc;
     end$$
 Delimiter ;
+
+drop procedure sp_search_user_by_data;
 
 #------------------------------ UPDATE USUARIOS -----------
 Delimiter $$

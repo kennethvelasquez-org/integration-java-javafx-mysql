@@ -175,7 +175,7 @@ public class UserViewController implements Initializable {
     };
     
     ChangeListener<String> onInputChangePwd = (observable, oldValue, newValue)->{
-        boolean reset = !validate.isEmptyText(pwdPassword.getText()) && !validate.isEmptyText(pwdConfirmPassword.getText());
+            boolean reset = !validate.isEmptyText(pwdPassword.getText()) && !validate.isEmptyText(pwdConfirmPassword.getText());
             isChangePassword = reset;
             if(isChangePassword == false && userViewStatus==ApplicationStatus.SAVE)
                 selectCheckBoxSecurityById(optionSecurity = userSelect.getTypeEncrypt());
@@ -210,6 +210,13 @@ public class UserViewController implements Initializable {
                 btnRead.setDisable(true);
                 btnUpdate.setDisable(true);
                 btnDelete.setDisable(false);
+                btnCancel.setDisable(false);
+            }
+            case SEARCH->{
+                btnCreate.setDisable(true);
+                btnUpdate.setDisable(true);
+                btnRead.setDisable(true);
+                btnDelete.setDisable(true);
                 btnCancel.setDisable(false);
             }
         }
@@ -255,7 +262,9 @@ public class UserViewController implements Initializable {
     
     @FXML
     private void onSelectSecurity(ActionEvent event) {
-        if (userViewStatus == ApplicationStatus.CREATE || userViewStatus == ApplicationStatus.SAVE) {
+        if (userViewStatus == ApplicationStatus.CREATE 
+                || userViewStatus == ApplicationStatus.SAVE
+                || userViewStatus == ApplicationStatus.SEARCH) {
             CheckBox checkSelect = (CheckBox) event.getSource();
             if (checkSelect.isSelected()) {
                 // Deja solo este activo y apaga los demás
@@ -482,7 +491,7 @@ public class UserViewController implements Initializable {
 
     @FXML
     private void onRead(ActionEvent event) {
-        if( userViewStatus  == ApplicationStatus.NONE){
+        if( userViewStatus  == ApplicationStatus.NONE ){
             UserStatus userStatus = userService.readUsers();
             switch (userStatus) {
                 case READ_SUCCESS->{
@@ -504,9 +513,61 @@ public class UserViewController implements Initializable {
 
     @FXML
     private void onSearch(ActionEvent event) {
-        userViewStatus = ApplicationStatus.SEARCH;
-        clearAllFields();
-        hideAllFields();
+        switch (userViewStatus) {
+            case NONE->{
+                userViewStatus = ApplicationStatus.SEARCH;
+                controlOptionsCRUD();
+                clearAllFields();
+                showAllFields();
+                pwdPassword.setDisable(true);
+                pwdConfirmPassword.setDisable(true);
+                txtIdUser.setEditable(true);
+                btnSearch.setText("VALIDAR");
+                userService.getUsersList().clear();
+                loadTableUsers();
+            }
+            case SEARCH->{
+                String idUser = txtIdUser.getText().trim();
+                String name = txtName.getText().trim();
+                String lastName = txtLastName.getText().trim();
+                String user = txtUser.getText().trim();
+                String email = txtEmail.getText().trim();
+                Rol rolSelect = cmbRol.getSelectionModel().getSelectedItem();
+                UserAccountStatus userAccStatus = cmbStatus.getSelectionModel().getSelectedItem();
+                
+                UserStatus userStatus = userService.findUsers(
+                        idUser,
+                        name,
+                        lastName,
+                        email,
+                        user,
+                        rolSelect,
+                        optionSecurity,
+                        userAccStatus
+                );
+                
+                switch (userStatus) {
+                    case READ_SUCCESS->{
+                        userViewStatus= ApplicationStatus.NONE;
+                        controlOptionsCRUD();
+                        hideAllFields();
+                        loadTableUsers();
+                        btnSearch.setText("BUSCAR");
+                    }
+                    case EMPTY_LIST->{
+                        alertInfo.viewAlert("LISTAR USUARIOS", "No existen usuarios a mostrar", 
+                        "No existen usuarios para mostrar.",
+                        "WARN");
+                    }               
+                    case ERROR_READ_USERS->{
+                        alertInfo.viewAlert("ERROR LISTAR USUARIOS", "Error al listar usuarios", 
+                        "Ocurrió un error al momento de listar datos de los usuarios.\n"+userService.getMessageError(),
+                        "ERR");
+                    }
+                }
+                clearAllFields();
+            }
+        }
     }
     
     @FXML
