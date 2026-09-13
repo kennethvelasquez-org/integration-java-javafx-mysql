@@ -11,6 +11,9 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
+import org.kennethvelasquez.system.model.dto.UserDTO;
 /**
  * Repositorio encargado de la persistencia y acceso a datos de los usuarios.
  * <p>
@@ -252,10 +255,175 @@ public class UserRepository implements UserInterface{
                 findUser.setLastName(result.getString(3));
                 findUser.setEmail(result.getString(4));
                 findUser.setUser(result.getString(5));
-                findUser.setRol(result.getInt(6));
+                findUser.setRol(result.getInt(7));
                 return findUser;
             }
         }
         return null;
+    }
+
+        /**
+     * Obtiene la lista completa de usuarios registrados en el sistema consultando la vista {@code view_read_users}.
+     * <p>
+     * Invoca el procedimiento almacenado {@code sp_read_users}, el cual realiza un {@code INNER JOIN}
+     * entre las tablas {@code User} y {@code Rol} para obtener la información detallada de cada usuario.
+     * </p>
+     *
+     * @return Lista de tipo {@link List}&lt;{@link User}&gt; con todos los registros encontrados (o lista vacía si no hay registros).
+     * @throws SQLException Si ocurre un error durante la consulta en la base de datos.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de restricciones de integridad.
+     */
+    @Override
+    public List read() throws SQLException, SQLIntegrityConstraintViolationException {
+        List<UserDTO> listUsers = new ArrayList<UserDTO>();
+        String storedProcedure = "{call sp_read_users()}";
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            ResultSet result = callSP.executeQuery();
+            
+            // Usamos while en lugar de if porque esperamos múltiples registros
+            while (result.next()) {
+                UserDTO user = new UserDTO();
+                user.setIdUser(result.getString(1));       // Columna 1: u.id_user ("ID Usuario")
+                user.setName(result.getString(2));         // Columna 2: u.name (Nombres)
+                user.setLastName(result.getString(3));     // Columna 3: u.last_name (Apellidos)
+                user.setEmail(result.getString(4));        // Columna 4: u.email (Correo)
+                user.setUser(result.getString(5));         // Columna 5: u.user (Usuario)
+                user.setTypeEncrypt(result.getInt(6));     // Columna 6: u.type_encrypt (Cifrado)
+                user.setRolName(result.getString(7));      // Columna 7: r.name (Rol en texto)
+                user.setStatus(result.getBoolean(8));   // Columna 8: u.user_status (Estado booleano)
+                
+                listUsers.add(user);
+            }
+        }
+        return listUsers;
+    }
+
+    /**
+    * {@inheritDoc}
+    * <p>
+    * Invoca el procedimiento almacenado {@code sp_soft_delete_user} para
+    * modificar el atributo {@code user_status = false} del usuario en MySQL.
+    * </p>
+    */
+    @Override
+    public void delete(String idUser) throws SQLException, SQLIntegrityConstraintViolationException {
+        String storedProcedure = "{call sp_delete_user(?)}";
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, idUser);
+            callSP.execute();
+        }
+    }
+    
+    /**
+     * Actualiza la información de un usuario existente en la base de datos.
+     * <p>
+     * Invoca el procedimiento almacenado {@code sp_update_user} enviando como parámetros
+     * los atributos de la entidad {@link User}. El procedimiento almacenado se encarga de
+     * localizar el registro por su {@code id_user} y actualizar sus nombres, apellidos,
+     * correo, nombre de usuario, contraseña (si fue provista), rol, tipo de encriptación y estado.
+     * </p>
+     *
+     * <p>
+     * <b>Manejo de recursos:</b><br>
+     * Utiliza la sentencia {@code try-with-resources} sobre {@link CallableStatement},
+     * garantizando la liberación automática de los cursores y recursos de memoria en el
+     * controlador JDBC al concluir la ejecución de la consulta.
+     * </p>
+     *
+     * @param user Entidad {@link User} que encapsula los datos modificados que serán persistidos.
+     * @throws SQLException Si ocurre un error de comunicación o fallo en la ejecución del procedimiento almacenado en MySQL.
+     * @throws SQLIntegrityConstraintViolationException Si se produce una colisión por valor duplicado en columnas únicas 
+     *                                                  ({@code email} o {@code user}) o una violación de llave foránea en {@code id_rol}.
+     */
+    @Override
+    public void update(User user) throws SQLException, SQLIntegrityConstraintViolationException {
+        String storedProcedure = "{call sp_update_user(?,?,?,?,?,?,?,?,?)}";
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, user.getIdUser());
+            callSP.setString(2, user.getName());
+            callSP.setString(3, user.getLastName());
+            callSP.setString(4, user.getEmail());
+            callSP.setString(5, user.getUser());
+            callSP.setString(6, user.getPassword());
+            callSP.setInt(7, user.getRol());
+            callSP.setInt(8, user.getTypeEncrypt());
+            callSP.setBoolean(9, user.getStatus());
+
+            callSP.execute();
+        }
+    }
+    
+      /**
+     * {@inheritDoc}
+     * <p>
+     * Invoca el procedimiento almacenado unificado {@code sp_create_user}. 
+     * Si {@code type_encrypt = 2}, MySQL aplica la función nativa {@code md5()} sobre la contraseña;
+     * si {@code type_encrypt = 3} (BCrypt), la contraseña debe haber sido encriptada previamente en Java.
+     * El identificador {@code id_user} es autogenerado en la base de datos mediante {@code uuid()}.
+     * </p>
+     *
+     * @param user Entidad {@link User} que contiene los datos del usuario a persistir.
+     * @throws SQLException Si ocurre un error durante la ejecución de la sentencia en MySQL.
+     * @throws SQLIntegrityConstraintViolationException Si el correo o nombre de usuario ya existen en la base de datos.
+     */
+    @Override
+    public void create(User user) throws SQLException, SQLIntegrityConstraintViolationException {
+        String storedProcedure = "{call sp_create_user(?,?,?,?,?,?,?,?)}";
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, user.getName());
+            callSP.setString(2, user.getLastName());
+            callSP.setString(3, user.getEmail());
+            callSP.setString(4, user.getUser());
+            callSP.setString(5, user.getPassword());
+            callSP.setInt(6, user.getRol());
+            callSP.setInt(7, user.getTypeEncrypt());
+            callSP.setBoolean(8, user.getStatus());
+            callSP.execute();
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Invoca {@code sp_search_user_by_data} enviando el texto de búsqueda.
+     * Mapea cada fila del {@link ResultSet} hacia una instancia de {@link UserDTO},
+     * asignando tanto los atributos heredados de {@link User} como los campos propios del DTO.
+     * </p>
+     */
+    @Override
+    public List<UserDTO> find(UserDTO userDTOFind) throws SQLException, SQLIntegrityConstraintViolationException {
+        List<UserDTO> usersFound = new ArrayList<>();
+        String storedProcedure = "{call sp_search_user_by_data(?,?,?,?,?,?,?,?,?)}";
+        
+        //2. Ejecutar la llamada con try-with-resources
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, userDTOFind.getIdUser());
+            callSP.setString(2, userDTOFind.getName());
+            callSP.setString(3, userDTOFind.getLastName());
+            callSP.setString(4, userDTOFind.getEmail());
+            callSP.setString(5, userDTOFind.getUser());
+            callSP.setString(6, userDTOFind.getIdRolStr());
+            callSP.setString(7, userDTOFind.getRolName());
+            callSP.setString(8, userDTOFind.getTypeEncryptStr());
+            callSP.setString(9, userDTOFind.getStatusStr());
+            try (ResultSet result = callSP.executeQuery()) {
+                while (result.next()) {
+                    UserDTO user = new UserDTO();
+                    
+                    // Atributos heredados de User:
+                    user.setIdUser(result.getString(1));       // Columna 1: u.id_user ("ID Usuario")
+                    user.setName(result.getString(2));         // Columna 2: u.name (Nombres)
+                    user.setLastName(result.getString(3));     // Columna 3: u.last_name (Apellidos)
+                    user.setUser(result.getString(4));         // Columna 4: u.user (Usuario)
+                    user.setEmail(result.getString(5));        // Columna 5: u.email (Correo)
+                    user.setRol(result.getInt(7));      // Columna 7: r.name (Rol en texto)
+                    user.setTypeEncrypt(result.getInt(8));     // Columna 8: u.type_encrypt (Cifrado)
+                    user.setStatus(result.getBoolean(9));   // Columna 9: u.user_status (Estado booleano)
+                    
+                    usersFound.add(user);
+                }
+            }
+        }
+        return usersFound;
     }
 }
