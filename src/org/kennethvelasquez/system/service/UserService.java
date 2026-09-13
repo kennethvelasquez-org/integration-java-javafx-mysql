@@ -126,6 +126,77 @@ public class UserService {
     }
     
     /**
+     * Orquesta el proceso de validación y creación de un nuevo usuario en el sistema.
+     * <p>
+     * El flujo de ejecución es el siguiente:
+     * <ol>
+     *   <li>Verifica si ya existe un usuario registrado con el mismo nombre de usuario o correo electrónico.</li>
+     *   <li>Si el usuario ya existe, interrumpe el flujo retornando {@link UserStatus#USER_EXISTS}.</li>
+     *   <li>Si no existe, instancia un nuevo objeto {@link User} con rol por defecto (101).</li>
+     *   <li>Deriva la inserción al método correspondiente del repositorio según el tipo de encriptación:
+     *       <ul>
+     *         <li><b>1:</b> Inserción sin encriptación (texto plano).</li>
+     *         <li><b>2:</b> Inserción con hash MD5 generado a nivel de base de datos.</li>
+     *         <li><b>3:</b> Inserción para encriptación con BCrypt.</li>
+     *       </ul>
+     *   </li>
+     *   <li>Si ocurre un error en la base de datos, captura la excepción y retorna el estado de error apropiado.</li>
+     * </ol>
+     * </p>
+     *
+     * @param name         Nombre(s) del usuario.
+     * @param lastName     Apellido(s) del usuario.
+     * @param email        Dirección de correo electrónico (debe ser única en la base de datos).
+     * @param user         Nombre de usuario único para credenciales de acceso.
+     * @param password     Contraseña del usuario en texto plano ingresada en la vista.
+     * @param rol          El rol elegido para la cuenta.
+     * @param typeEncrypt  Identificador del algoritmo de encriptación (1 = Sin protección, 2 = MD5, 3 = BCrypt).
+     * @param status       Estado de usuario que se asignara al crear la cuenta
+     * @return Un valor de {@link UserStatus} que indica el resultado de la operación:
+     *         <ul>
+     *           <li>{@link UserStatus#USER_CREATED} si se registró con éxito.</li>
+     *           <li>{@link UserStatus#USER_EXISTS} si el correo o usuario ya estaban registrados.</li>
+     *           <li>{@link UserStatus#INCORRECT_ENCRYPT_TYPE} si el tipo de encriptación no es válido.</li>
+     *           <li>{@link UserStatus#ERROR_USER_SEARCH} si falló la verificación de duplicados.</li>
+     *           <li>{@link UserStatus#ERROR_USER_CREATE} si ocurrió un fallo inesperado al persistir los datos.</li>
+     *         </ul>
+     */
+    public UserStatus createUser(String name, String lastName, String email,
+            String user, String password, Integer rol,  Integer typeEncrypt, Boolean status){
+        try {
+            boolean searchUser = userRepo.existsByEmailOrUser(user,email);
+            if( searchUser == true)
+                return UserStatus.USER_EXISTS;
+        } catch (SQLException e) {
+            messageError = e.getMessage();
+            return UserStatus.ERROR_USER_SEARCH;
+        }
+        
+        try {
+            User newUser = new User(name, lastName, email, user, password, rol, typeEncrypt,status);
+            switch (typeEncrypt) {
+                case 1,2-> userRepo.create(newUser);
+                case 3 -> {
+                    ToolBCrypt encrypt = new ToolBCrypt();
+                    newUser.setPassword(encrypt.encryptToString(password));
+                    userRepo.create(newUser);
+                }
+                default -> {
+                    return UserStatus.INCORRECT_ENCRYPT_TYPE;
+                }
+            }
+            return UserStatus.USER_CREATED;
+        } catch (SQLException e) {
+            messageError = e.getMessage();
+            return UserStatus.ERROR_USER_CREATE;
+        } catch (Exception e){
+            messageError = e.getMessage();
+            return UserStatus.ERROR_USER_CREATE;
+        }
+    }
+    
+    
+    /**
      * Consulta el catálogo de usuarios para poblar la vista del TableView.
      *
      * @return El estado de la operación ({@link UserStatus#READ_SUCCESS}, 

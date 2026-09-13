@@ -150,7 +150,6 @@ public class UserViewController implements Initializable {
                 btnUpdate.setDisable(false);
                 btnDelete.setDisable(false);
                 btnCancel.setDisable(false);
-                btnSearch.setDisable(true);
                 btnCreate.setDisable(true);
                 btnRead.setDisable(true);
             }
@@ -310,14 +309,66 @@ public class UserViewController implements Initializable {
             }
         }
         userViewStatus = ApplicationStatus.NONE;
-        hideAllFields();
         clearAllFields();
+        hideAllFields();
         controlOptionsCRUD();
     }
     
     @FXML
     private void onCreate(ActionEvent event) {
-        
+        switch (userViewStatus) {
+            case NONE->{
+                userViewStatus=ApplicationStatus.CREATE;
+                controlOptionsCRUD();
+                btnCreate.setText("CREAR");
+                showAllFields();
+            }
+            case CREATE->{
+                //Reutilizo la funcion para validar campos
+                boolean fieldsValid = isValidAllFields();
+                if( fieldsValid == true){
+                    String name = txtName.getText().trim();
+                    String lastName = txtLastName.getText().trim();
+                    String email = txtEmail.getText().trim();
+                    String user = txtUser.getText().trim();
+                    String password = pwdPassword.getText().trim();
+                    Rol rolSelect = cmbRol.getSelectionModel().getSelectedItem();
+                    UserAccountStatus userAccStatus = cmbStatus.getSelectionModel().getSelectedItem();
+                    
+                    UserStatus userStatus = userService.createUser(name, lastName, email, user,
+                                        password, rolSelect.getIdRol(), optionSecurity, userAccStatus.isActive());
+                    switch (userStatus) {
+                        case USER_CREATED->{
+                            alertInfo.viewAlert("CREACION DE CUENTA", "¡¡USUARIO CREADO EXITOSAMENTE!!", 
+                                "Su usuario se ha creado.",
+                                "INFORMATION");
+                            userViewStatus = ApplicationStatus.NONE;
+                            controlOptionsCRUD();
+                            btnCreate.setText("AGREGAR");
+                            clearAllFields();
+                            hideAllFields();
+                            onRead(null);
+                        }
+                        case INCORRECT_ENCRYPT_TYPE->
+                            alertInfo.viewAlert("ERROR DE ENCRIPTACIÓN", "Encriptación Incorrecta", 
+                                "Ha elegido una opción de encriptado inválido.",
+                                "ERR");
+                        case ERROR_USER_SEARCH->
+                            alertInfo.viewAlert("ERROR BUSQUEDA DE USUARIO", "Error al comprobar usuario", 
+                                "Ocurrió un error al momento de validar existencia de usuario.\n"+userService.getMessageError(),
+                                "ERR");
+                        case ERROR_USER_CREATE->
+                            alertInfo.viewAlert("CREACION DE CUENTA", "Error al crear cuenta", 
+                                "Ocurrió un error inesperado al crear tu cuenta.\n"+userService.getMessageError(),
+                                "ERR");
+                        case USER_EXISTS-> 
+                            alertInfo.viewAlert("ERROR DE CUENTA", "LA CUENTA YA EXISTE!!", 
+                                "El usuario o correo ya se encuentran registrados\nINGRESE UN NOMBRE DE USUARIO O CORREO DIFERENTE",
+                                "ERR");
+                    }
+                }
+            }
+        }
     }
 
     private void deleteUser(UserDTO userSelect){
@@ -337,8 +388,8 @@ public class UserViewController implements Initializable {
                         "El usuario que ha seleccionado se ha eliminado.\n"
                         + "Si quieres activar el usuario tienes que editar su estado", 
                         "INFO");
-                    userService.readUsers();
-                    loadTableUsers();   // Refresca el TableView con los datos actualizados
+                    userViewStatus = ApplicationStatus.NONE;
+                    onRead(null);  // Refresca el TableView con los datos actualizados
                 }
                 case USER_NOT_FOUND -> 
                     alertInfo.viewAlert(
@@ -377,10 +428,9 @@ public class UserViewController implements Initializable {
                 "El usuario seleccionado no se ha eliminado",
                 "INFO");
         }
+        controlOptionsCRUD();
         clearAllFields();   // Limpia los campos del formulario
         hideAllFields(); //Oculto todos los campos
-        userViewStatus = ApplicationStatus.NONE;
-        controlOptionsCRUD();
     }
     
     @FXML
@@ -438,6 +488,11 @@ public class UserViewController implements Initializable {
                 case READ_SUCCESS->{
                     loadTableUsers();
                 }
+                case EMPTY_LIST->{
+                    alertInfo.viewAlert("LISTAR USUARIOS", "No existen usuarios a mostrar", 
+                    "No existen usuarios para mostrar.\n"+userService.getMessageError(),
+                    "WARN");
+                }               
                 case ERROR_READ_USERS->{
                     alertInfo.viewAlert("ERROR LISTAR USUARIOS", "Error al listar usuarios", 
                     "Ocurrió un error al momento de listar datos de los usuarios.\n"+userService.getMessageError(),
@@ -473,6 +528,7 @@ public class UserViewController implements Initializable {
                 }
             }
             case SAVE->{
+                //Llamo a la funcion para validar los campos en edicion
                 boolean fieldsValid = isValidAllFields();
                 if( fieldsValid == true ){
                     String idUser = txtIdUser.getText().trim();
@@ -483,9 +539,6 @@ public class UserViewController implements Initializable {
                     String password = pwdPassword.getText().trim();
                     Rol rolSelect = cmbRol.getSelectionModel().getSelectedItem();
                     UserAccountStatus userAccStatus = cmbStatus.getSelectionModel().getSelectedItem();
-                    btnUpdate.setText("EDITAR");
-                    lblPassword.setText("Contraseña");
-                    lblConfirmPassword.setText("Confirmar Contraseña");
                     
                     UserStatus userStatus = userService.updateUser(
                             idUser, name,  lastName, email,
@@ -501,8 +554,14 @@ public class UserViewController implements Initializable {
                                 "Los datos del usuario han sido modificados exitosamente.",
                                 "INFO"
                             );
-                            userService.readUsers();
-                            loadTableUsers();
+                            btnUpdate.setText("EDITAR");
+                            lblPassword.setText("Contraseña");
+                            lblConfirmPassword.setText("Confirmar Contraseña");
+                            userViewStatus = ApplicationStatus.NONE;
+                            controlOptionsCRUD();
+                            onRead(null);
+                            clearAllFields();
+                            hideAllFields();
                         }
                         case USER_EXISTS -> 
                             alertInfo.viewAlert(
@@ -534,11 +593,6 @@ public class UserViewController implements Initializable {
                                 "ERR"
                             );
                     }
-                    userViewStatus = ApplicationStatus.NONE;
-                    controlOptionsCRUD();
-                    hideAllFields();
-                    clearAllFields();
-                    setSecurityCheckboxesReadOnly(!isChangePassword);
                 }
             }
         }
@@ -592,6 +646,10 @@ public class UserViewController implements Initializable {
             msg = "El campo Usuario no puede exceder los 70 caracteres.";
         }
         
+        /* Como el tipo de encriptado depende de que la contraseña se cambie,
+          valido que si la contraseña cambió, se encripte de la misma o diferente forma
+           o que si estoy en el flujo de crear, igualmente se valide la contraseña y el encriptado
+        */
         if( (isChangePassword ==true && userViewStatus == ApplicationStatus.SAVE) ||
                 userViewStatus == ApplicationStatus.CREATE){
             if (!validate.isValidLengthText(password, 70)) {
@@ -791,8 +849,15 @@ public class UserViewController implements Initializable {
         pwdPassword.clear();
         pwdConfirmPassword.clear();
         
+        // 1. Establecer el texto
+        cmbRol.setPromptText("Seleccione el rol del usuario");
+        cmbStatus.setPromptText("Seleccione el estado");
+        // 2. FORZAR el valor a null (esto es lo que activa el promptText)
         cmbRol.setValue(null);
         cmbStatus.setValue(null);
+        // 3. Limpiar la selección
+        cmbRol.getSelectionModel().clearSelection();
+        cmbStatus.getSelectionModel().clearSelection();
         /*Metodo paso a paso para limpiar 3 checkbox 
         cbUnprotected.setSelected(false);
         cbMD5.setSelected(false);
