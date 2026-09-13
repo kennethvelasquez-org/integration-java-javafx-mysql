@@ -102,4 +102,31 @@ public interface UserInterface {
      * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de integridad.
      */
     List<User> read() throws SQLException, SQLIntegrityConstraintViolationException;
+    
+    /**
+     * Realiza la eliminación lógica (Soft Delete) de un usuario en el sistema,
+     * desactivando su estado en la base de datos sin borrar el registro físico.
+     *
+     * @param idUser Identificador único (UUID) del usuario a desactivar.
+     * @throws SQLException Si ocurre un error durante la ejecución en MySQL.
+     * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de restricciones de integridad.
+     */
+    void delete(String idUser) throws SQLException, SQLIntegrityConstraintViolationException;
+    
+      /**
+     * Actualiza la información general, rol, estado y/o credenciales de un usuario existente en la base de datos.
+     * <p>
+     * Modifica los datos del registro en la base de datos cuyo identificador coincida con {@code user.getIdUser()}.
+     * La entidad provista debe contener los valores actualizados para nombres, apellidos, correo, nombre de usuario,
+     * rol y estado. Si la propiedad de contraseña es nula o vacía, la implementación deberá preservar la clave actual
+     * sin alterarla.
+     * </p>
+     *
+     * @param user Entidad {@link User} con la información modificada que será persistida en el sistema.
+     * @throws SQLException Si ocurre un error de comunicación, fallo de sintaxis o problema en el motor de base de datos.
+     * @throws SQLIntegrityConstraintViolationException Si los nuevos datos violan restricciones de unicidad 
+     *                                                  (correo o nombre de usuario ya registrado por otra cuenta)
+     *                                                  o de clave foránea (identificador de rol no válido).
+     */
+    void update(User user) throws SQLException, SQLIntegrityConstraintViolationException;
 }

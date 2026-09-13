@@ -57,8 +57,8 @@ public class User {
         this.idUser = idUser;
     }
 
-    public User(String name, String lastName, String email, String user, String password,
-            Integer rol, String idUser, Boolean status) {
+    public User(String idUser, String name, String lastName, String email, String user, String password,
+            Integer rol, Integer typeEncrypt, Boolean status) {
         this.name = name;
         this.lastName = lastName;
         this.email = email;
@@ -66,6 +66,7 @@ public class User {
         this.password = password;
         this.rol = rol;
         this.idUser = idUser;
+        this.typeEncrypt = typeEncrypt;
         this.status = status;
     }
 
