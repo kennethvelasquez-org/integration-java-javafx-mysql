@@ -46,6 +46,10 @@ public enum UserStatus {
      */
     READ_SUCCESS,
     /**
+     * No existe el usuario que se estaba buscando en la base de datos.
+     */
+    USER_NOT_FOUND,
+    /**
      * Ocurrió un fallo técnico o error de SQL al intentar consultar la lista de usuarios.
      */
     ERROR_READ_USERS,

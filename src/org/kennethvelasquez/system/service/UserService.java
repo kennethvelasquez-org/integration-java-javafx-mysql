@@ -5,6 +5,7 @@
 package org.kennethvelasquez.system.service;
 
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import org.kennethvelasquez.system.model.User;
 import org.kennethvelasquez.system.model.dto.UserDTO;
@@ -144,6 +145,70 @@ public class UserService {
         } catch (Exception  e) {
             this.messageError = e.getMessage();
             return UserStatus.ERROR_READ_USERS;
+        }
+    }
+    
+    /**
+     * Desactiva lógicamente a un usuario verificando previamente su existencia en el sistema.
+     *
+     * @param idUser Identificador único (UUID) del usuario a desactivar.
+     * @param user   Nombre de usuario para verificación previa.
+     * @param email  Correo electrónico para verificación previa.
+     * @return {@link UserStatus#USER_DELETED} si se desactivó con éxito;
+     *         {@link UserStatus#USER_NOT_FOUND} si no se localizó la cuenta;
+     *         {@link UserStatus#ERROR_USER_SEARCH} si falló la comprobación previa;
+     *         {@link UserStatus#ERROR_USER_DELETE} ante parámetros inválidos o fallo al eliminar.
+     */
+    public UserStatus deleteUser(String idUser, String user, String email) {
+        if (idUser == null || idUser.trim().isEmpty()) {
+            this.messageError = "El ID de usuario no es válido.";
+            return UserStatus.ERROR_USER_DELETE;
+        }
+        
+         try {
+            boolean searchUser = userRepo.existsByEmailOrUser(user,email);
+            if( searchUser != true)
+                return UserStatus.USER_NOT_FOUND;
+        } catch (SQLException e) {
+            messageError = e.getMessage();
+            return UserStatus.ERROR_USER_SEARCH;
+        }
+         
+        try {
+            userRepo.delete(idUser.trim());
+            return UserStatus.USER_DELETED;
+        } catch (SQLException e) {
+            this.messageError = e.getMessage();
+            return UserStatus.ERROR_USER_DELETE;
+        }
+    }
+    
+    public UserStatus updateUser(String idUser, String name, String lastName, String email,
+                                 String user, String password, Integer idRol, 
+                                 Integer typeEncrypt, Boolean userStatus){        
+        try {
+            User newUser = new User(idUser,name, lastName, email, user, password, idRol, typeEncrypt,userStatus);
+            switch (typeEncrypt) {
+                case 1, 2 -> userRepo.update(newUser);
+                case 3 -> {
+                    ToolBCrypt encrypt = new ToolBCrypt();
+                    newUser.setPassword(encrypt.encryptToString(password));
+                    userRepo.update(newUser);
+                }
+                default -> {
+                    return UserStatus.INCORRECT_ENCRYPT_TYPE;
+                }
+            }
+            return UserStatus.USER_UPDATED;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            messageError = e.getMessage();
+            return UserStatus.USER_EXISTS;
+        } catch (SQLException e) {
+            messageError = e.getMessage();
+            return UserStatus.ERROR_USER_UPDATE;
+        } catch (Exception e){
+            messageError = e.getMessage();
+            return UserStatus.ERROR_USER_UPDATE;
         }
     }
     
