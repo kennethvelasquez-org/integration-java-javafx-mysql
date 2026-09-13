@@ -8,6 +8,8 @@ import javafx.scene.image.ImageView;
 
 import java.io.InputStream;
 import java.util.Locale;
+import java.util.Optional;
+import javafx.scene.control.ButtonType;
 
 /**
  * 
@@ -61,6 +63,26 @@ public class AlertInformation {
      */
     private String type;
 
+    /**
+     * Enumeración de estados para alertas de confirmación.
+     */
+    public enum ConfirmStatus {
+        /**
+         * El usuario confirmó o aceptó la acción (botón OK / Aceptar).
+         */
+        CONFIRM,
+
+        /**
+         * El usuario rechazó o canceló la acción (botón Cancelar o cierre de la ventana).
+         */
+        DENIED
+    }
+
+    /**
+     * Estado resultante de la interacción con una alerta de tipo confirmación.
+     */
+    private ConfirmStatus confirmStatus;
+    
     /**
      * Constructor vacío.
      * <p>
@@ -159,6 +181,25 @@ public class AlertInformation {
     }
 
     /**
+     * Obtiene el estado resultante de la confirmación.
+     *
+     * @return {@link ConfirmStatus#CONFIRM} si fue aceptada, {@link ConfirmStatus#DENIED} si fue cancelada
+     *         o cerrada, o {@code null} si la última alerta no fue de confirmación.
+     */
+    public ConfirmStatus getConfirmStatus() {
+        return confirmStatus;
+    }
+
+    /**
+     * Determina si la última confirmación fue aceptada por el usuario.
+     *
+     * @return {@code true} si el usuario seleccionó Aceptar (OK); {@code false} en caso contrario.
+     */
+    public boolean isConfirmed() {
+        return this.confirmStatus == ConfirmStatus.CONFIRM;
+    }
+    
+    /**
      * Muestra una alerta utilizando los atributos actuales de la instancia.
      * <p>
      * Este método construye la alerta con los valores almacenados en:
@@ -205,7 +246,7 @@ public class AlertInformation {
         updateAttributesIfBlank(messageHead, title, message, type);
 
         Alert alert = buildAlert(messageHead, title, message, type);
-        alert.showAndWait();
+        showAlert(alert);
     }
 
     /**
@@ -248,9 +289,28 @@ public class AlertInformation {
         Alert alert = buildAlert(messageHead, title, message, type);
         applyImage(alert, imageURL);
 
-        alert.showAndWait();
+        showAlert(alert);
     }
-
+/**
+     * Muestra la alerta en pantalla y, en caso de ser de tipo {@link AlertType#CONFIRMATION},
+     * captura la decisión del usuario en el atributo {@link #confirmStatus}.
+     *
+     * @param alert Instancia de {@link Alert} que se presentará en la interfaz.
+     */
+    private void showAlert(Alert alert) {
+        if (alert.getAlertType() == AlertType.CONFIRMATION) {
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                this.confirmStatus = ConfirmStatus.CONFIRM;
+            } else {
+                this.confirmStatus = ConfirmStatus.DENIED;
+            }
+        } else {
+            this.confirmStatus = null;
+            alert.showAndWait();
+        }
+    }
+    
     /**
      * Convierte un tipo de alerta en formato texto a su equivalente
      * {@link AlertType}.

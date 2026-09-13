@@ -17,6 +17,7 @@ public class User {
     private Integer rol;
     private Integer typeEncrypt;
     private String idUser;
+    private Boolean status;
 
     public User() {
     }
@@ -54,6 +55,18 @@ public class User {
         this.rol = rol;
         this.typeEncrypt = typeEncrypt;
         this.idUser = idUser;
+    }
+
+    public User(String name, String lastName, String email, String user, String password,
+            Integer rol, String idUser, Boolean status) {
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.user = user;
+        this.password = password;
+        this.rol = rol;
+        this.idUser = idUser;
+        this.status = status;
     }
 
     public String getName() {
@@ -119,5 +132,12 @@ public class User {
     public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
-    
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 }

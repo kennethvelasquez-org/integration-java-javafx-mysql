@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1366.0" styleClass="user-view" stylesheets="@../resources/styles/UserViewStyles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kennethvelasquez.system.controller.UserViewController">
+   <children>
+      <BorderPane maxHeight="85.0" prefHeight="85.0" prefWidth="1366.0">
+         <left>
+            <ImageView fitHeight="65.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../resources/images/users-flaticon.com.png" />
+               </image>
+               <effect>
+                  <BoxBlur />
+               </effect>
+               <BorderPane.margin>
+                  <Insets left="5.0" top="5.0" />
+               </BorderPane.margin>
+            </ImageView>
+         </left>
+         <center>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="container-options" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="btnCreate" mnemonicParsing="false" onAction="#onCreate" styleClass="option" text="AGREGAR">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" styleClass="image-option">
+                           <image>
+                              <Image url="@../resources/images/add-flaticon.com.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="btnUpdate" disable="true" mnemonicParsing="false" onAction="#onUpdate" styleClass="option" text="EDITAR">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" styleClass="image-option">
+                           <image>
+                              <Image url="@../resources/images/edit-flaticon.com.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="btnSearch" disable="true" mnemonicParsing="false" onAction="#onSearch" styleClass="option" text="BUSCAR">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" styleClass="image-option">
+                           <image>
+                              <Image url="@../resources/images/search-flaticon.com.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="btnRead" mnemonicParsing="false" onAction="#onRead" styleClass="option" text="LISTAR">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" styleClass="image-option">
+                           <image>
+                              <Image url="@../resources/images/list-flaticon.com.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="btnDelete" disable="true" mnemonicParsing="false" onAction="#onDelete" styleClass="option" text="ELIMINAR">
+                     <graphic>
+                        <ImageView fitHeight="35.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/images/delete-flaticon.com.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#onCancel" styleClass="cancel" text="CANCELAR" />
+               </children>
+            </HBox>
+         </center>
+         <right>
+            <Button mnemonicParsing="false" onMouseClicked="#onDashboard" styleClass="btn-home" BorderPane.alignment="CENTER">
+               <graphic>
+                  <ImageView fitHeight="55.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/images/home-flaticon.com.png" />
+                     </image></ImageView>
+               </graphic>
+               <BorderPane.margin>
+                  <Insets right="5.0" />
+               </BorderPane.margin>
+            </Button>
+         </right>
+      </BorderPane>
+      <BorderPane prefHeight="665.0" prefWidth="1336.0" styleClass="card-pane">
+         <center>
+            <TableView fx:id="tblUsers" onMouseClicked="#onSelectUser" prefHeight="200.0" prefWidth="200.0" styleClass="table-view-nebula" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn fx:id="colIdUser" prefWidth="89.0" text="ID" />
+                <TableColumn fx:id="colName" prefWidth="149.0" text="Nombres" />
+                  <TableColumn fx:id="colLastName" prefWidth="136.0" text="Apellidos" />
+                  <TableColumn fx:id="colUser" prefWidth="181.0" text="Usuario" />
+                  <TableColumn fx:id="colEmail" prefWidth="124.0" text="Correo" />
+                  <TableColumn fx:id="colRol" prefWidth="150.0" text="Rol" />
+                  <TableColumn fx:id="colStatus" prefWidth="150.0" text="Estado" />
+                  <TableColumn fx:id="colEncrypt" prefWidth="150.0" text="Cifrado" />
+              </columns>
+               <BorderPane.margin>
+                  <Insets left="7.5" />
+               </BorderPane.margin>
+            </TableView>
+         </center>
+         <left>
+            <ScrollPane prefWidth="435.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <content>
+                  <VBox prefHeight="665.0" prefWidth="425.0" styleClass="form">
+                     <children>
+                        <VBox>
+                           <children>
+                              <Label text="ID del Usuario" />
+                              <TextField fx:id="txtIdUser" disable="true" editable="false" promptText="123-abc-a1b2c3" styleClass="text-field-nebula" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Nombres" />
+                              <TextField fx:id="txtName" disable="true" editable="false" promptText="Ingrese sus nombres" styleClass="text-field-nebula" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Apellidos" />
+                              <TextField fx:id="txtLastName" disable="true" editable="false" promptText="Ingrese sus apellidos" styleClass="text-field-nebula" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Usuario" />
+                              <TextField fx:id="txtUser" disable="true" editable="false" promptText="Ingrese un nombre de usuario ejemplo: pepito123" styleClass="text-field-nebula" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Correo" />
+                              <TextField fx:id="txtEmail" disable="true" editable="false" promptText="Ingrese un correo ejemplo: pepito123@gmail.com" styleClass="text-field-nebula" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Contraseña" />
+                              <PasswordField fx:id="pwdPassword" disable="true" editable="false" promptText="Ingrese contraseña segura" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Confirmar Contraseña" />
+                              <PasswordField fx:id="pwdConfirmPassword" disable="true" editable="false" promptText="Ingrese nuevamente la contraseña segura" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Seleccione la seguridad de la contraseña" />
+                              <HBox alignment="CENTER" prefHeight="55.0" prefWidth="405.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="60.0" prefWidth="150.0">
+                                       <children>
+                                          <CheckBox fx:id="cbUnprotected" disable="true" mnemonicParsing="false" onAction="#onSelectSecurity" text="Sin proteger" />
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="60.0" prefWidth="150.0">
+                                       <children>
+                                          <CheckBox fx:id="cbMD5" disable="true" mnemonicParsing="false" onAction="#onSelectSecurity" text="MD5" />
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="60.0" prefWidth="150.0">
+                                       <children>
+                                          <CheckBox fx:id="cbBCrypt" disable="true" mnemonicParsing="false" onAction="#onSelectSecurity" text="BCrypt" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Rol" />
+                              <ComboBox fx:id="cmbRol" disable="true" prefHeight="25.0" prefWidth="430.0" promptText="Seleccione el rol del usuario" visibleRowCount="5" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label text="Estado" />
+                              <ComboBox fx:id="cmbStatus" disable="true" prefHeight="25.0" prefWidth="430.0" promptText="Seleccione el estado" visibleRowCount="3" />
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets right="2.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </left>
+      </BorderPane>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+</VBox>

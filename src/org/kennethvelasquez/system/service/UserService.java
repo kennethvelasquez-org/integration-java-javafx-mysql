@@ -5,7 +5,9 @@
 package org.kennethvelasquez.system.service;
 
 import java.sql.SQLException;
+import java.util.List;
 import org.kennethvelasquez.system.model.User;
+import org.kennethvelasquez.system.model.dto.UserDTO;
 import org.kennethvelasquez.system.repository.UserRepository;
 import org.kennethvelasquez.system.utils.ToolBCrypt;
 
@@ -33,6 +35,8 @@ public class UserService {
      * Repositorio para la interacción directa con la base de datos en operaciones de usuario.
      */
     private UserRepository userRepo = new UserRepository();
+    
+    private List<UserDTO> usersList;
     
     /**
      * Almacena el mensaje de error técnico producido durante las operaciones con la base de datos.
@@ -119,6 +123,33 @@ public class UserService {
             return UserStatus.ERROR_USER_CREATE;
         }
     }
+    
+    /**
+     * Consulta el catálogo de usuarios para poblar la vista del TableView.
+     *
+     * @return El estado de la operación ({@link UserStatus#READ_SUCCESS}, 
+     *         {@link UserStatus#EMPTY_LIST} o {@link UserStatus#ERROR_READ_USERS}).
+     */
+    public UserStatus readUsers() {
+        try {
+            this.usersList = userRepo.read();
+            
+            if (this.usersList == null || this.usersList.isEmpty()) 
+                return UserStatus.EMPTY_LIST;
+            
+            return  UserStatus.READ_SUCCESS;
+        } catch (SQLException  e) {
+            this.messageError = e.getMessage();
+            return UserStatus.ERROR_READ_USERS;
+        } catch (Exception  e) {
+            this.messageError = e.getMessage();
+            return UserStatus.ERROR_READ_USERS;
+        }
+    }
+    
+    public List<UserDTO> getUsersList() {
+        return usersList;
+    }
 
     /**
      * Obtiene el mensaje de error técnico almacenado.
@@ -137,5 +168,4 @@ public class UserService {
     public void setMessageError(String messageError) {
         this.messageError = messageError;
     }
-    
 }

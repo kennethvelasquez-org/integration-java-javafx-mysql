@@ -1,0 +1,469 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.user-view {
+    -fx-background-image: url("../images/bg-dashboard.jpg");
+    -fx-background-position:center;
+}
+
+.container-options{
+    -fx-spacing:15px;
+}
+
+.container-options Button{
+    -fx-padding: 5px 5px;
+    -fx-spacing:15px;
+    -fx-font-family: "Cascadia";
+    -fx-font-weight:500;
+    -fx-focus-color:transparent;
+    -fx-faint-focus-color:transparent;
+    -fx-pref-width:150px;
+    -fx-font-size:19px;
+    -fx-background-radius:5px;
+    -fx-background-insets: 1;
+}
+Button:hover{
+    -fx-cursor:hand;
+}
+Button:pressed{
+    -fx-cursor:CLOSED_HAND;
+}
+
+.container-options .option{
+    -fx-background-color:transparent;
+    -fx-border-color:#ccc;
+    -fx-border-radius: 5px;
+    -fx-text-fill:#fff;
+}
+
+.container-options Button:hover{
+    -fx-font-weight:800;
+    -fx-background-radius:7px;
+}
+
+.container-options .option:hover{
+    -fx-background-color:#176ba585;
+}
+
+.container-options .option:pressed{
+    -fx-background-color:#176ba585;
+    -fx-border-width:2px;
+}
+
+.container-options .image-option{
+    -fx-pref-width: 45px;
+    -fx-pref-height: 45px;
+}
+
+.container-options .cancel{
+    -fx-background-color: transparent;
+    -fx-border-color: #521c32;
+    -fx-pref-height: 50px;
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+    -fx-text-fill: #f6738e;
+    -fx-font-weight:600;
+}
+
+.container-options .cancel:hover{
+    -fx-background-color: #90141b;
+    -fx-text-fill:#fff;
+    -fx-font-weight:600;
+    -fx-border-color: #521c32;
+    -fx-effect: dropshadow(gaussian, rgba(163, 25, 69, 0.4), 12, 0.2, 0, 0);
+}
+
+.container-options .cancel:pressed{
+    -fx-background-color: #971032;
+    -fx-text-fill:#fff;
+    -fx-font-weight:800;
+    -fx-effect: dropshadow(gaussian, rgba(163, 25, 69, 0.4), 12, 0.2, 0, 0);
+}
+
+.btn-home{
+    -fx-focus-color:transparent;
+    -fx-background-color:white;
+    -fx-background-radius: 25%;
+}
+
+.btn-home:hover{
+    -fx-background-color:linear-gradient(to right,#07a6dd70,#1afce4);
+}
+
+.card-pane {
+    -fx-background-color: rgba(8, 17, 38, 0.82);
+    -fx-background-radius: 14px;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1.2px;
+    -fx-border-color: linear-gradient(to right, rgba(0, 210, 255, 0.4), rgba(0, 255, 157, 0.35));
+    -fx-effect: dropshadow(gaussian, rgba(0, 210, 255, 0.12), 25, 0.15, 0, 8);
+    -fx-padding: 10px;
+}
+
+/* 1. Hace transparente el ScrollPane exterior */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;        /* Anula la variable interna de JavaFX */
+    -fx-border-color: transparent;
+    -fx-padding:0px;
+    -fx-faint-focus-color:transparent;
+    -fx-focus-color:transparent;
+}
+/* 2. Hace transparente el Viewport (la capa que te está mostrando el blanco) */
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-padding:0px;
+}
+
+/* =================================== Títulos =============*/
+.title-nebula {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #f8fafc;
+}
+/* =================================== Subtítulos o descriptores */
+.form Label{
+    -fx-font-size: 17px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #8ba2c8;
+}
+
+.form VBox{
+    -fx-padding: 0px 0px 10px 0px;
+}
+
+/*  ===================================  TEXTAREA (ÁREA DE TEXTO)=================================== */
+.text-area {
+    -fx-background-color: rgba(5, 11, 26, 0.90);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-border-color: #1e315c;
+    -fx-padding: 4px;
+    -fx-font-size: 15px;
+}
+.text-area .content {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #f8fafc;
+    -fx-prompt-text-fill: #475e8a;
+    -fx-padding: 4px 10px;
+}
+.text-area:hover {
+    -fx-border-color: #00d2ff;
+}
+.text-area:focused {
+    -fx-background-color: rgba(7, 15, 36, 0.95);
+    -fx-border-color: #00f5d4;
+    -fx-effect: dropshadow(gaussian, rgba(0, 245, 212, 0.45), 12, 0.25, 0, 0);
+}
+/* Scrollbar estilizado dentro del TextArea para no romper la estética */
+.text-area .scroll-bar:vertical, 
+.text-area .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+.text-area .scroll-bar .thumb {
+    -fx-background-color: #1e315c;
+    -fx-background-radius: 6px;
+}
+.text-area .scroll-bar .thumb:hover {
+    -fx-background-color: #00d2ff;
+}
+
+/* =====================   TEXTFIELD & PASSWORDFIELD   =================================================== */
+.text-field, .password-field {
+    -fx-background-color: rgba(5, 11, 26, 0.90);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-border-color: #1e315c;
+    -fx-padding: 4px 10px;
+    -fx-text-fill: #f8fafc;
+    -fx-font-size: 15px;
+    -fx-prompt-text-fill: #475e8a;
+}
+.text-field:hover, .password-field:hover {
+    -fx-border-color: #00d2ff;
+}
+.text-field:focused, .password-field:focused {
+    -fx-background-color: rgba(7, 15, 36, 0.95);
+    -fx-border-color: #00f5d4;
+    -fx-effect: dropshadow(gaussian, rgba(0, 245, 212, 0.45), 12, 0.25, 0, 0);
+}
+
+/* =========================   COMBOBOX  ==================== */
+.combo-box {
+    -fx-background-color: rgba(5, 11, 26, 0.90);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-border-color: #1e315c;
+    -fx-padding: 3px 6px;
+    -fx-cursor: hand;
+}
+.combo-box:hover {
+    -fx-border-color: #00d2ff;
+}
+.combo-box:focused, .combo-box:showing {
+    -fx-border-color: #00f5d4;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 245, 212, 0.40), 10, 0.25, 0, 0);
+}
+
+/* Texto del valor seleccionado */
+.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f8fafc;
+    -fx-font-size: 14px;
+    -fx-padding: 4px 8px;
+}
+/* Botón y flecha hacia abajo */
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+.combo-box .arrow-button .arrow {
+    -fx-background-color: #00f5d4; /* Flecha turquesa neón */
+}
+/* Lista desplegable flotante (Popup) */
+.combo-box-popup .list-view {
+    -fx-background-color: rgba(8, 17, 38, 0.96);
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-border-color: #00f5d4;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.65), 18, 0.3, 0, 6);
+    -fx-padding: 4px;
+}
+/* Opciones dentro del menú desplegable */
+.combo-box-popup .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f8fafc;
+    -fx-font-size: 14.5px;
+    -fx-padding: 4px 10px;
+    -fx-background-radius: 6px;
+}
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(0, 210, 255, 0.20);
+    -fx-text-fill: #00f5d4;
+}
+.combo-box-popup .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(to right, rgba(0, 210, 255, 0.35), rgba(0, 255, 157, 0.25));
+    -fx-text-fill: #00ff9d; /* Texto en verde esmeralda al seleccionarlo */
+}
+
+
+/* ===================================   CHECKBOX  ======================================== */
+.check-box {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+}
+/* La cajita del CheckBox */
+.check-box .box {
+    -fx-background-color: rgba(5, 11, 26, 0.90);
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1.5px;
+    -fx-border-color: #1e2c80;
+    -fx-padding: 3px;
+}
+.check-box:hover .box {
+    -fx-border-color: #00d2ff;
+}
+/* Estado Marcado (Checked) */
+.check-box:selected .box {
+    -fx-background-color: linear-gradient(to right, #00d2ff, #00ff9d);
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(0, 255, 157, 0.50), 8, 0.3, 0, 0);
+}
+/* El ícono del check (la palomita) */
+.check-box .mark {
+    -fx-background-color: transparent;
+}
+.check-box:selected .mark {
+    -fx-background-color: #04091a; /* El check queda en negro abisal sobre el fondo brillante */
+}
+
+
+/* ========================================   RADIOBUTTON   ========================== */
+.radio-button {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+}
+/* Círculo exterior */
+.radio-button .radio {
+    -fx-background-color: rgba(5, 11, 26, 0.90);
+    -fx-background-radius: 100%;
+    -fx-border-radius: 100%;
+    -fx-border-width: 1.5px;
+    -fx-border-color: #1e2c80;
+    -fx-padding: 3px;
+}
+.radio-button:hover .radio {
+    -fx-border-color: #00d2ff;
+}
+/* Estado Seleccionado */
+.radio-button:selected .radio {
+    -fx-border-color: #00f5d4;
+    -fx-effect: dropshadow(gaussian, rgba(0, 245, 212, 0.45), 10, 0.3, 0, 0);
+}
+/* Punto interior (Dot) */
+.radio-button .dot {
+    -fx-background-color: transparent;
+    -fx-background-radius: 100%;
+}
+.radio-button:selected .dot {
+    -fx-background-color: #00ff9d; /* Punto central verde esmeralda brillante */
+}
+
+/*============================= Contenedor general de la tabla================== */
+.table-view-nebula {
+    -fx-background-color: transparent;
+    -fx-border-color: #1e315c;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-width: 1px;
+}
+
+/* 4. Si tienes habilitado el botón de mostrar/ocultar columnas en la esquina derecha */
+.table-view .show-hide-columns-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #00ff9d;
+    -fx-border-width: 0 0 2px 0;
+}
+.table-view .show-hide-column-image {
+    -fx-background-color: #00f5d4;
+}
+
+/* Cabecera de columnas */
+.table-view-nebula .column-header-background {
+    -fx-background-color: #0d1838;
+    -fx-border-color: linear-gradient(to right, #00d2ff, #00ff9d);
+    -fx-border-width: 0 0 2px 0;
+}
+
+/* 2. El espacio vacío a la derecha de la última columna (FILLER) */
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: linear-gradient(to right, #00d2ff, #00ff9d);
+    -fx-border-width: 0px; /* Continúa la línea neón inferior hasta el final */
+}
+
+/* 3. Las columnas individuales */
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: #1e315c;
+    -fx-border-width: 0 2px 2px 0; /* Línea divisoria vertical y borde inferior */
+}
+
+.table-view-nebula .column-header .label {
+    -fx-text-fill: #00f5d4;
+    -fx-font-weight: 700;
+    -fx-font-size: 15px;
+}
+
+/* ==========================   FLECHA DE ORDENAMIENTO EN CABECERAS DE TABLEVIEW   ======================= */
+/* 1. Estilo base de la flecha */
+.table-view .column-header .arrow {
+    -fx-background-color: #00f5d4; /* Color turquesa neón */
+    -fx-padding: 3.5px 4.5px;      /* Tamaño sutil y definido */
+    -fx-effect: dropshadow(gaussian, rgba(0, 245, 212, 0.55), 6, 0.25, 0, 0); /* Resplandor */
+}
+/* 2. Orden ASCENDENTE (Flecha hacia arriba ▲) */
+.table-view .column-header:sort-ascending .arrow {
+    -fx-background-color: #00f5d4; /* Turquesa eléctrico */
+    -fx-shape: "M 0 4 L 4 0 L 8 4 Z"; /* Triángulo equilátero hacia arriba */
+    -fx-effect: dropshadow(gaussian, rgba(0, 245, 212, 0.70), 8, 0.3, 0, 0);
+}
+/* 3. Orden DESCENDENTE (Flecha hacia abajo ▼) */
+.table-view .column-header:sort-descending .arrow {
+    -fx-background-color: #00ff9d; /* Verde esmeralda neón */
+    -fx-shape: "M 0 0 L 4 4 L 8 0 Z"; /* Triángulo equilátero hacia abajo */
+    -fx-effect: dropshadow(gaussian, rgba(0, 255, 157, 0.70), 8, 0.3, 0, 0);
+}
+/* 4. Puntos indicadores de orden múltiple (cuando se ordena con Shift + Clic) */
+.table-view .column-header .sort-order-dots-container {
+    -fx-padding: 0 0 0 4px;
+}
+.table-view .column-header .sort-order-dot {
+    -fx-background-color: #00d2ff; /* Puntos en azul cian */
+    -fx-padding: 1.5px;
+    -fx-background-radius: 100%;
+}
+
+/* ============================= Filas ================ */
+.table-view-nebula .table-row-cell {
+    -fx-background-color: rgba(9, 18, 42, 0.75);
+    -fx-border-color: rgba(255, 255, 255, 0.03);
+    /* -fx-border-width: 0 0 1px 0; */
+   -fx-border-width: 0px; 
+   -fx-font-size: 14px;
+}
+.table-view-nebula .table-row-cell:odd {
+    -fx-background-color: rgba(13, 25, 58, 0.75);
+}
+.table-view-nebula .table-row-cell:hover {
+    -fx-background-color: rgba(0, 210, 255, 0.15);
+}
+.table-view-nebula .table-row-cell:filled:selected {
+    -fx-background-color: linear-gradient(to right, rgba(0, 210, 255, 0.35), rgba(0, 255, 157, 0.20));
+    -fx-border-color: #00ff9d;
+    -fx-border-width: 0 0 0 3px;
+}
+.table-view-nebula .table-cell {
+    -fx-text-fill: #f8fafc;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 7px;
+}
+
+
+/* ==========================   SCROLLBAR (BARRA DE DESPLAZAMIENTO)  ========= */
+/* 1. Contenedor de la barra (Vertical y Horizontal) */
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;  /* Barra delgada y moderna */
+    -fx-padding: 0 1px;
+}
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-pref-height: 8px;
+    -fx-padding: 1px 0;
+}
+/* 2. La pista de fondo por donde se desliza (Track) */
+.scroll-bar .track {
+    -fx-background-color: rgba(5, 11, 26, 0.60); /* Fondo abisal semi-transparente */
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+}
+/* 3. El tirador que se arrastra (Thumb) */
+.scroll-bar .thumb {
+    /*-fx-background-color: #1a2a50;  Azul grisáceo discreto en reposo */
+    -fx-background-radius: 6px;
+}
+/* Estado Hover: Al pasar el ratón se enciende en Cian Eléctrico */
+.scroll-bar .thumb:hover {
+    -fx-background-color: #00d2ff;
+    -fx-effect: dropshadow(gaussian, rgba(0, 210, 255, 0.40), 6, 0.2, 0, 0);
+}
+/* Estado Pressed: Al hacer clic o arrastrar se ilumina en Turquesa Neón */
+.scroll-bar .thumb:pressed {
+    -fx-background-color: #00f5d4;
+    -fx-effect: dropshadow(gaussian, rgba(0, 245, 212, 0.65), 10, 0.3, 0, 0);
+}
+/* 4. Ocultar los botones de flecha de los extremos (Aspecto Clean / Minimalista) */
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+/* 5. Esquina inferior derecha cuando ambas barras están activas (Corner) */
+.corner {
+    -fx-background-color: transparent; /* Evita el recuadro gris feo por defecto */
+}

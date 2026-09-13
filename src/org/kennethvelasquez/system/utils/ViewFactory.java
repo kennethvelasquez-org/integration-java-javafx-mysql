@@ -72,8 +72,13 @@ public class ViewFactory {
                     scene = loadFileFXML("DashboardView.fxml",1366,768);
                     SceneManager.getInstanceSceneManager().getStagePrincipal().setTitle("PANEL PRINCIPAL");
                 }
+                case "users"-> {
+                    scene = loadFileFXML("UserView.fxml",1366,780);
+                    SceneManager.getInstanceSceneManager().getStagePrincipal().setTitle("PANEL PRINCIPAL");
+                }
                 default-> scene = loadFileFXML("NotFoundView.fxml", 350, 350);
             }
+            SceneManager.getInstanceSceneManager().getStagePrincipal().setResizable(false);
             SceneManager.getInstanceSceneManager().changeScene(scene);
         } catch (NullPointerException nullPointer) {
             AlertInformation alertInfo = new AlertInformation("ERROR CAMBIO DE VENTANA",
@@ -118,5 +123,8 @@ public class ViewFactory {
     }
     public void dashboardView(){
         loadScene("dashboard");
+    }
+    public void usersView(){
+        loadScene("users");
     }
 }
