@@ -102,6 +102,18 @@ public class Product {
         this.idCategory = idCategory;
     }
 
+    /**
+     * Constructor ligero para operaciones que requieren únicamente el identificador
+     * del producto y el usuario ejecutor (como búsquedas o eliminaciones con auditoría).
+     *
+     * @param idProduct Identificador único del producto
+     * @param idUser    UUID del usuario que ejecuta la acción
+     */
+    public Product(Integer idProduct, String idUser) {
+        this.idProduct = idProduct;
+        this.idUser = idUser;
+    }
+
     public Integer getIdProduct() {
         return idProduct;
     }

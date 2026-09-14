@@ -19,6 +19,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -26,6 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.kennethvelasquez.system.model.ApplicationStatus;
 import org.kennethvelasquez.system.model.Rol;
+import org.kennethvelasquez.system.model.User;
 import org.kennethvelasquez.system.model.UserAccountStatus;
 import org.kennethvelasquez.system.model.dto.UserDTO;
 import org.kennethvelasquez.system.service.RolService;
@@ -102,6 +104,7 @@ public class UserViewController implements Initializable {
 
     @FXML
     private Label lblPassword;
+    @FXML private ScrollPane scrollPaneForm;
     
     /**
      * Instancia de la factoría de vistas ({@link ViewFactory}) para instanciar escenas y componentes FXML.
@@ -146,6 +149,10 @@ public class UserViewController implements Initializable {
             this.userSelect = userSelect;
             // El tercer parámetro 'userSelect' ya es el nuevo usuario seleccionado
             if (userViewStatus == ApplicationStatus.NONE && userSelect != null) {
+                User userLogued = AuthenticationController.getUserLogued();
+                if (userLogued != null && userLogued.getRol() != null && userLogued.getRol() != User.ROLE_ADMIN) {
+                    return;
+                }
                 viewUser();
                 showBasicFields();
                 btnUpdate.setDisable(false);
@@ -162,6 +169,52 @@ public class UserViewController implements Initializable {
         pwdConfirmPassword.focusedProperty().addListener(onFocusChangedPwd);
         
         controlOptionsCRUD();
+        managedControls();
+    }
+
+    /**
+     * Aplica restricciones de visibilidad y gestión de controles en base al rol del usuario.
+     * Solo los administradores (User.ROLE_ADMIN) tienen acceso al formulario y acciones CRUD de usuarios.
+     */
+    private void managedControls() {
+        User userLogued = AuthenticationController.getUserLogued();
+        if (userLogued == null) {
+            return;
+        }
+
+        if (userLogued.getRol() == null || userLogued.getRol() != User.ROLE_ADMIN) {
+            scrollPaneForm.setVisible(false);
+            scrollPaneForm.setManaged(false);
+
+            btnCreate.setVisible(false);
+            btnCreate.setManaged(false);
+            btnUpdate.setVisible(false);
+            btnUpdate.setManaged(false);
+            btnDelete.setVisible(false);
+            btnDelete.setManaged(false);
+            btnCancel.setVisible(false);
+            btnCancel.setManaged(false);
+            btnSearch.setVisible(false);
+            btnSearch.setManaged(false);
+            btnRead.setVisible(false);
+            btnRead.setManaged(false);
+        } else {
+            scrollPaneForm.setVisible(true);
+            scrollPaneForm.setManaged(true);
+
+            btnCreate.setVisible(true);
+            btnCreate.setManaged(true);
+            btnUpdate.setVisible(true);
+            btnUpdate.setManaged(true);
+            btnDelete.setVisible(true);
+            btnDelete.setManaged(true);
+            btnCancel.setVisible(true);
+            btnCancel.setManaged(true);
+            btnSearch.setVisible(true);
+            btnSearch.setManaged(true);
+            btnRead.setVisible(true);
+            btnRead.setManaged(true);
+        }
     }    
     
     ChangeListener<Boolean>onFocusChangedPwd = (observable, oldValue, newValue)->{
@@ -636,6 +689,13 @@ public class UserViewController implements Initializable {
                                 "CUENTA DUPLICADA",
                                 "Usuario o correo ya registrado",
                                 "El nombre de usuario o correo electrónico ya pertenece a otra cuenta registrada.",
+                                "WARN"
+                        );
+                        case USER_NOT_FOUND -> 
+                            alertInfo.viewAlert(
+                                "CUENTA DESCONOCIDA",
+                                "La cuenta a editar no se encuentra",
+                                "La cuenta que ha seleccionado no existe.",
                                 "WARN"
                         );
                         case INCORRECT_ENCRYPT_TYPE -> 

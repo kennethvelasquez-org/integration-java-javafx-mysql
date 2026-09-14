@@ -57,7 +57,7 @@ call sp_create_user_hashed(
 
 #----------------SIMULACIONES DE BUSQUEDA DE USUARIO--------------------------
 call sp_read_user_by_email_or_user(null,"admin@example.com");
-call sp_read_user_by_email_or_user("user",null);
+call sp_read_user_by_email_or_user("Otro",null);
 
 
 #----------------SIMULACIONES DE LOGIN--------------------------
@@ -78,14 +78,14 @@ call sp_search_user_by_data(null,null,null,null,null,null,null,null,null);
 call sp_delete_user('2e83eb20-af0e-11f1-8a26-f8edfc2af70e');
 -- 4. Prueba de actualización
 call sp_update_user(
-    '13d4eac3-af1c-11f1-8a26-f8edfc2af70e',
-    'as',
-    'ds',
-    'as@kinal.edu.gt',
+    '',
+    'g',
+    'g',
+    'g@g',
     'ffff',
     null,
-    100,
-    2,
+    102,
+    3,
     true
 );
 
@@ -119,57 +119,71 @@ CALL sp_delete_category(7);
 
 # -------------------------------------------------------------
 # 1. INSERTAR 5 PRODUCTOS (sp_create_product)
+# Obtenemos el id_user del usuario 'admin' para las pruebas de auditoría y producto
+select id_user into @test_user_id from User where user = 'admin' limit 1;
+
 # Nota: Para la imagen se utiliza un valor hexadecimal ficticio (0x89504e47)
 call sp_create_product(
     'Laptop Gamer ASUS',
     'Laptop con procesador Intel Core i7, 16GB RAM y tarjeta RTX 4060',
     8999.99,
     0x89504e47,
-    1
+    1,
+    @test_user_id
 );
 call sp_create_product(
     'Teclado Mecanico RGB',
     'Teclado mecanico con switches blue y retroiluminacion personalizable',
     350.50,
     0x89504e47,
-    1
+    1,
+    @test_user_id
 );
 call sp_create_product(
     'Camisa Polo Casual',
     'Camisa de algodon corte slim fit color azul marino',
     125.00,
     0x89504e47,
-    2
+    2,
+    @test_user_id
 );
 call sp_create_product(
     'Cafetera Espresso Automatica',
     'Cafetera de presion de 15 bares con espumador de leche integrado',
     650.00,
     0x89504e47,
-    3
+    3,
+    @test_user_id
 );
 call sp_create_product(
     'Balon de Futbol Pro',
     'Balon profesional de alta resistencia tamano 5',
     180.00,
     0x89504e47,
-    4
+    4,
+    @test_user_id
 );
-# Listar todos los productos cargados
-call sp_read_products();
+# Listar todos los productos cargados (registra acción READ en History_Change)
+call sp_read_products(@test_user_id);
 
 # ---------------------- ACCIONES CON 1 PRODUCTO (ID = 5)
-# BUSCAR el producto
-call sp_search_product(4);
-# EDITAR el producto
+# BUSCAR el producto (registra acción SEARCH en History_Change)
+call sp_search_product(4, @test_user_id);
+
+# EDITAR el producto (el trigger tr_product_after_update registra UPDATE en History_Change)
 call sp_update_product(
     5,
     'Balon de Futbol Pro Elite Edition',
     'Balon profesional termocellado tamano 5 edicion torneo',
     220.00,
     0x89504e47,
-    4
+    4,
+    @test_user_id
 );
-# ELIMINAR el producto
-call sp_delete_product(5);
+
+# ELIMINAR el producto (registra acción DELETE en History_Change)
+call sp_delete_product(5, @test_user_id);
+
+# Consultar historial de auditoría de cambios
+select * from History_Change;
 

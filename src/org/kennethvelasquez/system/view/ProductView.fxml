@@ -99,11 +99,11 @@
             <TableView fx:id="tblProducts" prefHeight="200.0" prefWidth="200.0" styleClass="table-view-nebula" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="colIdProduct" prefWidth="79.0" text="ID" />
-                  <TableColumn fx:id="colImgProduct" prefWidth="150.0" text="Imagen" />
-                <TableColumn fx:id="colName" prefWidth="139.0" text="Nombres" />
-                  <TableColumn fx:id="colDescription" prefWidth="205.0" text="Descripcion" />
-                  <TableColumn fx:id="colPrice" prefWidth="149.0" text="Precio" />
-                  <TableColumn fx:id="colCategory" prefWidth="137.0" text="Categoria" />
+                  <TableColumn fx:id="colImgProduct" prefWidth="125.0" text="Imagen" />
+                <TableColumn fx:id="colName" prefWidth="160.0" text="Nombres" />
+                  <TableColumn fx:id="colDescription" prefWidth="225.0" text="Descripcion" />
+                  <TableColumn fx:id="colPrice" prefWidth="100.0" text="Precio" />
+                  <TableColumn fx:id="colCategory" prefWidth="150.0" text="Categoria" />
               </columns>
                <BorderPane.margin>
                   <Insets left="7.5" />
@@ -111,7 +111,7 @@
             </TableView>
          </center>
          <left>
-            <ScrollPane prefHeight="640.0" prefWidth="435.0" BorderPane.alignment="CENTER">
+            <ScrollPane fx:id="scrollPaneForm" prefHeight="640.0" prefWidth="435.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>

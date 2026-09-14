@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -26,6 +27,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.kennethvelasquez.system.model.ApplicationStatus;
 import org.kennethvelasquez.system.model.Category;
+import org.kennethvelasquez.system.model.User;
 import org.kennethvelasquez.system.model.dto.ProductDTO;
 import org.kennethvelasquez.system.service.CategoryService;
 import org.kennethvelasquez.system.service.CategoryStatus;
@@ -90,6 +92,7 @@ public class ProductViewController implements Initializable {
 
     @FXML
     private ImageView imvPreview;
+    @FXML private ScrollPane scrollPaneForm;
 
     /**
      * Factoría de vistas para la navegación entre escenas.
@@ -115,12 +118,14 @@ public class ProductViewController implements Initializable {
 
     private ProductDTO productSelect = null;
     private byte[] imageBytesSelected = null;
+    private User userLogued;
 
     /**
      * Inicializa el controlador de la vista de productos.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        userLogued = AuthenticationController.getUserLogued();
         initTableColumns();
         loadComboBox();
 
@@ -128,6 +133,10 @@ public class ProductViewController implements Initializable {
         tblProducts.getSelectionModel().selectedItemProperty().addListener((obs, oldProduct, newProduct) -> {
             this.productSelect = newProduct;
             if (userViewStatus == ApplicationStatus.NONE && newProduct != null) {
+                // Si el rol es ROLE_USER, solo puede buscar y listar (no se habilitan opciones CRUD ni formulario)
+                if (userLogued != null && userLogued.getRol() != null && userLogued.getRol() == User.ROLE_USER) {
+                    return;
+                }
                 viewProduct();
                 showBasicFields();
                 btnUpdate.setDisable(false);
@@ -139,6 +148,56 @@ public class ProductViewController implements Initializable {
         });
 
         controlOptionsCRUD();
+        managedControls();
+    }
+
+    /**
+     * Aplica restricciones de visibilidad y gestión de controles en base al rol del usuario.
+     * <p>
+     * - Admin (100) y Employee (102): Tienen habilitado el CRUD completo en Productos.
+     * - User (101): Únicamente puede buscar y listar productos. Se oculta y desvincula el formulario lateral
+     *   ({@link #scrollPaneForm}) y los botones de mutación CRUD (Agregar, Editar, Eliminar, Cancelar).
+     * </p>
+     */
+    private void managedControls() {
+        if (userLogued == null) {
+            return;
+        }
+
+        if (userLogued.getRol() != null && userLogued.getRol() == User.ROLE_USER) {
+            scrollPaneForm.setVisible(false);
+            scrollPaneForm.setManaged(false);
+
+            btnCreate.setVisible(false);
+            btnCreate.setManaged(false);
+            btnUpdate.setVisible(false);
+            btnUpdate.setManaged(false);
+            btnDelete.setVisible(false);
+            btnDelete.setManaged(false);
+
+            btnRead.setVisible(true);
+            btnRead.setManaged(true);
+            btnRead.setDisable(false);
+
+            btnSearch.setVisible(true);
+            btnSearch.setManaged(true);
+            btnSearch.setDisable(false);
+        } else {
+            scrollPaneForm.setVisible(true);
+            scrollPaneForm.setManaged(true);
+
+            btnCreate.setVisible(true);
+            btnCreate.setManaged(true);
+            btnUpdate.setVisible(true);
+            btnUpdate.setManaged(true);
+            btnDelete.setVisible(true);
+            btnDelete.setManaged(true);
+
+            btnRead.setVisible(true);
+            btnRead.setManaged(true);
+            btnSearch.setVisible(true);
+            btnSearch.setManaged(true);
+        }
     }
     
     /**
@@ -305,6 +364,7 @@ public class ProductViewController implements Initializable {
         clearAllFields();
         hideAllFields();
         controlOptionsCRUD();
+        managedControls();
     }
 
     @FXML
@@ -324,8 +384,9 @@ public class ProductViewController implements Initializable {
                     Double price = Double.valueOf(txtPrice.getText().trim());
                     Category categorySelect = cmbCategory.getSelectionModel().getSelectedItem();
                     Integer idCategory = categorySelect != null ? categorySelect.getIdCategory() : null;
+                    String idUser = userLogued != null ? userLogued.getIdUser() : null;
 
-                    ProductStatus status = productService.createProduct(name, description, price, imageBytesSelected, idCategory);
+                    ProductStatus status = productService.createProduct(name, description, price, imageBytesSelected, idCategory, idUser);
                     switch (status) {
                         case PRODUCT_CREATED -> {
                             alertInfo.viewAlert("CREAR PRODUCTO", "¡Producto creado exitosamente!",
@@ -395,6 +456,7 @@ public class ProductViewController implements Initializable {
                     Double price = Double.valueOf(txtPrice.getText().trim());
                     Category categorySelect = cmbCategory.getSelectionModel().getSelectedItem();
                     Integer idCategory =  categorySelect.getIdCategory() ;
+                    String idUser = userLogued != null ? userLogued.getIdUser() : null;
 
                     ProductStatus status = productService.updateProduct(
                             productSelect.getIdProduct(),
@@ -402,7 +464,8 @@ public class ProductViewController implements Initializable {
                             description,
                             price,
                             imageBytesSelected, // Si es null, MySQL preserva la imagen previa
-                            idCategory
+                            idCategory,
+                            idUser
                     );
 
                     switch (status) {
@@ -457,7 +520,8 @@ public class ProductViewController implements Initializable {
                         "CONFIRM");
 
         if (alertInfo.isConfirmed()) {
-            ProductStatus status = productService.deleteProduct(productSelect.getIdProduct());
+            String idUser = userLogued != null ? userLogued.getIdUser() : null;
+            ProductStatus status = productService.deleteProduct(productSelect.getIdProduct(), idUser);
             switch (status) {
                 case PRODUCT_DELETED -> {
                     alertInfo.viewAlert("ELIMINAR PRODUCTO", "Producto eliminado",
@@ -530,7 +594,8 @@ public class ProductViewController implements Initializable {
     @FXML
     private void onRead(ActionEvent event) {
         if (userViewStatus == ApplicationStatus.NONE) {
-            ProductStatus status = productService.readProducts();
+            String idUser = userLogued != null ? userLogued.getIdUser() : null;
+            ProductStatus status = productService.readProducts(idUser);
             switch (status) {
                 case READ_SUCCESS -> {
                     loadTableProducts();
@@ -556,6 +621,13 @@ public class ProductViewController implements Initializable {
                 clearAllFields();
                 hideAllFields();
                 btnSearch.setText("VALIDAR");
+                if (userLogued != null && userLogued.getRol() != null && userLogued.getRol() == User.ROLE_USER) {
+                    scrollPaneForm.setVisible(true);
+                    scrollPaneForm.setManaged(true);
+                    btnCancel.setVisible(true);
+                    btnCancel.setManaged(true);
+                    btnCancel.setDisable(false);
+                }
                 txtIdProduct.setEditable(true);
                 txtIdProduct.setDisable(false);
                 tblProducts.getItems().clear();
@@ -572,8 +644,10 @@ public class ProductViewController implements Initializable {
                     return ;
                 }
                 
+                String idUser =userLogued.getIdUser() ;
                 ProductStatus status = productService.searchProduct(
-                                        Integer.parseInt(idProducto)
+                                        Integer.parseInt(idProducto),
+                                        idUser
                                     );
                 
                 switch (status) {
@@ -583,6 +657,7 @@ public class ProductViewController implements Initializable {
                         loadTableProducts();
                         btnSearch.setText("BUSCAR");
                         hideAllFields();
+                        managedControls();
                     }
                     case EMPTY_LIST->{
                         alertInfo.viewAlert("LISTAR PRODUCTOS", "No existen productos a mostrar", 

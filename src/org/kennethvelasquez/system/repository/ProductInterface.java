@@ -47,11 +47,12 @@ public interface ProductInterface {
      * {@code view_read_product} realizando el {@code INNER JOIN} con la tabla de categorías.
      * </p>
      *
+     * @param idUser ID del usuario que hace la accion
      * @return Lista de objetos {@link ProductDTO} con la información de cada producto.
      * @throws SQLException Si ocurre un error durante la consulta a la base de datos.
      * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de restricciones.
      */
-    List<ProductDTO> read() throws SQLException, SQLIntegrityConstraintViolationException;
+    List<ProductDTO> read(String idUser) throws SQLException, SQLIntegrityConstraintViolationException;
 
     /**
      * Busca un producto específico a partir de su identificador numérico único.
@@ -60,12 +61,12 @@ public interface ProductInterface {
      * detallada junto con el nombre de su categoría asociada.
      * </p>
      *
-     * @param idProduct Identificador primario del producto en la base de datos.
+     * @param product Objeto de producto del cual se buscara
      * @return Objeto {@link ProductDTO} si se encuentra el registro; {@code null} en caso contrario.
      * @throws SQLException Si ocurre un error durante la ejecución de la consulta.
      * @throws SQLIntegrityConstraintViolationException Si ocurre una violación de integridad.
      */
-    ProductDTO search(int idProduct) throws SQLException, SQLIntegrityConstraintViolationException;
+    ProductDTO search(Product product) throws SQLException, SQLIntegrityConstraintViolationException;
 
     /**
      * Actualiza la información general, precio, imagen y/o categoría de un producto existente.
@@ -87,9 +88,9 @@ public interface ProductInterface {
      * Invoca el procedimiento almacenado {@code sp_delete_product}.
      * </p>
      *
-     * @param idProduct Identificador único del producto a eliminar.
+     * @param product Objeto de producto del cual se eliminara
      * @throws SQLException Si ocurre un error de ejecución en la base de datos.
      * @throws SQLIntegrityConstraintViolationException Si el producto está asociado a registros dependientes.
      */
-    void delete(int idProduct) throws SQLException, SQLIntegrityConstraintViolationException;
+    void delete(Product product) throws SQLException, SQLIntegrityConstraintViolationException;
 }
