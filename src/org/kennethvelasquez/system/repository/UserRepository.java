@@ -416,6 +416,7 @@ public class UserRepository implements UserInterface{
                     user.setLastName(result.getString(3));     // Columna 3: u.last_name (Apellidos)
                     user.setUser(result.getString(4));         // Columna 4: u.user (Usuario)
                     user.setEmail(result.getString(5));        // Columna 5: u.email (Correo)
+                    user.setRolName(result.getString(6));
                     user.setRol(result.getInt(7));      // Columna 7: r.name (Rol en texto)
                     user.setTypeEncrypt(result.getInt(8));     // Columna 8: u.type_encrypt (Cifrado)
                     user.setStatus(result.getBoolean(9));   // Columna 9: u.user_status (Estado booleano)
