@@ -347,4 +347,38 @@ public class MyProfileController implements Initializable {
                 "Tu información ha sido actualizada exitosamente.", "INFO");
         alert.viewAlert();
     }
+
+    /**
+     * Prueba del flujo de confirmación para eliminación (onDelete).
+     * <p>
+     * Despliega una alerta de tipo {@code "CONFIRM"} solicitando la decisión del usuario
+     * y evalúa el desenlace a través de {@link AlertInformation#getConfirmStatus()}
+     * imprimiendo el resultado únicamente en consola (sin invocar la capa de servicio).
+     * </p>
+     *
+     * @param event Evento de acción del control visual (opcional/nullable).
+     */
+    @FXML
+    public void onDelete(ActionEvent event) {
+        AlertInformation alert = new AlertInformation();
+        alert.viewAlert(
+            "CONFIRMACIÓN DE ELIMINACIÓN",
+            "Eliminar Registro",
+            "¿Está seguro de que desea eliminar este registro? Esta acción no se puede deshacer.",
+            "CONFIRM"
+        );
+
+        if (alert.getConfirmStatus() == AlertInformation.ConfirmStatus.CONFIRM) {
+            System.out.println("-> [onDelete TEST]: Confirmación ACEPTADA (CONFIRM). Procediendo a eliminar en consola...");
+        } else {
+            System.out.println("-> [onDelete TEST]: Confirmación CANCELADA / DENEGADA (DENIED). Operación cancelada.");
+        }
+    }
+
+    /**
+     * Sobrecarga sin argumentos para invocar la prueba de {@link #onDelete(ActionEvent)} directamente.
+     */
+    public void onDelete() {
+        onDelete(null);
+    }
 }

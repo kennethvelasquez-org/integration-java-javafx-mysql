@@ -37,6 +37,7 @@ create table Product(
     name varchar(70) not null check(length(name)<=70),
     description varchar(100) not null check(length(description)<=100),
     price decimal(10,2) not null default 0.00,
+    img_product blob,
     id_user varchar(36),
     id_category int,
     constraint fk_product_category 
@@ -380,3 +381,67 @@ Delimiter $$
             where id_user = id_user_p;
     end$$
 Delimiter ;
+
+# ----------------------------------- C R U D S DE CATEGORIA  -----------------------  
+# ----------------------- create de categoria --------------
+delimiter $$
+	create procedure sp_create_category(
+			in p_name_category varchar(100),
+			in p_description varchar(200)
+		)
+	begin
+		insert into Category (name_category, description)
+			values (p_name_category, p_description);
+	end $$
+delimiter ;
+# ----------------------- read de categoria --------------
+delimiter $$
+	create procedure sp_read_category()
+	begin
+		select 
+				id_category as ID,
+				name_category as Nombre,
+				description as Descripcion
+			from Category;
+	end $$
+delimiter ;
+# ----------------------- search de categoria --------------
+delimiter $$
+	create procedure sp_search_category(
+			in p_id_category int
+		)
+	begin
+		select 
+			id_category as ID,
+			name_category as Nombre,
+			description as Descripcion
+		from Category
+			where id_category = p_id_category;
+	end $$
+delimiter ;
+# ----------------------- update de categoria --------------
+delimiter $$
+	create procedure sp_update_category(
+			in p_id_category int,
+			in p_name_category varchar(100),
+			in p_description varchar(200)
+		)
+	begin
+		update Category
+			set 
+				name_category = p_name_category,
+				description = p_description
+			where id_category = p_id_category;
+	end $$
+delimiter ;
+# ----------------------- delete de categoria --------------
+delimiter $$
+	create procedure sp_delete_category(
+			in p_id_category int
+		)
+	begin
+		delete from Category
+			where id_category = p_id_category;
+	end $$
+delimiter ;
+

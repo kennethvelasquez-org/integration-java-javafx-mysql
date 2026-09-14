@@ -92,3 +92,31 @@ call sp_update_user(
 );
 
 
+# ----------------------- CREATE de cateogoria
+CALL sp_category_create('Electrónica', 'Smartphones, laptops, tablets y accesorios tecnológicos.');
+CALL sp_category_create('Ropa y Moda', 'Prendas de vestir para dama, caballero y niños.');
+CALL sp_category_create('Hogar y Cocina', 'Electrodomésticos, muebles y artículos de decoración.');
+CALL sp_category_create('Deportes y Fitness', 'Equipamiento deportivo, suplementos y ropa deportiva.');
+CALL sp_category_create('Libros y Papelería', 'Literatura, libros de texto y artículos de oficina.');
+CALL sp_category_create('Belleza y Cuidado Personal', 'Cosméticos, productos para el cuidado de la piel y perfumes.');
+CALL sp_category_create('Categoría Temporal (Prueba)', 'Registro creado exclusivamente para probar Update, Find y Delete.');
+
+# ------------------- LISTAR TODAS LAS CTEOGIRAS
+-- Debe listar las 7 categorías creadas
+CALL sp_category_read();
+# ------------------- SEARCH BY ID DE UNA CATEGORIA
+-- Buscamos el registro con ID = 7
+CALL sp_category_search(7);
+# --------------------- REALIZAR UPDATE DE UNA CATEOGIRA
+-- Actualizamos los datos de la categoría con ID = 7
+CALL sp_category_update(
+    7, 
+    'Categoría Modificada', 
+    'Descripción actualizada exitosamente para pruebas.'
+);
+
+#------------------- delete de categoria
+-- Eliminamos definitivamente la categoría con ID = 7
+CALL sp_category_delete(7);
+
+

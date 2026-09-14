@@ -436,6 +436,7 @@ public class UserViewController implements Initializable {
                 "No se ha eliminado el usuario",
                 "El usuario seleccionado no se ha eliminado",
                 "INFO");
+            userViewStatus = ApplicationStatus.NONE;
         }
         controlOptionsCRUD();
         clearAllFields();   // Limpia los campos del formulario
