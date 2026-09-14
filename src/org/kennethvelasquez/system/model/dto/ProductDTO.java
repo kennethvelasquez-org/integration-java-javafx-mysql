@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.kennethvelasquez.system.model.Product;
+import org.kennethvelasquez.system.utils.ImageTool;
 
 /**
  * Objeto de transferencia de datos (DTO) para la visualización de productos en el TableView.
@@ -95,11 +96,7 @@ public class ProductDTO extends Product {
      */
     public Image getImage() {
         if (getImgProducto() != null && getImgProducto().length > 0) {
-            try {
-                return new Image(new ByteArrayInputStream(getImgProducto()));
-            } catch (Exception e) {
-                return null;
-            }
+            return ImageTool.bytesToImage(getImgProduct());
         }
         return null;
     }
@@ -114,22 +111,12 @@ public class ProductDTO extends Product {
         Image img = getImage();
         if (img != null) {
             ImageView imageView = new ImageView(img);
-            imageView.setFitWidth(50);
-            imageView.setFitHeight(50);
+            imageView.setFitWidth(145);
+            imageView.setFitHeight(145);
             imageView.setPreserveRatio(true);
             imageView.setSmooth(true);
             return imageView;
         }
         return null;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductDTO{" +
-                "idProduct=" + getIdProduct() +
-                ", name='" + getName() + '\'' +
-                ", price=" + getPrice() +
-                ", categoryName='" + categoryName + '\'' +
-                '}';
     }
 }

@@ -80,19 +80,6 @@ public class Category {
      */
     @Override
     public String toString() {
-        return nameCategory != null ? nameCategory : "";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return Objects.equals(idCategory, category.idCategory);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idCategory);
+        return idCategory + " | "+nameCategory;
     }
 }

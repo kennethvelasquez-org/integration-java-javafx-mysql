@@ -177,14 +177,4 @@ public class Product {
     public void setIdCategory(Integer idCategory) {
         this.idCategory = idCategory;
     }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "idProduct=" + idProduct +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", idCategory=" + idCategory +
-                '}';
-    }
 }
