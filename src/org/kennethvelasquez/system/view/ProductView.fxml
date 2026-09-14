@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1366.0" styleClass="user-view" stylesheets="@../resources/styles/ProductViewStyles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1366.0" styleClass="user-view" stylesheets="@../resources/styles/ProductViewStyles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.kennethvelasquez.system.controller.ProductViewController">
    <children>
       <BorderPane maxHeight="85.0" prefHeight="85.0" prefWidth="1366.0">
          <left>
@@ -96,13 +96,14 @@
       </BorderPane>
       <BorderPane prefHeight="665.0" prefWidth="1336.0" styleClass="card-pane">
          <center>
-            <TableView fx:id="tblUsers" onMouseClicked="#onSelectUser" prefHeight="200.0" prefWidth="200.0" styleClass="table-view-nebula" BorderPane.alignment="CENTER">
+            <TableView fx:id="tblProducts" prefHeight="200.0" prefWidth="200.0" styleClass="table-view-nebula" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn fx:id="colIdProduct" prefWidth="89.0" text="ID" />
-                <TableColumn fx:id="colName" prefWidth="149.0" text="Nombres" />
-                  <TableColumn fx:id="colDescription" prefWidth="136.0" text="Descripcion" />
-                  <TableColumn fx:id="colPrice" prefWidth="124.0" text="Precio" />
-                  <TableColumn fx:id="colCategory" prefWidth="150.0" text="Categoria" />
+                <TableColumn fx:id="colIdProduct" prefWidth="79.0" text="ID" />
+                  <TableColumn fx:id="colImgProduct" prefWidth="150.0" text="Imagen" />
+                <TableColumn fx:id="colName" prefWidth="139.0" text="Nombres" />
+                  <TableColumn fx:id="colDescription" prefWidth="205.0" text="Descripcion" />
+                  <TableColumn fx:id="colPrice" prefWidth="149.0" text="Precio" />
+                  <TableColumn fx:id="colCategory" prefWidth="137.0" text="Categoria" />
               </columns>
                <BorderPane.margin>
                   <Insets left="7.5" />
@@ -115,12 +116,12 @@
                   <Insets />
                </BorderPane.margin>
                <content>
-                  <VBox prefHeight="639.0" prefWidth="425.0" styleClass="form">
+                  <VBox prefWidth="425.0" styleClass="form">
                      <children>
                         <VBox>
                            <children>
                               <Label text="ID del Producto" />
-                              <TextField fx:id="txtIdUser" disable="true" editable="false" promptText="123-abc-a1b2c3" styleClass="text-field-nebula" />
+                              <TextField fx:id="txtIdProduct" disable="true" editable="false" promptText="123-abc-a1b2c3" styleClass="text-field-nebula" />
                            </children>
                         </VBox>
                         <VBox>
@@ -132,20 +133,45 @@
                         <VBox>
                            <children>
                               <Label text="Descripcion" />
-                              <TextArea disable="true" maxHeight="225.0" prefHeight="200.0" prefWidth="200.0" promptText="Ingrese la descripción del producto" />
+                              <TextArea fx:id="txaDescription" disable="true" editable="false" maxHeight="225.0" prefHeight="150.0" prefWidth="200.0" promptText="Ingrese la descripción del producto" wrapText="true" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label text="Precio" />
-                              <TextField disable="true" promptText="Ingrese el precio ejemplo: 12.45" />
+                              <TextField fx:id="txtPrice" disable="true" prefWidth="500.0" promptText="Ingrese el precio ejemplo: 12.45" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label text="Categoria" />
-                              <ComboBox fx:id="cmbCategory" disable="true" prefHeight="25.0" prefWidth="430.0" visibleRowCount="5" />
+                              <ComboBox fx:id="cmbCategory" disable="true" prefHeight="25.0" prefWidth="500.0" visibleRowCount="5" />
                            </children>
+                        </VBox>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label text="Imagen del Producto" />
+                              <Button id="btnUploadImg" fx:id="btnUploadImage" disable="true" mnemonicParsing="false" onAction="#onUploadImage" prefWidth="500.0" styleClass="btnUploadImg" text="Cargar imagen">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/images/file-upload-flaticon.com-riajulislam.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <VBox spacing="5.0">
+                           <children>
+                              <ImageView fx:id="imvPreview" fitHeight="445.0" fitWidth="420.0" managed="false" pickOnBounds="true" preserveRatio="true" visible="false" />
+                           </children>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
                         </VBox>
                      </children>
                      <padding>

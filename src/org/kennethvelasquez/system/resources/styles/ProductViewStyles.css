@@ -142,13 +142,14 @@ Button:pressed{
     -fx-border-color: #1e315c;
     -fx-padding: 4px;
     -fx-font-size: 15px;
+    -fx-text-fill: #f8fafc;
+    -fx-prompt-text-fill: #475e8a;
 }
 .text-area .content {
     -fx-background-color: transparent;
     -fx-background-radius: 6px;
-    -fx-text-fill: #f8fafc;
     -fx-prompt-text-fill: #475e8a;
-    -fx-padding: 4px 10px;
+    -fx-padding: 4px 6px;
 }
 .text-area:hover {
     -fx-border-color: #00d2ff;
@@ -250,72 +251,6 @@ Button:pressed{
 .combo-box-popup .list-cell:filled:selected {
     -fx-background-color: linear-gradient(to right, rgba(0, 210, 255, 0.35), rgba(0, 255, 157, 0.25));
     -fx-text-fill: #00ff9d; /* Texto en verde esmeralda al seleccionarlo */
-}
-
-
-/* ===================================   CHECKBOX  ======================================== */
-.check-box {
-    -fx-text-fill: #e2e8f0;
-    -fx-font-size: 15px;
-    -fx-cursor: hand;
-}
-/* La cajita del CheckBox */
-.check-box .box {
-    -fx-background-color: rgba(5, 11, 26, 0.90);
-    -fx-background-radius: 5px;
-    -fx-border-radius: 5px;
-    -fx-border-width: 1.5px;
-    -fx-border-color: #1e2c80;
-    -fx-padding: 3px;
-}
-.check-box:hover .box {
-    -fx-border-color: #00d2ff;
-}
-/* Estado Marcado (Checked) */
-.check-box:selected .box {
-    -fx-background-color: linear-gradient(to right, #00d2ff, #00ff9d);
-    -fx-border-color: transparent;
-    -fx-effect: dropshadow(gaussian, rgba(0, 255, 157, 0.50), 8, 0.3, 0, 0);
-}
-/* El ícono del check (la palomita) */
-.check-box .mark {
-    -fx-background-color: transparent;
-}
-.check-box:selected .mark {
-    -fx-background-color: #04091a; /* El check queda en negro abisal sobre el fondo brillante */
-}
-
-
-/* ========================================   RADIOBUTTON   ========================== */
-.radio-button {
-    -fx-text-fill: #e2e8f0;
-    -fx-font-size: 15px;
-    -fx-cursor: hand;
-}
-/* Círculo exterior */
-.radio-button .radio {
-    -fx-background-color: rgba(5, 11, 26, 0.90);
-    -fx-background-radius: 100%;
-    -fx-border-radius: 100%;
-    -fx-border-width: 1.5px;
-    -fx-border-color: #1e2c80;
-    -fx-padding: 3px;
-}
-.radio-button:hover .radio {
-    -fx-border-color: #00d2ff;
-}
-/* Estado Seleccionado */
-.radio-button:selected .radio {
-    -fx-border-color: #00f5d4;
-    -fx-effect: dropshadow(gaussian, rgba(0, 245, 212, 0.45), 10, 0.3, 0, 0);
-}
-/* Punto interior (Dot) */
-.radio-button .dot {
-    -fx-background-color: transparent;
-    -fx-background-radius: 100%;
-}
-.radio-button:selected .dot {
-    -fx-background-color: #00ff9d; /* Punto central verde esmeralda brillante */
 }
 
 /*============================= Contenedor general de la tabla================== */
@@ -466,4 +401,57 @@ Button:pressed{
 /* 5. Esquina inferior derecha cuando ambas barras están activas (Corner) */
 .corner {
     -fx-background-color: transparent; /* Evita el recuadro gris feo por defecto */
+}
+
+/* =========================================================================
+   BOTÓN CARGAR IMAGEN (Estilo Nebula acorde al formulario y campos)
+   ========================================================================= */
+#btnUploadImg, .btnUploadImg {
+    -fx-background-color: rgba(5, 11, 26, 0.90);
+    -fx-border-color: #1e315c;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-text-fill: #f8fafc;
+    -fx-font-family: "Cascadia";
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-padding: 8px 16px;
+    -fx-alignment: CENTER;
+    -fx-graphic-text-gap: 12px;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+#btnUploadImg:hover, .btnUploadImg:hover {
+    -fx-background-color: rgba(13, 25, 58, 0.95);
+    -fx-border-color: #00d2ff;
+    -fx-text-fill: #00f5d4;
+    /* dificulta la lectura 
+    -fx-effect: dropshadow(gaussian, rgba(0, 210, 255, 0.40), 10, 0.25, 0, 0);
+    */
+}
+
+#btnUploadImg:pressed, .btnUploadImg:pressed {
+    -fx-background-color: rgba(0, 210, 255, 0.25);
+    -fx-border-color: #00f5d4;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 245, 212, 0.25), 14, 0.35, 0, 0);
+}
+
+#btnUploadImg:disabled, .btnUploadImg:disabled {
+    -fx-background-color: rgba(5, 11, 26, 0.45);
+    -fx-border-color: rgba(30, 49, 92, 0.40);
+    -fx-text-fill: #475e8a;
+    -fx-opacity: 0.65;
+    -fx-cursor: default;
+    -fx-effect: null;
+}
+
+/* =========================================================================
+   PREVISUALIZADOR DE IMAGEN (Efecto de elevación e iluminación sutil)
+   ========================================================================= */
+#imvPreview {
+    -fx-effect: dropshadow(gaussian, rgba(0, 210, 255, 0.30), 16, 0.25, 0, 4);
 }

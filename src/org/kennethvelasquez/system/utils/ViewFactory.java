@@ -74,7 +74,11 @@ public class ViewFactory {
                 }
                 case "users"-> {
                     scene = loadFileFXML("UserView.fxml",1366,780);
-                    SceneManager.getInstanceSceneManager().getStagePrincipal().setTitle("PANEL PRINCIPAL");
+                    SceneManager.getInstanceSceneManager().getStagePrincipal().setTitle("PANEL USUARIOS");
+                }
+                case "products"-> {
+                    scene = loadFileFXML("ProductView.fxml",1366,780);
+                    SceneManager.getInstanceSceneManager().getStagePrincipal().setTitle("PANEL PRODUCTOS");
                 }
                 default-> scene = loadFileFXML("NotFoundView.fxml", 350, 350);
             }
@@ -126,5 +130,8 @@ public class ViewFactory {
     }
     public void usersView(){
         loadScene("users");
+    }
+    public void productsView(){
+        loadScene("products");
     }
 }

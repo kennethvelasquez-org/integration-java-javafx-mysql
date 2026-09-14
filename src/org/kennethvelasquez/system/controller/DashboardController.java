@@ -235,7 +235,7 @@ public class DashboardController implements Initializable {
      * Manejador del evento de clic para la opción "Usuarios" ({@link #btnUsers}).
      * <p>
      * Solicita a la factoría {@link ViewFactory#loadComponent(String)} la carga del componente
-     * correspondiente a la clave {@code "my-profile"} (vista {@code MyProfileView.fxml}) y la incrusta
+     * correspondiente a la clave {@code "users"} (vista {@code UserView.fxml}) y la incrusta
      * en el panel principal llamando a {@link #insertContentAnchorPante(Parent)}.
      * </p>
      *
@@ -244,6 +244,21 @@ public class DashboardController implements Initializable {
     @FXML
     private void onUsers(MouseEvent event) {
         viewFacto.usersView();
+    }
+    
+    /**
+     * Manejador del evento de clic para la opción "Productos" ({@link #bntProducts}).
+     * <p>
+     * Solicita a la factoría {@link ViewFactory#loadComponent(String)} la carga del componente
+     * correspondiente a la clave {@code "products"} (vista {@code ProductView.fxml}) y la incrusta
+     * en el panel principal llamando a {@link #insertContentAnchorPante(Parent)}.
+     * </p>
+     *
+     * @param event Evento del ratón disparado al hacer clic sobre el botón "Mi Perfil".
+     */
+    @FXML
+    private void onProducts(MouseEvent event) {
+        viewFacto.productsView();
     }
 
     /**

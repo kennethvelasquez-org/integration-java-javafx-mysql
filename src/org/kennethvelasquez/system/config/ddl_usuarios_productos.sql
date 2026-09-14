@@ -34,10 +34,10 @@ create table Category (
 );
 
 create table Product(
-    name varchar(70) not null check(length(name)<=70),
-    description varchar(100) not null check(length(description)<=100),
+    name varchar(100) not null check (char_length(name) <= 100),
+    description varchar(200) not null check (char_length(description) <= 200),
     price decimal(10,2) not null default 0.00,
-    img_product blob,
+    img_producto mediumblob,
     id_user varchar(36),
     id_category int,
     constraint fk_product_category 
@@ -48,7 +48,7 @@ create table Product(
         foreign key (id_user) references User(id_user)
         on delete set null 
         on update cascade,
-    id_product varchar(36) not null,
+    id_product int not null auto_increment,
     constraint pk_product primary key (id_product)
 );
 
@@ -324,8 +324,6 @@ Delimiter $$
     end$$
 Delimiter ;
 
-drop procedure sp_search_user_by_data;
-
 #------------------------------ UPDATE USUARIOS -----------
 Delimiter $$
     create procedure sp_update_user(
@@ -445,3 +443,84 @@ delimiter $$
 	end $$
 delimiter ;
 
+# ----------------------------------- C R U D S DE PRODUCTO  -----------------------  
+# --------------------- Crear Producto ---------------------
+delimiter $$
+	create procedure sp_create_product(
+			in name_p varchar(100),
+			in description_p varchar(200),
+			in price_p decimal(10, 2),
+			in img_producto_p mediumblob,
+			in id_category_p int
+		)
+	begin
+		insert into Product (name, description, price, img_producto,id_category)
+			values (name_p, description_p, price_p, img_producto_p,id_category_p);
+	end $$
+delimiter ;
+
+# ------------------------ Listar Productos -----------------
+# VISTA
+create view view_read_product as
+select 
+        p.id_product as ID,
+        p.name as Nombre,
+        p.description as Descripcion,
+        p.price as Precio,
+        p.img_producto as Imagen,
+        p.id_category as "ID de categoria",
+        c.name_category as Categoria
+    from Product p
+        inner join Category c
+           on p.id_category = c.id_category;
+# ---------------  SP DE LISTAR Productos--------------
+delimiter $$
+	create procedure sp_read_products()
+	begin
+		select * from view_read_product;
+	end $$
+delimiter ;
+
+# -------------------  BUSCAR PRODUCTO
+delimiter $$
+	create procedure sp_search_product(
+			in id_product_p int
+		)
+	begin
+		select * from view_read_product
+			where ID = id_product_p;
+	end $$
+delimiter ;
+
+#------------ Actualizar Producto
+delimiter $$
+	create procedure sp_update_product(
+		in id_product_p int,
+		in name_p varchar(100),
+		in description_p varchar(200),
+		in price_p decimal(10, 2),
+		in img_producto_p mediumblob,
+		in id_category_p int
+	)
+	begin
+		update Product
+			set 
+				name = name_p,
+				description = description_p,
+				price = price_p,
+				img_producto = ifnull(img_producto_p, img_producto),
+				id_category = id_category_p
+			where id_product = id_product_p;
+	end $$
+delimiter ;
+
+# -------------------- Eliminar Producto
+delimiter $$
+	create procedure sp_delete_product(
+		in id_product_p int
+	)
+	begin
+		delete from Product
+			where id_product = id_product_p;
+	end $$
+delimiter ;

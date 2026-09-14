@@ -47,4 +47,76 @@ public class Validations {
         return arrobeCount == 1;
     }
     
+    /**
+     * Valida si un texto representa una estructura decimal numérica válida.
+     *
+     * @param text Cadena de texto a evaluar.
+     * @return true si es convertible a Double; false si contiene letras o formato erróneo.
+     */
+    public Boolean isValidDecimal(String text) {
+        if (text == null || isEmptyText(text)) {
+            return false;
+        }
+        try {
+            Double.valueOf(text.trim());
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Valida si un texto representa un número decimal positivo mayor a cero (ej. precios).
+     *
+     * @param text Cadena de texto a evaluar.
+     * @return true si es un número decimal y su valor es estrictamente mayor a 0.0; false en caso contrario.
+     */
+    public Boolean isValidPositiveDecimal(String text) {
+        if (text == null || isEmptyText(text)) {
+            return false;
+        }
+        try {
+            double value = Double.parseDouble(text.trim());
+            return value > 0.0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Valida si un texto representa una estructura de número entero válida.
+     *
+     * @param text Cadena de texto a evaluar.
+     * @return true si es convertible a Integer; false si contiene letras, decimales o formato erróneo.
+     */
+    public Boolean isValidInteger(String text) {
+        if (text == null || isEmptyText(text)) {
+            return false;
+        }
+        try {
+            Integer.valueOf(text.trim());
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Valida si un texto representa un número entero positivo mayor a cero (ej. IDs, stock, cantidades).
+     *
+     * @param text Cadena de texto a evaluar.
+     * @return true si es un número entero y su valor es estrictamente mayor a 0; false en caso contrario.
+     */
+    public Boolean isValidPositiveInteger(String text) {
+        if (text == null || isEmptyText(text)) {
+            return false;
+        }
+        try {
+            int value = Integer.parseInt(text.trim());
+            return value > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
+
