@@ -134,6 +134,7 @@ public class UserViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         loadComboBox();
+        initTableColumns();
         listOptionsSecurity.add(cbUnprotected);
         listOptionsSecurity.add(cbMD5);
         listOptionsSecurity.add(cbBCrypt);
@@ -436,6 +437,7 @@ public class UserViewController implements Initializable {
                 "No se ha eliminado el usuario",
                 "El usuario seleccionado no se ha eliminado",
                 "INFO");
+            userViewStatus = ApplicationStatus.NONE;
         }
         controlOptionsCRUD();
         clearAllFields();   // Limpia los campos del formulario
@@ -460,9 +462,10 @@ public class UserViewController implements Initializable {
         }
     }
     
-    private void loadTableUsers(){
-        observableListUsers = FXCollections.observableArrayList(userService.getUsersList());
-        tblUsers.setItems(observableListUsers);
+     /**
+     * Enlaza las columnas del TableView con los atributos de UserDTO.
+     */
+    private void initTableColumns() {
         colIdUser.setCellValueFactory(
                 new PropertyValueFactory<UserDTO, String>("idUser")
         );
@@ -487,6 +490,11 @@ public class UserViewController implements Initializable {
         colEncrypt.setCellValueFactory(
                 new PropertyValueFactory<UserDTO, String>("typeEncryptName")
         );
+    }
+    
+    private void loadTableUsers(){
+        observableListUsers = FXCollections.observableArrayList(userService.getUsersList());
+        tblUsers.setItems(observableListUsers);
     }
 
     @FXML
@@ -523,8 +531,7 @@ public class UserViewController implements Initializable {
                 pwdConfirmPassword.setDisable(true);
                 txtIdUser.setEditable(true);
                 btnSearch.setText("VALIDAR");
-                userService.getUsersList().clear();
-                loadTableUsers();
+                tblUsers.getItems().clear();
             }
             case SEARCH->{
                 String idUser = txtIdUser.getText().trim();

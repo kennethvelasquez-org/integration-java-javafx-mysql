@@ -3,13 +3,13 @@ package org.kennethvelasquez.system.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.Optional;
-import javafx.scene.control.ButtonType;
 
 /**
  * 
@@ -82,7 +82,7 @@ public class AlertInformation {
      * Estado resultante de la interacción con una alerta de tipo confirmación.
      */
     private ConfirmStatus confirmStatus;
-    
+
     /**
      * Constructor vacío.
      * <p>
@@ -198,7 +198,7 @@ public class AlertInformation {
     public boolean isConfirmed() {
         return this.confirmStatus == ConfirmStatus.CONFIRM;
     }
-    
+
     /**
      * Muestra una alerta utilizando los atributos actuales de la instancia.
      * <p>
@@ -222,7 +222,7 @@ public class AlertInformation {
      */
     public void viewAlert() {
         Alert alert = buildAlert(this.messageHead, this.title, this.message, this.type);
-        alert.showAndWait();
+        showAlert(alert);
     }
 
     /**
@@ -290,6 +290,7 @@ public class AlertInformation {
         applyImage(alert, imageURL);
 
         showAlert(alert);
+
     }
 /**
      * Muestra la alerta en pantalla y, en caso de ser de tipo {@link AlertType#CONFIRMATION},

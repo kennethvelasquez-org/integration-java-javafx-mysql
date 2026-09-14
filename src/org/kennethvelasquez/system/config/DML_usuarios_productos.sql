@@ -74,8 +74,6 @@ call sp_read_users();
 select * from user;
 -- 1. Prueba de búsqueda (trae a todos los que tengan 'ad' en= user )
 call sp_search_user_by_data(null,null,null,null,null,null,null,null,null);
--- 2. Prueba de búsqueda vacía (trae todos los usuarios)
-call sp_search_user_by_data('');
 -- 3. Prueba de eliminación lógica (desactivar usuario por su UUID)
 call sp_delete_user('2e83eb20-af0e-11f1-8a26-f8edfc2af70e');
 -- 4. Prueba de actualización
@@ -91,4 +89,87 @@ call sp_update_user(
     true
 );
 
+
+# ----------------------- CREATE de cateogoria
+CALL sp_create_category('Electrónica', 'Smartphones, laptops, tablets y accesorios tecnológicos.');
+CALL sp_create_category('Ropa y Moda', 'Prendas de vestir para dama, caballero y niños.');
+CALL sp_create_category('Hogar y Cocina', 'Electrodomésticos, muebles y artículos de decoración.');
+CALL sp_create_category('Deportes y Fitness', 'Equipamiento deportivo, suplementos y ropa deportiva.');
+CALL sp_create_category('Libros y Papelería', 'Literatura, libros de texto y artículos de oficina.');
+CALL sp_create_category('Belleza y Cuidado Personal', 'Cosméticos, productos para el cuidado de la piel y perfumes.');
+CALL sp_create_category('Categoría Temporal (Prueba)', 'Registro creado exclusivamente para probar Update, Find y Delete.');
+
+# ------------------- LISTAR TODAS LAS CTEOGIRAS
+-- Debe listar las 7 categorías creadas
+CALL sp_read_category();
+# ------------------- SEARCH BY ID DE UNA CATEGORIA
+-- Buscamos el registro con ID = 7
+CALL sp_search_category(7);
+# --------------------- REALIZAR UPDATE DE UNA CATEOGIRA
+-- Actualizamos los datos de la categoría con ID = 7
+CALL sp_update_category(
+    7, 
+    'Categoría Modificada', 
+    'Descripción actualizada exitosamente para pruebas.'
+);
+
+#------------------- delete de categoria
+-- Eliminamos definitivamente la categoría con ID = 7
+CALL sp_delete_category(7);
+
+# -------------------------------------------------------------
+# 1. INSERTAR 5 PRODUCTOS (sp_create_product)
+# Nota: Para la imagen se utiliza un valor hexadecimal ficticio (0x89504e47)
+call sp_create_product(
+    'Laptop Gamer ASUS',
+    'Laptop con procesador Intel Core i7, 16GB RAM y tarjeta RTX 4060',
+    8999.99,
+    0x89504e47,
+    1
+);
+call sp_create_product(
+    'Teclado Mecanico RGB',
+    'Teclado mecanico con switches blue y retroiluminacion personalizable',
+    350.50,
+    0x89504e47,
+    1
+);
+call sp_create_product(
+    'Camisa Polo Casual',
+    'Camisa de algodon corte slim fit color azul marino',
+    125.00,
+    0x89504e47,
+    2
+);
+call sp_create_product(
+    'Cafetera Espresso Automatica',
+    'Cafetera de presion de 15 bares con espumador de leche integrado',
+    650.00,
+    0x89504e47,
+    3
+);
+call sp_create_product(
+    'Balon de Futbol Pro',
+    'Balon profesional de alta resistencia tamano 5',
+    180.00,
+    0x89504e47,
+    4
+);
+# Listar todos los productos cargados
+call sp_read_products();
+
+# ---------------------- ACCIONES CON 1 PRODUCTO (ID = 5)
+# BUSCAR el producto
+call sp_search_product(4);
+# EDITAR el producto
+call sp_update_product(
+    5,
+    'Balon de Futbol Pro Elite Edition',
+    'Balon profesional termocellado tamano 5 edicion torneo',
+    220.00,
+    0x89504e47,
+    4
+);
+# ELIMINAR el producto
+call sp_delete_product(5);
 
