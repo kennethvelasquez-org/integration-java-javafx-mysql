@@ -186,6 +186,7 @@ public class UserRepository implements UserInterface{
                 findUser.setRol(result.getInt(6));
                 findUser.setTypeEncrypt(result.getInt(7));
                 findUser.setIdUser(result.getString(8));
+                findUser.setStatus(result.getBoolean(9));
                 return findUser;
             }
         }
@@ -220,7 +221,9 @@ public class UserRepository implements UserInterface{
                 findUser.setLastName(result.getString(3));
                 findUser.setEmail(result.getString(4));
                 findUser.setUser(result.getString(5));
-                findUser.setRol(result.getInt(6));
+                findUser.setPassword(result.getString(6));
+                findUser.setRol(result.getInt(7));
+                findUser.setStatus(result.getBoolean(8));
                 return findUser;
             }
         }
@@ -255,7 +258,9 @@ public class UserRepository implements UserInterface{
                 findUser.setLastName(result.getString(3));
                 findUser.setEmail(result.getString(4));
                 findUser.setUser(result.getString(5));
+                findUser.setPassword(result.getString(6));
                 findUser.setRol(result.getInt(7));
+                findUser.setStatus(result.getBoolean(8));
                 return findUser;
             }
         }

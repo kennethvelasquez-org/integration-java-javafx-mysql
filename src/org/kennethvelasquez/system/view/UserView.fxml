@@ -114,7 +114,7 @@
             </TableView>
          </center>
          <left>
-            <ScrollPane prefWidth="435.0" BorderPane.alignment="CENTER">
+            <ScrollPane fx:id="scrollPaneForm" prefWidth="435.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>

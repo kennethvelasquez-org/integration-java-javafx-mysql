@@ -115,6 +115,29 @@ public class DashboardController implements Initializable {
             String fullName = userLogued.getName() + " " + userLogued.getLastName();
             lblFullName.setText(fullName);
         }
+        managedControls();
+    }
+
+    /**
+     * Aplica el control de acceso por roles (RBAC) sobre las opciones de navegación del Dashboard.
+     * <p>
+     * - Admin (100): Acceso completo a todos los botones del sistema.
+     * - Employee (102) y User (101): Se oculta y desvincula el módulo de administración de usuarios ({@link #btnUsers}).
+     * </p>
+     */
+    private void managedControls() {
+        User userLogued = AuthenticationController.getUserLogued();
+        if (userLogued == null) {
+            return;
+        }
+
+        if (userLogued.getRol() == null || userLogued.getRol() != User.ROLE_ADMIN) {
+            btnUsers.setVisible(false);
+            btnUsers.setManaged(false);
+        } else {
+            btnUsers.setVisible(true);
+            btnUsers.setManaged(true);
+        }
     }
 
     /**

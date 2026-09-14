@@ -38,7 +38,22 @@ public enum AuthenticationStatus {
     /**
      * Ocurrió un fallo general o inesperado durante la ejecución del proceso de inicio de sesión.
      */
-    ERROR_LOGIN
+    ERROR_LOGIN,
+
+    /**
+     * La cuenta del usuario se encuentra activa y las credenciales son válidas.
+     */
+    ACTIVE_ACCOUNT,
+
+    /**
+     * Las credenciales coinciden pero la cuenta de usuario se encuentra inactiva o deshabilitada.
+     */
+    INACTIVE,
+
+    /**
+     * Alias descriptivo complementario para indicar cuenta inactiva.
+     */
+    INACTIVE_ACCOUNT
 }
 
 

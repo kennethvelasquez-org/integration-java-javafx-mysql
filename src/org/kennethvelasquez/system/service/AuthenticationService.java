@@ -108,11 +108,15 @@ public class AuthenticationService {
                 }
                 default-> null;
             };
-            if( userLogued == null)
+            if (userLogued == null)
                 return AuthenticationStatus.ERROR_CREDENTIALS;
             
+            if (Boolean.FALSE.equals(userLogued.getStatus())) {
+                return AuthenticationStatus.INACTIVE;
+            }
+
             AuthenticationController.setUserLogued(userLogued);
-            return AuthenticationStatus.LOGIN_SUCCESS;
+            return AuthenticationStatus.ACTIVE_ACCOUNT;
         } catch (SQLException e) {
             messageError = e.getMessage();
             return AuthenticationStatus.ERROR_LOGIN;

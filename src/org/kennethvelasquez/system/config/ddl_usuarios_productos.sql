@@ -52,6 +52,14 @@ create table Product(
     constraint pk_product primary key (id_product)
 );
 
+create table History_Change(
+    id_history int auto_increment,
+    id_user varchar(70),
+    date_time datetime default current_timestamp,
+    id_producto int,
+    accion varchar(20),
+    constraint pk_History_Change primary key (id_history)
+);
 
 #----------------STORED PROCEDURES DE ROLES----------------------
 Delimiter $$
@@ -218,6 +226,7 @@ Delimiter $$
         
         select id_user as ID,
 			   name as Nombres,
+               last_name as Apellidos,
                email as Correo,
                user as Usuario,
                password as Clave,
@@ -451,11 +460,12 @@ delimiter $$
 			in description_p varchar(200),
 			in price_p decimal(10, 2),
 			in img_producto_p mediumblob,
-			in id_category_p int
+			in id_category_p int,
+			in id_user_p varchar(70)
 		)
 	begin
-		insert into Product (name, description, price, img_producto,id_category)
-			values (name_p, description_p, price_p, img_producto_p,id_category_p);
+		insert into Product (name, description, price, img_producto, id_category, id_user)
+			values (name_p, description_p, price_p, img_producto_p, id_category_p, id_user_p);
 	end $$
 delimiter ;
 
@@ -475,8 +485,12 @@ select
            on p.id_category = c.id_category;
 # ---------------  SP DE LISTAR Productos--------------
 delimiter $$
-	create procedure sp_read_products()
+	create procedure sp_read_products(
+			in id_user_p varchar(70)
+		)
 	begin
+		insert into History_Change (id_user, id_producto, accion)
+			values (id_user_p, null, 'READ');
 		select * from view_read_product;
 	end $$
 delimiter ;
@@ -484,9 +498,12 @@ delimiter ;
 # -------------------  BUSCAR PRODUCTO
 delimiter $$
 	create procedure sp_search_product(
-			in id_product_p int
+			in id_product_p int,
+			in id_user_p varchar(70)
 		)
 	begin
+		insert into History_Change (id_user, id_producto, accion)
+			values (id_user_p, id_product_p, 'SEARCH');
 		select * from view_read_product
 			where ID = id_product_p;
 	end $$
@@ -500,7 +517,8 @@ delimiter $$
 		in description_p varchar(200),
 		in price_p decimal(10, 2),
 		in img_producto_p mediumblob,
-		in id_category_p int
+		in id_category_p int,
+		in id_user_p varchar(70)
 	)
 	begin
 		update Product
@@ -509,7 +527,8 @@ delimiter $$
 				description = description_p,
 				price = price_p,
 				img_producto = ifnull(img_producto_p, img_producto),
-				id_category = id_category_p
+				id_category = id_category_p,
+				id_user = id_user_p
 			where id_product = id_product_p;
 	end $$
 delimiter ;
@@ -517,10 +536,36 @@ delimiter ;
 # -------------------- Eliminar Producto
 delimiter $$
 	create procedure sp_delete_product(
-		in id_product_p int
+		in id_product_p int,
+		in id_user_p varchar(70)
 	)
 	begin
+		insert into History_Change (id_user, id_producto, accion)
+			values (id_user_p, id_product_p, 'DELETE');
 		delete from Product
 			where id_product = id_product_p;
+	end $$
+delimiter ;
+
+#------------------------ TRIGGERS DE PRODUCTO ---------------
+# Trigger tras crear producto (AFTER INSERT)
+delimiter $$
+	create trigger tr_product_after_insert
+            after insert on Product
+            for each row
+	begin
+		insert into History_Change (id_user, id_producto, accion)
+			values (NEW.id_user, NEW.id_product, 'CREATE');
+	end $$
+delimiter ;
+
+# Trigger tras actualizar producto (AFTER UPDATE)
+delimiter $$
+	create trigger tr_product_after_update
+            after update on Product
+            for each row
+	begin
+		insert into History_Change (id_user, id_producto, accion)
+			values (NEW.id_user, NEW.id_product, 'UPDATE');
 	end $$
 delimiter ;

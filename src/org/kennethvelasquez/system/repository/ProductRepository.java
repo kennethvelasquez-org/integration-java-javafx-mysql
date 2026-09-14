@@ -55,13 +55,14 @@ public class ProductRepository implements ProductInterface {
      */
     @Override
     public void create(Product product) throws SQLException, SQLIntegrityConstraintViolationException {
-        String storedProcedure = "{call sp_create_product(?,?,?,?,?)}";
+        String storedProcedure = "{call sp_create_product(?,?,?,?,?,?)}";
         try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
             callSP.setString(1, product.getName());
             callSP.setString(2, product.getDescription());
             callSP.setDouble(3, product.getPrice());
             callSP.setBytes(4, product.getImgProducto());
             callSP.setInt(5, product.getIdCategory());
+            callSP.setString(6, product.getIdUser());
             callSP.execute();
         }
     }
@@ -74,24 +75,25 @@ public class ProductRepository implements ProductInterface {
      * </p>
      */
     @Override
-    public List<ProductDTO> read() throws SQLException, SQLIntegrityConstraintViolationException {
+    public List<ProductDTO> read(String idUser) throws SQLException, SQLIntegrityConstraintViolationException {
         List<ProductDTO> listProducts = new ArrayList<>();
-        String storedProcedure = "{call sp_read_products()}";
+        String storedProcedure = "{call sp_read_products(?)}";
 
-        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure);
-             ResultSet result = callSP.executeQuery()) {
+        try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
+            callSP.setString(1, idUser);
+            try (ResultSet result = callSP.executeQuery()) {
+                while (result.next()) {
+                    ProductDTO product = new ProductDTO();
+                    product.setIdProduct(result.getInt(1));        // Columna 1: p.id_product (ID)
+                    product.setName(result.getString(2));          // Columna 2: p.name (Nombre)
+                    product.setDescription(result.getString(3));   // Columna 3: p.description (Descripcion)
+                    product.setPrice(result.getDouble(4));         // Columna 4: p.price (Precio)
+                    product.setImgProducto(result.getBytes(5));    // Columna 5: p.img_producto (Imagen en bytes)
+                    product.setIdCategory(result.getInt(6));       // Columna 6: p.id_category (ID de categoria)
+                    product.setCategoryName(result.getString(7));  // Columna 7: c.name_category (Categoria en texto)
 
-            while (result.next()) {
-                ProductDTO product = new ProductDTO();
-                product.setIdProduct(result.getInt(1));        // Columna 1: p.id_product (ID)
-                product.setName(result.getString(2));          // Columna 2: p.name (Nombre)
-                product.setDescription(result.getString(3));   // Columna 3: p.description (Descripcion)
-                product.setPrice(result.getDouble(4));         // Columna 4: p.price (Precio)
-                product.setImgProducto(result.getBytes(5));    // Columna 5: p.img_producto (Imagen en bytes)
-                product.setIdCategory(result.getInt(6));       // Columna 6: p.id_category (ID de categoria)
-                product.setCategoryName(result.getString(7));  // Columna 7: c.name_category (Categoria en texto)
-
-                listProducts.add(product);
+                    listProducts.add(product);
+                }
             }
         }
         return listProducts;
@@ -104,23 +106,24 @@ public class ProductRepository implements ProductInterface {
      * </p>
      */
     @Override
-    public ProductDTO search(int idProduct) throws SQLException, SQLIntegrityConstraintViolationException {
-        String storedProcedure = "{call sp_search_product(?)}";
+    public ProductDTO search(Product product) throws SQLException, SQLIntegrityConstraintViolationException {
+        String storedProcedure = "{call sp_search_product(?,?)}";
 
         try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
-            callSP.setInt(1, idProduct);
+            callSP.setInt(1, product.getIdProduct());
+            callSP.setString(2, product.getIdUser());
 
             try (ResultSet result = callSP.executeQuery()) {
                 if (result.next()) {
-                    ProductDTO product = new ProductDTO();
-                    product.setIdProduct(result.getInt(1));
-                    product.setName(result.getString(2));
-                    product.setDescription(result.getString(3));
-                    product.setPrice(result.getDouble(4));
-                    product.setImgProducto(result.getBytes(5));
-                    product.setIdCategory(result.getInt(6));
-                    product.setCategoryName(result.getString(7));
-                    return product;
+                    ProductDTO productDTO = new ProductDTO();
+                    productDTO.setIdProduct(result.getInt(1));
+                    productDTO.setName(result.getString(2));
+                    productDTO.setDescription(result.getString(3));
+                    productDTO.setPrice(result.getDouble(4));
+                    productDTO.setImgProducto(result.getBytes(5));
+                    productDTO.setIdCategory(result.getInt(6));
+                    productDTO.setCategoryName(result.getString(7));
+                    return productDTO;
                 }
             }
         }
@@ -135,7 +138,7 @@ public class ProductRepository implements ProductInterface {
      */
     @Override
     public void update(Product product) throws SQLException, SQLIntegrityConstraintViolationException {
-        String storedProcedure = "{call sp_update_product(?,?,?,?,?,?)}";
+        String storedProcedure = "{call sp_update_product(?,?,?,?,?,?,?)}";
         try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
             callSP.setInt(1, product.getIdProduct());
             callSP.setString(2, product.getName());
@@ -143,6 +146,7 @@ public class ProductRepository implements ProductInterface {
             callSP.setDouble(4, product.getPrice());
             callSP.setBytes(5, product.getImgProducto());
             callSP.setInt(6, product.getIdCategory());
+            callSP.setString(7, product.getIdUser());
             callSP.execute();
         }
     }
@@ -154,10 +158,11 @@ public class ProductRepository implements ProductInterface {
      * </p>
      */
     @Override
-    public void delete(int idProduct) throws SQLException, SQLIntegrityConstraintViolationException {
-        String storedProcedure = "{call sp_delete_product(?)}";
+    public void delete(Product product) throws SQLException, SQLIntegrityConstraintViolationException {
+        String storedProcedure = "{call sp_delete_product(?,?)}";
         try (CallableStatement callSP = conexionDB.getConnection().prepareCall(storedProcedure)) {
-            callSP.setInt(1, idProduct);
+            callSP.setInt(1, product.getIdProduct());
+            callSP.setString(2, product.getIdUser());
             callSP.execute();
         }
     }

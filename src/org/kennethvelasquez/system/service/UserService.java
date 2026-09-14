@@ -233,11 +233,6 @@ public class UserService {
      *         {@link UserStatus#ERROR_USER_DELETE} ante parámetros inválidos o fallo al eliminar.
      */
     public UserStatus deleteUser(String idUser, String user, String email) {
-        if (idUser == null || idUser.trim().isEmpty()) {
-            this.messageError = "El ID de usuario no es válido.";
-            return UserStatus.ERROR_USER_DELETE;
-        }
-        
          try {
             boolean searchUser = userRepo.existsByEmailOrUser(user,email);
             if( searchUser != true)
@@ -258,14 +253,16 @@ public class UserService {
     
     public UserStatus updateUser(String idUser, String name, String lastName, String email,
                                  String user, String password, Integer idRol, 
-                                 Integer typeEncrypt, Boolean userStatus){        
+                                 Integer typeEncrypt, Boolean userStatus){                         
         try {
             User newUser = new User(idUser,name, lastName, email, user, password, idRol, typeEncrypt,userStatus);
             switch (typeEncrypt) {
                 case 1, 2 -> userRepo.update(newUser);
                 case 3 -> {
-                    ToolBCrypt encrypt = new ToolBCrypt();
-                    newUser.setPassword(encrypt.encryptToString(password));
+                    if( password !=null && !password.isEmpty()){
+                        ToolBCrypt encrypt = new ToolBCrypt();
+                        newUser.setPassword(encrypt.encryptToString(password));
+                    }
                     userRepo.update(newUser);
                 }
                 default -> {
@@ -275,7 +272,9 @@ public class UserService {
             return UserStatus.USER_UPDATED;
         } catch (SQLIntegrityConstraintViolationException e) {
             messageError = e.getMessage();
-            return UserStatus.USER_EXISTS;
+            if (messageError != null && messageError.toLowerCase().contains("duplicate")) 
+                return UserStatus.USER_EXISTS;
+            return UserStatus.ERROR_USER_UPDATE;
         } catch (SQLException e) {
             messageError = e.getMessage();
             return UserStatus.ERROR_USER_UPDATE;

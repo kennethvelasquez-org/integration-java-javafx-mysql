@@ -145,23 +145,24 @@ public class ProductService {
     }
 
     /**
-     * Valida y crea un nuevo producto en la base de datos.
+     * Valida y crea un nuevo producto en la base de datos con referencia al usuario creador.
      *
      * @param name        Nombre del producto.
      * @param description Descripción detallada.
      * @param price       Precio unitario.
      * @param imgProducto Arreglo de bytes con la imagen (puede ser null).
      * @param idCategory  ID de la categoría a la que pertenece.
+     * @param idUser      UUID del usuario que ejecuta la acción.
      * @return Estado resultante de la operación en {@link ProductStatus}.
      */
-    public ProductStatus createProduct(String name, String description, Double price, byte[] imgProducto, Integer idCategory) {
+    public ProductStatus createProduct(String name, String description, Double price, byte[] imgProducto, Integer idCategory, String idUser) {
         ProductStatus validationStatus = validateProductData(name, description, price, idCategory);
         if (validationStatus != null) {
             return validationStatus;
         }
 
         try {
-            Product product = new Product(name.trim(), description.trim(), price, imgProducto, idCategory);
+            Product product = new Product(name.trim(), description.trim(), price, imgProducto, idUser, idCategory);
             productRepo.create(product);
             clearTemporalImage();
             return ProductStatus.PRODUCT_CREATED;
@@ -175,15 +176,16 @@ public class ProductService {
     }
 
     /**
-     * Consulta y recupera la lista completa de productos registrados junto con su categoría.
+     * Consulta y recupera la lista completa de productos registrados registrando la auditoría del usuario.
      *
+     * @param idUser UUID del usuario que ejecuta la lectura.
      * @return {@link ProductStatus#READ_SUCCESS} si se encontraron registros,
      *         {@link ProductStatus#EMPTY_LIST} si la tabla no tiene datos,
      *         o {@link ProductStatus#ERROR_READ_PRODUCTS} ante un error de base de datos.
      */
-    public ProductStatus readProducts() {
+    public ProductStatus readProducts(String idUser) {
         try {
-            this.productsList = productRepo.read();
+            this.productsList = productRepo.read(idUser);
             if (this.productsList == null || this.productsList.isEmpty()) {
                 return ProductStatus.EMPTY_LIST;
             }
@@ -195,20 +197,22 @@ public class ProductService {
     }
 
     /**
-     * Busca un producto por su identificador primario.
+     * Busca un producto por su identificador primario registrando la auditoría del usuario.
      *
      * @param idProduct Identificador único del producto.
+     * @param idUser    UUID del usuario que ejecuta la búsqueda.
      * @return {@link ProductStatus#PRODUCT_FOUND} si se localizó,
      *         {@link ProductStatus#PRODUCT_NOT_FOUND} si no existe,
      *         o {@link ProductStatus#ERROR_SEARCH_PRODUCT} si ocurrió un error SQL.
      */
-    public ProductStatus searchProduct(int idProduct) {
+    public ProductStatus searchProduct(int idProduct, String idUser) {
         if (idProduct <= 0) {
             return ProductStatus.PRODUCT_NOT_FOUND;
         }
 
         try {
-            this.currentProduct = productRepo.search(idProduct);
+            Product searchParam = new Product(idProduct, idUser);
+            this.currentProduct = productRepo.search(searchParam);
             if (this.currentProduct != null) {
                 productsList.clear();
                 productsList.add(currentProduct);
@@ -222,7 +226,7 @@ public class ProductService {
     }
 
     /**
-     * Valida y actualiza los datos de un producto existente.
+     * Valida y actualiza los datos de un producto existente con referencia al usuario que modifica.
      * <p>
      * Si {@code imgProducto} se envía como {@code null}, la base de datos preservará la imagen actual.
      * </p>
@@ -233,10 +237,11 @@ public class ProductService {
      * @param price       Nuevo precio.
      * @param imgProducto Nueva imagen en bytes (o null para mantener la actual).
      * @param idCategory  ID de categoría asociada.
+     * @param idUser      UUID del usuario que ejecuta la actualización.
      * @return Estado resultante de la actualización.
      */
     public ProductStatus updateProduct(Integer idProduct, String name, String description,
-            Double price, byte[] imgProducto, Integer idCategory) {
+            Double price, byte[] imgProducto, Integer idCategory, String idUser) {
         if (idProduct == null || idProduct <= 0) {
             return ProductStatus.PRODUCT_NOT_FOUND;
         }
@@ -247,7 +252,7 @@ public class ProductService {
         }
 
         try {
-            Product product = new Product(idProduct, name.trim(), description.trim(), price, imgProducto, idCategory);
+            Product product = new Product(idProduct, name.trim(), description.trim(), price, imgProducto, idUser, idCategory);
             productRepo.update(product);
             clearTemporalImage();
             return ProductStatus.PRODUCT_UPDATED;
@@ -261,25 +266,28 @@ public class ProductService {
     }
 
     /**
-     * Elimina físicamente un producto del sistema.
+     * Elimina físicamente un producto del sistema registrando la auditoría del usuario que elimina.
      *
      * @param idProduct Identificador del producto a eliminar.
+     * @param idUser    UUID del usuario que ejecuta la eliminación.
      * @return {@link ProductStatus#PRODUCT_DELETED} si se eliminó correctamente,
      *         {@link ProductStatus#PRODUCT_HAS_DEPENDENCIES} si tiene registros relacionados (FK),
      *         o {@link ProductStatus#ERROR_PRODUCT_DELETE} si ocurrió otro error SQL.
      */
-    public ProductStatus deleteProduct(int idProduct) {
+    public ProductStatus deleteProduct(int idProduct, String idUser) {
+        Product actionParam = new Product(idProduct, idUser);
         try {
-            ProductDTO searchProduct = productRepo.search(idProduct);
-            if( searchProduct == null)
+            ProductDTO searchProduct = productRepo.search(actionParam);
+            if (searchProduct == null) {
                 return ProductStatus.PRODUCT_NOT_FOUND;
+            }
         } catch (SQLException e) {
             messageError = e.getMessage();
             return ProductStatus.ERROR_SEARCH_PRODUCT;
         }
 
         try {
-            productRepo.delete(idProduct);
+            productRepo.delete(actionParam);
             return ProductStatus.PRODUCT_DELETED;
         } catch (SQLIntegrityConstraintViolationException e) {
             this.messageError = e.getMessage();

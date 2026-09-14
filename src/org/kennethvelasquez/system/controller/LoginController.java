@@ -82,9 +82,13 @@ public class LoginController implements Initializable{
         
         AuthenticationStatus loginStatus = authService.userLogin(dataUser, password);
         switch (loginStatus) {
-            case LOGIN_SUCCESS -> {
+            case LOGIN_SUCCESS, ACTIVE_ACCOUNT -> {
                 viewFacto.dashboardView();
             }
+            case INACTIVE, INACTIVE_ACCOUNT ->
+                alertInfo.viewAlert("CUENTA INACTIVA", "Acceso denegado",
+                        "Su cuenta se encuentra inactiva. Comuníquese con el administrador.",
+                        "WARN");
             case ERROR_CREDENTIALS->
                 alertInfo.viewAlert("DATOS INCORRECTOS", "Error de Credenciales",
                         "El usuario/correo y contraseña ingresado no coincide\nValide sus credenciales",

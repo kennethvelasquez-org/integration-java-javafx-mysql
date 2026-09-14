@@ -9,6 +9,10 @@ package org.kennethvelasquez.system.model;
  * @author STEPHRYS
  */
 public class User {
+    public static final int ROLE_ADMIN = 100;
+    public static final int ROLE_USER = 101;
+    public static final int ROLE_EMPLOYEE = 102;
+
     private String name;
     private String lastName;
     private String email;
